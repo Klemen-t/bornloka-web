@@ -422,10 +422,11 @@ body::before {
 @media(max-width:768px){
   .navbar{padding:0 10px;height:56px;gap:8px;}
   .brand-text{display:none;} /* Only show emoji icon to save space */
-  .nav-tabs{gap:2px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
-  .nav-tabs::-webkit-scrollbar{display:none;}
-  .nav-tab{padding:6px 8px;font-size:12px;flex-shrink:0;}
-  .xp-badge, .streak-badge{padding:4px 8px;font-size:11px;}
+  .nav-tabs{gap:4px;justify-content:center;}
+  .nav-tab{padding:8px 10px;font-size:0;flex-shrink:0;} /* Hide text */
+  .nav-tab span{font-size:18px;} /* Keep icons visible */
+  .nav-actions{gap:6px;}
+  .xp-badge, .streak-badge{padding:4px 6px;font-size:11px;}
   
   .main{padding:12px}
   .cards-grid{grid-template-columns:1fr}
