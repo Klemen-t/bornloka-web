@@ -420,13 +420,34 @@ body::before {
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){
-  .navbar{padding:0 12px;height:56px}
-  .nav-tabs{gap:2px}
-  .nav-tab{padding:6px 10px;font-size:12px}
-  .main{padding:16px}
+  .navbar{padding:0 10px;height:56px;gap:8px;}
+  .brand-text{display:none;} /* Only show emoji icon to save space */
+  .nav-tabs{gap:2px;overflow-x:auto;white-space:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:2px;}
+  .nav-tabs::-webkit-scrollbar{display:none;}
+  .nav-tab{padding:6px 8px;font-size:12px;flex-shrink:0;}
+  .xp-badge, .streak-badge{padding:4px 8px;font-size:11px;}
+  
+  .main{padding:12px}
   .cards-grid{grid-template-columns:1fr}
+  
+  /* Modal fixes */
+  .modal-overlay{padding:12px;}
+  .modal-card{padding:20px;max-height:calc(100vh - 24px);width:100%;}
+  .modal-name{font-size:22px;}
+  .modal-stats{padding:12px;gap:8px;flex-wrap:wrap;}
+  .modal-stat{min-width:30%;}
+  .modal-stat-val{font-size:16px;}
+  
+  /* Quiz & Exam fixes */
+  .question-card{padding:16px;margin-bottom:16px;}
+  .quiz-type-card{padding:20px 16px;}
+  .answer-btn{padding:12px;font-size:14px;}
   .confidence-btns{flex-direction:column}
-  .conf-btn{min-width:unset}
+  .conf-btn{min-width:unset;padding:12px;}
+  
+  .exam-config{padding:16px;}
+  .exam-top-bar{flex-direction:column;align-items:flex-start;gap:12px;padding:12px;}
+  .exam-timer-wrap{align-self:center;}
 }
 
 /* ===== DESKTOP ADAPTATIONS ===== */
