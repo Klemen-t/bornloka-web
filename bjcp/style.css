@@ -428,3 +428,27 @@ body::before {
   .confidence-btns{flex-direction:column}
   .conf-btn{min-width:unset}
 }
+
+/* ===== DESKTOP ADAPTATIONS ===== */
+@media(min-width: 1024px){
+  .main { max-width: 1300px; margin: 0 auto; padding: 40px 24px; }
+  .cards-grid { grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 24px; }
+  .style-card { padding: 28px; }
+  .card-name { font-size: 20px; }
+  .card-category { font-size: 14px; }
+  .card-desc { font-size: 15px; }
+  .modal-card { max-width: 900px; padding: 48px; }
+  .modal-name { font-size: 36px; }
+  .quiz-container, .exam-container, .stats-container { max-width: 960px; }
+  .nav-tab { font-size: 15px; padding: 10px 20px; }
+  .brand-text { font-size: 26px; }
+  .answers-grid { gap: 16px; }
+  .answer-btn { font-size: 16px; padding: 20px; }
+  .quiz-type-card { padding: 48px; }
+  .quiz-type-icon { font-size: 64px; }
+  .question-title { font-size: 26px; }
+  .stats-grid-top { grid-template-columns: repeat(4, 1fr); }
+}
+@media(min-width: 1350px){
+  .navbar { padding: 0 calc(50vw - 626px); }
+}
