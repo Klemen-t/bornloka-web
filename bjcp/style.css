@@ -226,14 +226,19 @@ body::before {
 .quiz-title{font-size:36px;font-weight:800;background:linear-gradient(135deg,var(--accent),var(--purple));
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;margin-bottom:8px}
 .quiz-subtitle{color:var(--text2)}
-.quiz-selector{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:600px){.quiz-selector{grid-template-columns:1fr}}
+.quiz-selector{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px}
+@media(max-width:800px){.quiz-selector{grid-template-columns:1fr}}
 .quiz-type-card{
   background:var(--surface);border:2px solid var(--border);border-radius:var(--radius-lg);
   padding:32px 24px;text-align:center;cursor:pointer;transition:var(--transition);
   position:relative;overflow:hidden;
 }
 .quiz-type-card:hover{border-color:var(--accent);transform:translateY(-4px);box-shadow:var(--shadow)}
+.quiz-type-card--featured{
+  border-color:var(--accent);background:linear-gradient(160deg,var(--surface),var(--accent-glow));
+  box-shadow:0 0 24px var(--accent-glow);
+}
+.quiz-type-card--featured:hover{box-shadow:0 0 40px var(--accent-glow);transform:translateY(-6px)}
 .quiz-type-icon{font-size:48px;margin-bottom:16px}
 .quiz-type-card h3{font-size:20px;font-weight:700;margin-bottom:8px}
 .quiz-type-card p{font-size:14px;color:var(--text2);line-height:1.6}
@@ -241,6 +246,8 @@ body::before {
   position:absolute;top:16px;right:16px;background:var(--accent);color:#000;
   font-size:11px;font-weight:700;padding:3px 8px;border-radius:4px;
 }
+.quiz-type-badge--featured{background:var(--green);color:#000;animation:pulse-badge 2s infinite}
+
 .quiz-progress-bar{height:4px;background:var(--surface2);border-radius:2px;margin-bottom:20px}
 .quiz-progress-fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--purple));
   border-radius:2px;transition:width 0.4s ease}
@@ -256,6 +263,8 @@ body::before {
 .question-chars{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px}
 .q-char{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px;transition:var(--transition)}
 .q-char.wide{grid-column:1/-1;background:var(--bg3)}
+.q-char-tags{background:var(--bg2)!important}
+.q-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
 .q-char-label{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px}
 .q-char-val{font-size:15px;font-weight:700;color:var(--text);line-height:1.4}
 .q-char.wide .q-char-val{font-weight:500;font-size:14px;color:var(--text2);line-height:1.6}
@@ -383,6 +392,7 @@ body::before {
 .toast-error{background:var(--red);color:#fff}
 .toast-info{background:var(--blue);color:#fff}
 @keyframes slideIn{from{transform:translateX(100%);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes pulse-badge{0%,100%{opacity:1}50%{opacity:0.6}}
 
 /* ===== TASTING MODE ===== */
 .tasting-note{
@@ -413,10 +423,10 @@ body::before {
 .conf-btn:hover{transform:translateY(-2px);box-shadow:0 4px 12px rgba(0,0,0,0.2)}
 .conf-btn.sure{border-color:var(--green);color:var(--green)}
 .conf-btn.sure:hover{background:var(--green-bg)}
-.conf-btn.doubt{border-color:var(--accent);color:var(--accent)}
-.conf-btn.doubt:hover{background:var(--accent-glow)}
-.conf-btn.guess{border-color:var(--blue);color:var(--blue)}
-.conf-btn.guess:hover{background:var(--blue-bg)}
+.conf-btn.doubt{border-color:#f97316;color:#f97316}
+.conf-btn.doubt:hover{background:rgba(249,115,22,0.15)}
+.conf-btn.guess{border-color:var(--red);color:var(--red)}
+.conf-btn.guess:hover{background:var(--red-bg)}
 
 /* ===== RESPONSIVE ===== */
 @media(max-width:768px){

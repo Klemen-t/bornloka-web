@@ -94,6 +94,28 @@ const Utils = {
     return a;
   },
   pick(arr,n) { return this.shuffle(arr).slice(0,n); },
+  truncate(text, limit) {
+    if (!text || text.length <= limit + 40) return text;
+    
+    let nextDot = text.indexOf('. ', limit - 20);
+    if (nextDot === -1) {
+      const lastDot = text.lastIndexOf('.');
+      if (lastDot > limit - 20) nextDot = lastDot;
+    }
+    
+    if (nextDot !== -1 && nextDot < limit + 120) {
+      return text.substring(0, nextDot + 1) + (nextDot >= text.length - 2 ? '' : '…');
+    }
+    
+    const sub = text.substring(0, limit);
+    const prevDot = sub.lastIndexOf('. ');
+    if (prevDot > limit * 0.3) {
+      return text.substring(0, prevDot + 1) + '…';
+    }
+    
+    const sp = sub.lastIndexOf(' ');
+    return text.substring(0, sp > 0 ? sp : limit) + '…';
+  },
   toast(msg, type='info') {
     const t = document.createElement('div');
     t.className = `toast toast-${type}`;
@@ -358,17 +380,18 @@ const Quiz = {
     });
     const seen = new Set();
     const pool = Utils.shuffle(weighted).filter(s => { if(seen.has(s.name)) return false; seen.add(s.name); return true; });
-    return pool.slice(0, n).map(s => this.buildQuestion(s, type, pool));
+    return pool.slice(0, n).map(s => {
+      const t = type === 'mix' ? (Math.random() < 0.5 ? 'guess' : 'define') : type;
+      return this.buildQuestion(s, t, pool);
+    });
   },
 
   buildQuestion(style, type, pool) {
     if(type === 'guess') {
       const distractors = this.getDistractors(style, pool, 3);
       const options = Utils.shuffle([style, ...distractors]);
-      // 40% tasting mode if style has enough sensory data
-      const canTaste = !!(style.aroma && style.aroma.length > 50 && style.flavor);
-      const tasting = canTaste && Math.random() < 0.4;
-      return { style, type:'guess', options, correct: style.name, tasting };
+      const profile = this.pickGuessProfile(style);
+      return { style, type:'guess', options, correct: style.name, profile };
     } else {
       // Show name, guess a random parameter (ABV, IBU, SRM, Category, Commercial Examples)
       const possibleSubtypes = [];
@@ -383,26 +406,33 @@ const Quiz = {
       let correct = '';
       let options = [];
       
+      // Pick n distractors that differ from correct midpoint by at least minDist
+      const distPick = (src, midFn, cMid, minDist, n) => {
+        const far = Utils.shuffle(src.filter(s => Math.abs(midFn(s) - cMid) >= minDist));
+        return far.length >= n ? far.slice(0, n) : Utils.shuffle(src).slice(0, n);
+      };
       if (subtype === 'abv') {
         correct = Utils.fmtRange(style.abvmin, style.abvmax, '% ABV');
-        const others = Utils.shuffle(pool.filter(s => s.name !== style.name && (s.abvmin||s.abvmax)))
-          .slice(0, 3).map(s => Utils.fmtRange(s.abvmin, s.abvmax, '% ABV'));
-        options = Utils.shuffle([correct, ...others]);
+        const cMid = ((style.abvmin||0)+(style.abvmax||0))/2;
+        const src = pool.filter(s => s.name !== style.name && (s.abvmin||s.abvmax) && Utils.fmtRange(s.abvmin,s.abvmax,'% ABV') !== correct);
+        const picked = distPick(src, s => ((s.abvmin||0)+(s.abvmax||0))/2, cMid, 1.5, 3);
+        options = Utils.shuffle([correct, ...picked.map(s => Utils.fmtRange(s.abvmin, s.abvmax, '% ABV'))]);
       } else if (subtype === 'ibu') {
         correct = Utils.fmtRange(style.ibumin, style.ibumax, ' IBU');
         if (correct === '—') correct = 'Sense especificar';
-        const others = Utils.shuffle(pool.filter(s => s.name !== style.name && (s.ibumin||s.ibumax)))
-          .slice(0, 3).map(s => Utils.fmtRange(s.ibumin, s.ibumax, ' IBU'));
-        options = Utils.shuffle([correct, ...others]);
+        const cMid = ((style.ibumin||0)+(style.ibumax||0))/2;
+        const src = pool.filter(s => s.name !== style.name && (s.ibumin||s.ibumax) && Utils.fmtRange(s.ibumin,s.ibumax,' IBU') !== correct);
+        const picked = distPick(src, s => ((s.ibumin||0)+(s.ibumax||0))/2, cMid, 20, 3);
+        options = Utils.shuffle([correct, ...picked.map(s => Utils.fmtRange(s.ibumin, s.ibumax, ' IBU'))]);
       } else if (subtype === 'srm') {
         const mid = (style.srmmin+style.srmmax)/2 || style.srmmin || style.srmmax;
         correct = `${Utils.fmtRange(style.srmmin, style.srmmax)} SRM (${Utils.srmToName(mid)})`;
-        const others = Utils.shuffle(pool.filter(s => s.name !== style.name && (s.srmmin||s.srmmax)))
-          .slice(0, 3).map(s => {
-            const m = (s.srmmin+s.srmmax)/2 || s.srmmin || s.srmmax;
-            return `${Utils.fmtRange(s.srmmin, s.srmmax)} SRM (${Utils.srmToName(m)})`;
-          });
-        options = Utils.shuffle([correct, ...others]);
+        const src = pool.filter(s => s.name !== style.name && (s.srmmin||s.srmmax));
+        const picked = distPick(src, s => (s.srmmin+s.srmmax)/2 || s.srmmin || s.srmmax, mid, 4, 3);
+        options = Utils.shuffle([correct, ...picked.map(s => {
+          const m = (s.srmmin+s.srmmax)/2 || s.srmmin || s.srmmax;
+          return `${Utils.fmtRange(s.srmmin, s.srmmax)} SRM (${Utils.srmToName(m)})`;
+        })]);
       } else if (subtype === 'category') {
         correct = style.category;
         const others = [...new Set(pool.filter(s => s.category !== style.category).map(s => s.category))];
@@ -422,10 +452,22 @@ const Quiz = {
       options = [...new Set(options)];
       // If we don't have enough unique options, fill with random distractors
       while(options.length < 4) {
-        if(subtype === 'abv') options.push((Math.random()*6 + 2).toFixed(1) + '-' + (Math.random()*6 + 6).toFixed(1) + '% ABV');
-        else if(subtype === 'ibu') options.push(Math.round(Math.random()*40 + 10) + '-' + Math.round(Math.random()*40 + 40) + ' IBU');
-        else if(subtype === 'srm') options.push(Math.round(Math.random()*15 + 1) + '-' + Math.round(Math.random()*20 + 15) + ' SRM');
-        else {
+        if(subtype === 'abv') {
+          const cMid = ((style.abvmin||0)+(style.abvmax||0))/2;
+          const sign = options.length % 2 === 0 ? 1 : -1;
+          const lo = Math.max(1, +(cMid + sign * (2 + Math.random()*3)).toFixed(1));
+          options.push(`${lo}–${+(lo + 1.5 + Math.random()*1.5).toFixed(1)}% ABV`);
+        } else if(subtype === 'ibu') {
+          const cMid = ((style.ibumin||0)+(style.ibumax||0))/2;
+          const sign = options.length % 2 === 0 ? 1 : -1;
+          const base = Math.max(5, Math.round(cMid + sign * (22 + Math.random()*15)));
+          options.push(`${base}–${base + 10 + Math.round(Math.random()*15)} IBU`);
+        } else if(subtype === 'srm') {
+          const cMid = ((style.srmmin||0)+(style.srmmax||0))/2;
+          const sign = options.length % 2 === 0 ? 1 : -1;
+          const base = Math.max(1, Math.round(cMid + sign * (5 + Math.random()*5)));
+          options.push(`${base}–${base + 3 + Math.round(Math.random()*5)} SRM (${Utils.srmToName(base + 2)})`);
+        } else {
           options.push('Opció genèrica ' + options.length);
         }
         options = [...new Set(options)];
@@ -434,6 +476,16 @@ const Quiz = {
 
       return { style, type:'define', subtype, options, correct };
     }
+  },
+
+  pickGuessProfile(style) {
+    const c = ['sensory', 'sensory']; // sensory weighted 2x
+    if ((style.aroma||'').length > 50 && style.flavor) c.push('tasting');
+    if ((style.history||'').length > 40) c.push('history');
+    if ((style.characteristicingredients||'').length > 20) c.push('ingredients');
+    if ((style.comments||'').length > 30) c.push('comments');
+    if ((style.stylecomparison||'').length > 30) c.push('stylecomparison');
+    return Utils.shuffle(c)[0];
   },
 
   getDistractors(style, pool, n) {
@@ -479,14 +531,18 @@ const Quiz = {
   },
 
   setConfidence(level) {
+    if(this.answered) return; // guard against double-tap
+    this.answered = true;
     const q = this.questions[this.current];
     const chosen = this._pendingChosen;
+    if(!chosen) return; // no answer selected yet
     const correct = q.correct;
     const isCorrect = chosen === correct;
 
-    // NOW highlight answers
+    // Lock all buttons and reveal correct/wrong
     document.querySelectorAll('.answer-btn').forEach(btn => {
-      btn.style.boxShadow = ''; // Reset the focus shadow
+      btn.disabled = true;
+      btn.style.boxShadow = '';
       const btnText = btn.textContent.replace(/\s+/g,' ').trim();
       if(q.type==='guess') {
         if(btnText.startsWith(correct)) btn.classList.add('correct');
@@ -521,7 +577,7 @@ const Quiz = {
     if (bonusXP !== 0) { this.score = Math.max(0, this.score + bonusXP); Store.addXP(bonusXP); }
     Utils.el('quiz-score-live').textContent = `Puntuació: ${this.score}`;
 
-    // NOW show feedback
+    // Show feedback
     const fb = Utils.el('quiz-feedback');
     fb.className = `quiz-feedback${isCorrect?'':' wrong-fb'}`;
     fb.innerHTML = `
@@ -547,30 +603,52 @@ const Quiz = {
 
     if(q.type === 'guess') {
       const s = q.style;
-      if (q.tasting) {
+      const tags = (s.tags||'').split(',').map(t=>t.trim()).filter(Boolean);
+      const tagsHTML = tags.length ? `<div class="q-char wide q-char-tags"><div class="q-char-label">Tags</div><div class="q-tags">${tags.map(t=>`<span class="tag-badge">${t}</span>`).join('')}</div></div>` : '';
+      const statsHTML = [
+        s.abvmin||s.abvmax ? `<div class="q-char"><div class="q-char-label">ABV</div><div class="q-char-val">${Utils.fmtRange(s.abvmin,s.abvmax,'%')}</div></div>` : '',
+        s.ibumin||s.ibumax ? `<div class="q-char"><div class="q-char-label">IBU</div><div class="q-char-val">${Utils.fmtRange(s.ibumin,s.ibumax)}</div></div>` : '',
+        s.srmmin||s.srmmax ? `<div class="q-char"><div class="q-char-label">Color</div><div class="q-char-val">${Utils.srmToName((s.srmmin+s.srmmax)/2)}</div></div>` : '',
+      ].join('');
+      const wide = (lbl, txt, lim=380) => `<div class="q-char wide"><div class="q-char-label">${lbl}</div><div class="q-char-val">${Utils.truncate(txt, lim)}</div></div>`;
+
+      if (q.profile === 'tasting') {
         Utils.el('question-card').innerHTML = `
           <div class="question-label">🍺 Tasting Mode — Identifica l'estil</div>
           <div class="question-title">Quina cervesa descriu aquesta nota de tast?</div>
           <div class="tasting-note">${this.generateTastingNote(s)}</div>`;
+      } else if (q.profile === 'history') {
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">📜 Conèixes la seva història?</div>
+          <div class="question-title">Quin estil descriu aquest origen i evolució?</div>
+          <div class="question-chars">${wide('Història', s.history, 450)}${tagsHTML}</div>`;
+      } else if (q.profile === 'ingredients') {
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">🌾 Ingredients característics</div>
+          <div class="question-title">Quin estil utilitza aquests ingredients?</div>
+          <div class="question-chars">${statsHTML}${wide('Ingredients característics', s.characteristicingredients, 380)}${tagsHTML}</div>`;
+      } else if (q.profile === 'comments') {
+        const cmpH = s.stylecomparison ? wide('Comparació d\'estils', s.stylecomparison, 300) : '';
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">💬 Comentaris de l'estil</div>
+          <div class="question-title">A quin estil es refereixen aquests comentaris?</div>
+          <div class="question-chars">${wide('Comentaris', s.comments, 420)}${cmpH}</div>`;
+      } else if (q.profile === 'stylecomparison') {
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">⚖️ Comparació d'estils</div>
+          <div class="question-title">De quin estil parla aquesta comparació?</div>
+          <div class="question-chars">${wide('Comparació d\'estils', s.stylecomparison, 450)}${tagsHTML}</div>`;
       } else {
+        // sensory (default)
         const chars = [
-          s.abvmin||s.abvmax ? { label: 'ABV', val: Utils.fmtRange(s.abvmin,s.abvmax,'%'), wide: false } : null,
-          s.ibumin||s.ibumax ? { label: 'IBU', val: Utils.fmtRange(s.ibumin,s.ibumax), wide: false } : null,
-          s.srmmin||s.srmmax ? { label: 'Color', val: Utils.srmToName((s.srmmin+s.srmmax)/2), wide: false } : null,
-          s.aroma ? { label: 'Aroma', val: s.aroma.length > 300 ? s.aroma.substring(0,300)+'…' : s.aroma, wide: true } : null,
-          s.flavor ? { label: 'Sabor', val: s.flavor.length > 300 ? s.flavor.substring(0,300)+'…' : s.flavor, wide: true } : null,
-          s.mouthfeel ? { label: 'Sensació', val: s.mouthfeel.length > 250 ? s.mouthfeel.substring(0,250)+'…' : s.mouthfeel, wide: true } : null,
-        ].filter(Boolean);
+          s.aroma ? wide('Aroma', s.aroma, 380) : '',
+          s.flavor ? wide('Sabor', s.flavor, 380) : '',
+          s.mouthfeel ? wide('Sensació', s.mouthfeel, 280) : '',
+        ].join('');
         Utils.el('question-card').innerHTML = `
           <div class="question-label">🍺 Endevina l'estil BJCP</div>
           <div class="question-title">Quin estil és aquesta cervesa?</div>
-          <div class="question-chars">
-            ${chars.map(c => `
-              <div class="q-char ${c.wide ? 'wide' : ''}">
-                <div class="q-char-label">${c.label}</div>
-                <div class="q-char-val">${c.val}</div>
-              </div>`).join('')}
-          </div>`;
+          <div class="question-chars">${statsHTML}${chars}</div>`;
       }
       Utils.el('answers-grid').innerHTML = q.options.map(opt => `
         <button class="answer-btn" onclick="Quiz.answer('${opt.name.replace(/'/g,"\\'")}')">
@@ -600,22 +678,22 @@ const Quiz = {
 
   answer(chosen) {
     if(this.answered) return;
-    this.answered = true;
+    // Don't lock yet — user can still change selection before confirming confidence
     this._pendingChosen = chosen;
     const q = this.questions[this.current];
 
-    // Disable all buttons and visually mark the chosen one temporarily
+    // Clear all highlights, mark chosen temporarily
     document.querySelectorAll('.answer-btn').forEach(btn => {
-      btn.disabled = true;
+      btn.style.boxShadow = '';
       const btnText = btn.textContent.replace(/\s+/g,' ').trim();
       if(q.type==='guess') {
-        if(btnText.startsWith(chosen)) btn.style.boxShadow = '0 0 0 2px var(--accent)';
+        if(btnText.startsWith(chosen)) btn.style.boxShadow = '0 0 0 3px var(--accent)';
       } else {
-        if(btnText === chosen) btn.style.boxShadow = '0 0 0 2px var(--accent)';
+        if(btnText === chosen) btn.style.boxShadow = '0 0 0 3px var(--accent)';
       }
     });
 
-    // Show confidence calibration FIRST (before revealing correctness)
+    // Show confidence calibration (without locking yet)
     Utils.el('quiz-confidence').classList.remove('hidden');
   },
 

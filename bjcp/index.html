@@ -1,308 +1,327 @@
 <!DOCTYPE html>
 <html lang="ca" data-theme="dark">
+
 <head>
   <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-TLPDT8MP');</script>
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-TLPDT8MP');</script>
   <!-- End Google Tag Manager -->
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>BJCP Study — Aprèn els estils de cervesa</title>
-  <meta name="description" content="Eina interactiva per estudiar i practicar els estils de cervesa BJCP. Cards d'estudi, quiz i mode examen." />
+  <meta name="description"
+    content="Eina interactiva per estudiar i practicar els estils de cervesa BJCP. Cards d'estudi, quiz i mode examen." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,400;1,700&family=Barlow:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,400;1,700&family=Barlow:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap"
+    rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLPDT8MP"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
-<canvas id="bg-canvas" style="position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0;"></canvas>
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLPDT8MP" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
+  <canvas id="bg-canvas"
+    style="position: fixed; inset: 0; width: 100vw; height: 100vh; pointer-events: none; z-index: 0;"></canvas>
 
-<!-- NAVBAR -->
-<nav class="navbar" id="navbar">
-  <div class="nav-brand">
-    <span class="brand-icon">🍺</span>
-    <span class="brand-text">BJCP<span class="brand-accent">Study</span></span>
-  </div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" id="tab-study" onclick="App.showMode('study')">
-      <span>📚</span> Estudi
-    </button>
-    <button class="nav-tab" id="tab-quiz" onclick="App.showMode('quiz')">
-      <span>🧠</span> Quiz
-    </button>
-    <button class="nav-tab" id="tab-exam" onclick="App.showMode('exam')">
-      <span>🧪</span> Examen
-    </button>
-    <button class="nav-tab" id="tab-stats" onclick="App.showMode('stats')">
-      <span>📊</span> Estadístiques
-    </button>
-  </div>
-  <div class="nav-actions">
-    <div class="xp-badge" id="xp-badge">
-      <span class="xp-icon">⚡</span>
-      <span id="xp-display">0 XP</span>
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-brand">
+      <span class="brand-icon">🍺</span>
+      <span class="brand-text">BJCP<span class="brand-accent">Study</span></span>
     </div>
-    <div class="streak-badge" id="streak-badge">
-      <span>🔥</span>
-      <span id="streak-display">0</span>
+    <div class="nav-tabs">
+      <button class="nav-tab active" id="tab-study" onclick="App.showMode('study')">
+        <span>📚</span> Estudi
+      </button>
+      <button class="nav-tab" id="tab-quiz" onclick="App.showMode('quiz')">
+        <span>🧠</span> Quiz
+      </button>
+      <button class="nav-tab" id="tab-exam" onclick="App.showMode('exam')">
+        <span>🧪</span> Examen
+      </button>
+      <button class="nav-tab" id="tab-stats" onclick="App.showMode('stats')">
+        <span>📊</span> Estadístiques
+      </button>
     </div>
-    <button class="theme-toggle" id="theme-toggle" onclick="App.toggleTheme()" title="Canvia el tema">
-      <span id="theme-icon">☀️</span>
-    </button>
-  </div>
-</nav>
+    <div class="nav-actions">
+      <div class="xp-badge" id="xp-badge">
+        <span class="xp-icon">⚡</span>
+        <span id="xp-display">0 XP</span>
+      </div>
+      <div class="streak-badge" id="streak-badge">
+        <span>🔥</span>
+        <span id="streak-display">0</span>
+      </div>
+      <button class="theme-toggle" id="theme-toggle" onclick="App.toggleTheme()" title="Canvia el tema">
+        <span id="theme-icon">☀️</span>
+      </button>
+    </div>
+  </nav>
 
-<!-- MAIN CONTENT -->
-<main class="main" id="main-content">
+  <!-- MAIN CONTENT -->
+  <main class="main" id="main-content">
 
-  <!-- ===== MODE ESTUDI ===== -->
-  <section id="mode-study" class="mode-section active">
-    <div class="study-header">
-      <div class="study-controls">
-        <div class="search-wrapper">
-          <span class="search-icon">🔍</span>
-          <input type="text" id="search-input" class="search-input" placeholder="Cerca estil..." oninput="Study.search(this.value)" />
+    <!-- ===== MODE ESTUDI ===== -->
+    <section id="mode-study" class="mode-section active">
+      <div class="study-header">
+        <div class="study-controls">
+          <div class="search-wrapper">
+            <span class="search-icon">🔍</span>
+            <input type="text" id="search-input" class="search-input" placeholder="Cerca estil..."
+              oninput="Study.search(this.value)" />
+          </div>
+          <select id="cat-filter" class="filter-select" onchange="Study.filterCat(this.value)">
+            <option value="">Totes les categories</option>
+          </select>
+          <button class="btn btn-outline btn-sm" onclick="Study.filterFavorites()" id="fav-filter-btn">
+            ❤️ Preferits
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="Study.filterDifficult()" id="diff-filter-btn">
+            📌 A repassar
+          </button>
         </div>
-        <select id="cat-filter" class="filter-select" onchange="Study.filterCat(this.value)">
-          <option value="">Totes les categories</option>
-        </select>
-        <button class="btn btn-outline btn-sm" onclick="Study.filterFavorites()" id="fav-filter-btn">
-          ❤️ Preferits
-        </button>
-        <button class="btn btn-outline btn-sm" onclick="Study.filterDifficult()" id="diff-filter-btn">
-          📌 A repassar
-        </button>
-      </div>
-      <div class="study-info">
-        <span id="style-count" class="style-count">116 estils</span>
-        <button class="btn btn-primary btn-sm" onclick="Study.shuffle()">🔀 Barreja</button>
-      </div>
-    </div>
-
-    <div class="cards-grid" id="cards-grid">
-      <!-- Cards generats dinàmicament -->
-    </div>
-
-    <!-- DETAIL MODAL -->
-    <div class="modal-overlay" id="detail-modal" onclick="Study.closeModal(event)">
-      <div class="modal-card" id="modal-content">
-        <!-- Contingut dinàmic -->
-      </div>
-    </div>
-  </section>
-
-  <!-- ===== MODE QUIZ ===== -->
-  <section id="mode-quiz" class="mode-section">
-    <div class="quiz-container">
-      <div class="quiz-header">
-        <h2 class="quiz-title">Mode Quiz</h2>
-        <p class="quiz-subtitle">Posa a prova els teus coneixements de cervesa</p>
-      </div>
-
-      <!-- Quiz type selector -->
-      <div id="quiz-selector" class="quiz-selector">
-        <div class="quiz-type-card" onclick="Quiz.start('guess')">
-          <div class="quiz-type-icon">🍺</div>
-          <h3>Endevina l'Estil</h3>
-          <p>Se't mostren les característiques i has d'endevinar quin estil BJCP és</p>
-          <div class="quiz-type-badge">Quiz A</div>
-        </div>
-        <div class="quiz-type-card" onclick="Quiz.start('define')">
-          <div class="quiz-type-icon">📋</div>
-          <h3>Defineix l'Estil</h3>
-          <p>Se't mostra el nom d'un estil i has d'endevinar les seves característiques (ABV, IBU, color...)</p>
-          <div class="quiz-type-badge">Quiz B</div>
+        <div class="study-info">
+          <span id="style-count" class="style-count">116 estils</span>
+          <button class="btn btn-primary btn-sm" onclick="Study.shuffle()">🔀 Barreja</button>
         </div>
       </div>
 
-      <!-- Quiz in progress -->
-      <div id="quiz-game" class="quiz-game hidden">
-        <div class="quiz-progress-bar">
-          <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+      <div class="cards-grid" id="cards-grid">
+        <!-- Cards generats dinàmicament -->
+      </div>
+
+      <!-- DETAIL MODAL -->
+      <div class="modal-overlay" id="detail-modal" onclick="Study.closeModal(event)">
+        <div class="modal-card" id="modal-content">
+          <!-- Contingut dinàmic -->
         </div>
-        <div class="quiz-meta">
-          <span id="quiz-q-counter">Pregunta 1/10</span>
-          <span id="quiz-score-live">Puntuació: 0</span>
-          <button class="btn btn-outline btn-sm" onclick="Quiz.abort()">✕ Sortir</button>
+      </div>
+    </section>
+
+    <!-- ===== MODE QUIZ ===== -->
+    <section id="mode-quiz" class="mode-section">
+      <div class="quiz-container">
+        <div class="quiz-header">
+          <h2 class="quiz-title">Mode Quiz</h2>
+          <p class="quiz-subtitle">Posa a prova els teus coneixements de cervesa</p>
         </div>
 
-        <div class="question-card" id="question-card">
-          <!-- Contingut de la pregunta -->
-        </div>
-
-        <div class="answers-grid" id="answers-grid">
-          <!-- Opcions de resposta -->
-        </div>
-
-        <div class="quiz-feedback hidden" id="quiz-feedback">
-          <!-- Feedback de resposta -->
-        </div>
-
-        <!-- Confidence calibration -->
-        <div id="quiz-confidence" class="quiz-confidence hidden">
-          <div class="confidence-label">💭 Quina era la teva confiança?</div>
-          <div class="confidence-btns">
-            <button class="conf-btn sure" onclick="Quiz.setConfidence('sure')">🎯 Segur/a</button>
-            <button class="conf-btn doubt" onclick="Quiz.setConfidence('doubt')">🤔 Dubtava</button>
-            <button class="conf-btn guess" onclick="Quiz.setConfidence('guess')">🎲 Endevino</button>
+        <!-- Quiz type selector -->
+        <div id="quiz-selector" class="quiz-selector">
+          <div class="quiz-type-card" onclick="Quiz.start('guess')">
+            <div class="quiz-type-icon">🍺</div>
+            <h3>Endevina l'Estil</h3>
+            <p>Se't mostren les característiques i has d'endevinar quin estil BJCP és</p>
+            <div class="quiz-type-badge">Quiz A</div>
+          </div>
+          <div class="quiz-type-card quiz-type-card--featured" onclick="Quiz.start('mix')">
+            <div class="quiz-type-icon">🎲</div>
+            <h3>Mode Mixt</h3>
+            <p>Barreja dels dos modes: a vegades endevines l'estil, a vegades defineixes les seves característiques</p>
+            <div class="quiz-type-badge quiz-type-badge--featured">Recomanat</div>
+          </div>
+          <div class="quiz-type-card" onclick="Quiz.start('define')">
+            <div class="quiz-type-icon">📋</div>
+            <h3>Defineix l'Estil</h3>
+            <p>Se't mostra el nom d'un estil i has d'endevinar les seves característiques (ABV, IBU, color...)</p>
+            <div class="quiz-type-badge">Quiz B</div>
           </div>
         </div>
 
-        <button class="btn btn-primary btn-lg next-btn hidden" id="next-btn" onclick="Quiz.nextQuestion()">
-          Següent pregunta →
-        </button>
-      </div>
+        <!-- Quiz in progress -->
+        <div id="quiz-game" class="quiz-game hidden">
+          <div class="quiz-progress-bar">
+            <div class="quiz-progress-fill" id="quiz-progress-fill"></div>
+          </div>
+          <div class="quiz-meta">
+            <span id="quiz-q-counter">Pregunta 1/10</span>
+            <span id="quiz-score-live">Puntuació: 0</span>
+            <button class="btn btn-outline btn-sm" onclick="Quiz.abort()">✕ Sortir</button>
+          </div>
 
-      <!-- Quiz results -->
-      <div id="quiz-results" class="quiz-results hidden">
-        <!-- Resultats -->
-      </div>
-    </div>
-  </section>
+          <div class="question-card" id="question-card">
+            <!-- Contingut de la pregunta -->
+          </div>
 
-  <!-- ===== MODE EXAMEN ===== -->
-  <section id="mode-exam" class="mode-section">
-    <div class="exam-container">
+          <div class="answers-grid" id="answers-grid">
+            <!-- Opcions de resposta -->
+          </div>
 
-      <!-- Exam selector -->
-      <div id="exam-setup" class="exam-setup">
-        <div class="exam-hero">
-          <div class="exam-hero-icon">🧪</div>
-          <h2>Mode Examen BJCP</h2>
-          <p>Simulació d'examen real amb temps limitat i 20 preguntes aleatòries</p>
-        </div>
-        <div class="exam-config">
-          <div class="config-item">
-            <label>Nombre de preguntes</label>
-            <div class="config-options">
-              <button class="config-btn active" data-n="10" onclick="Exam.setN(this, 10)">10</button>
-              <button class="config-btn" data-n="20" onclick="Exam.setN(this, 20)">20</button>
-              <button class="config-btn" data-n="30" onclick="Exam.setN(this, 30)">30</button>
+          <div class="quiz-feedback hidden" id="quiz-feedback">
+            <!-- Feedback de resposta -->
+          </div>
+
+          <!-- Confidence calibration -->
+          <div id="quiz-confidence" class="quiz-confidence hidden">
+            <div class="confidence-label">💭 Quina és la teva confiança amb la resposta?</div>
+            <div class="confidence-btns">
+              <button class="conf-btn sure" onclick="Quiz.setConfidence('sure')">🎯 Segur/a</button>
+              <button class="conf-btn doubt" onclick="Quiz.setConfidence('doubt')">🤔 Dubto</button>
+              <button class="conf-btn guess" onclick="Quiz.setConfidence('guess')">🎲 Faig quiniela</button>
             </div>
           </div>
-          <div class="config-item">
-            <label>Temps per pregunta</label>
-            <div class="config-options">
-              <button class="config-btn" data-t="15" onclick="Exam.setTime(this, 15)">15s</button>
-              <button class="config-btn active" data-t="30" onclick="Exam.setTime(this, 30)">30s</button>
-              <button class="config-btn" data-t="60" onclick="Exam.setTime(this, 60)">60s</button>
-              <button class="config-btn" data-t="0" onclick="Exam.setTime(this, 0)">Sense límit</button>
+
+          <button class="btn btn-primary btn-lg next-btn hidden" id="next-btn" onclick="Quiz.nextQuestion()">
+            Següent pregunta →
+          </button>
+        </div>
+
+        <!-- Quiz results -->
+        <div id="quiz-results" class="quiz-results hidden">
+          <!-- Resultats -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== MODE EXAMEN ===== -->
+    <section id="mode-exam" class="mode-section">
+      <div class="exam-container">
+
+        <!-- Exam selector -->
+        <div id="exam-setup" class="exam-setup">
+          <div class="exam-hero">
+            <div class="exam-hero-icon">🧪</div>
+            <h2>Mode Examen BJCP</h2>
+            <p>Simulació d'examen real amb temps limitat i 20 preguntes aleatòries</p>
+          </div>
+          <div class="exam-config">
+            <div class="config-item">
+              <label>Nombre de preguntes</label>
+              <div class="config-options">
+                <button class="config-btn active" data-n="10" onclick="Exam.setN(this, 10)">10</button>
+                <button class="config-btn" data-n="20" onclick="Exam.setN(this, 20)">20</button>
+                <button class="config-btn" data-n="30" onclick="Exam.setN(this, 30)">30</button>
+              </div>
+            </div>
+            <div class="config-item">
+              <label>Temps per pregunta</label>
+              <div class="config-options">
+                <button class="config-btn" data-t="15" onclick="Exam.setTime(this, 15)">15s</button>
+                <button class="config-btn active" data-t="30" onclick="Exam.setTime(this, 30)">30s</button>
+                <button class="config-btn" data-t="60" onclick="Exam.setTime(this, 60)">60s</button>
+                <button class="config-btn" data-t="0" onclick="Exam.setTime(this, 0)">Sense límit</button>
+              </div>
+            </div>
+            <div class="config-item">
+              <label>Categoria</label>
+              <select id="exam-cat-filter" class="filter-select">
+                <option value="">Totes les categories</option>
+              </select>
             </div>
           </div>
-          <div class="config-item">
-            <label>Categoria</label>
-            <select id="exam-cat-filter" class="filter-select">
-              <option value="">Totes les categories</option>
-            </select>
-          </div>
+          <button class="btn btn-primary btn-xl" onclick="Exam.start()">
+            🚀 Iniciar Examen
+          </button>
         </div>
-        <button class="btn btn-primary btn-xl" onclick="Exam.start()">
-          🚀 Iniciar Examen
-        </button>
-      </div>
 
-      <!-- Exam in progress -->
-      <div id="exam-game" class="exam-game hidden">
-        <div class="exam-top-bar">
-          <div class="exam-timer-wrap">
-            <div class="exam-timer-ring">
-              <svg viewBox="0 0 36 36">
-                <path class="timer-track" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                <path class="timer-fill" id="timer-fill-path" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-              </svg>
-              <span id="exam-timer-text">30</span>
+        <!-- Exam in progress -->
+        <div id="exam-game" class="exam-game hidden">
+          <div class="exam-top-bar">
+            <div class="exam-timer-wrap">
+              <div class="exam-timer-ring">
+                <svg viewBox="0 0 36 36">
+                  <path class="timer-track"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                  <path class="timer-fill" id="timer-fill-path"
+                    d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                </svg>
+                <span id="exam-timer-text">30</span>
+              </div>
             </div>
-          </div>
-          <div class="exam-progress-info">
-            <span id="exam-q-counter">1 / 20</span>
-            <div class="exam-progress-bar">
-              <div class="exam-progress-fill" id="exam-progress-fill"></div>
+            <div class="exam-progress-info">
+              <span id="exam-q-counter">1 / 20</span>
+              <div class="exam-progress-bar">
+                <div class="exam-progress-fill" id="exam-progress-fill"></div>
+              </div>
             </div>
+            <div class="exam-score-info">
+              <span class="exam-score-label">Punts</span>
+              <span class="exam-score-val" id="exam-score-live">0</span>
+            </div>
+            <button class="btn btn-danger btn-sm" onclick="Exam.abort()">Sortir</button>
           </div>
-          <div class="exam-score-info">
-            <span class="exam-score-label">Punts</span>
-            <span class="exam-score-val" id="exam-score-live">0</span>
+
+          <div class="question-card" id="exam-question-card"></div>
+          <div class="answers-grid" id="exam-answers-grid"></div>
+          <div class="quiz-feedback hidden" id="exam-feedback"></div>
+          <button class="btn btn-primary btn-lg next-btn hidden" id="exam-next-btn" onclick="Exam.nextQuestion()">
+            Següent →
+          </button>
+        </div>
+
+        <!-- Exam results -->
+        <div id="exam-results" class="hidden"></div>
+      </div>
+    </section>
+
+    <!-- ===== MODE ESTADÍSTIQUES ===== -->
+    <section id="mode-stats" class="mode-section">
+      <div class="stats-container">
+        <h2 class="stats-title">📊 Les teves estadístiques</h2>
+
+        <div class="stats-grid-top">
+          <div class="stat-card big-stat">
+            <div class="stat-icon">⚡</div>
+            <div class="stat-val" id="stat-xp">0</div>
+            <div class="stat-label">Punts XP</div>
           </div>
-          <button class="btn btn-danger btn-sm" onclick="Exam.abort()">Sortir</button>
+          <div class="stat-card big-stat">
+            <div class="stat-icon">🔥</div>
+            <div class="stat-val" id="stat-streak">0</div>
+            <div class="stat-label">Dies seguits</div>
+          </div>
+          <div class="stat-card big-stat">
+            <div class="stat-icon">✅</div>
+            <div class="stat-val" id="stat-correct">0</div>
+            <div class="stat-label">Respostes correctes</div>
+          </div>
+          <div class="stat-card big-stat">
+            <div class="stat-icon">🎯</div>
+            <div class="stat-val" id="stat-accuracy">0%</div>
+            <div class="stat-label">Precisió</div>
+          </div>
         </div>
 
-        <div class="question-card" id="exam-question-card"></div>
-        <div class="answers-grid" id="exam-answers-grid"></div>
-        <div class="quiz-feedback hidden" id="exam-feedback"></div>
-        <button class="btn btn-primary btn-lg next-btn hidden" id="exam-next-btn" onclick="Exam.nextQuestion()">
-          Següent →
-        </button>
-      </div>
-
-      <!-- Exam results -->
-      <div id="exam-results" class="hidden"></div>
-    </div>
-  </section>
-
-  <!-- ===== MODE ESTADÍSTIQUES ===== -->
-  <section id="mode-stats" class="mode-section">
-    <div class="stats-container">
-      <h2 class="stats-title">📊 Les teves estadístiques</h2>
-
-      <div class="stats-grid-top">
-        <div class="stat-card big-stat">
-          <div class="stat-icon">⚡</div>
-          <div class="stat-val" id="stat-xp">0</div>
-          <div class="stat-label">Punts XP</div>
+        <div class="stats-sections">
+          <div class="stats-section">
+            <h3>🏅 Nivell per Categoria</h3>
+            <div id="cat-levels" class="cat-levels"></div>
+          </div>
+          <div class="stats-section">
+            <h3>🔴 Estils febles (on falles més)</h3>
+            <div id="weak-styles" class="weak-styles"></div>
+          </div>
+          <div class="stats-section">
+            <h3>❤️ Preferits</h3>
+            <div id="fav-styles-list" class="fav-styles-list"></div>
+          </div>
         </div>
-        <div class="stat-card big-stat">
-          <div class="stat-icon">🔥</div>
-          <div class="stat-val" id="stat-streak">0</div>
-          <div class="stat-label">Dies seguits</div>
-        </div>
-        <div class="stat-card big-stat">
-          <div class="stat-icon">✅</div>
-          <div class="stat-val" id="stat-correct">0</div>
-          <div class="stat-label">Respostes correctes</div>
-        </div>
-        <div class="stat-card big-stat">
-          <div class="stat-icon">🎯</div>
-          <div class="stat-val" id="stat-accuracy">0%</div>
-          <div class="stat-label">Precisió</div>
+
+        <div class="stats-actions">
+          <button class="btn btn-danger" onclick="App.resetProgress()">🗑 Reiniciar progrés</button>
         </div>
       </div>
+    </section>
 
-      <div class="stats-sections">
-        <div class="stats-section">
-          <h3>🏅 Nivell per Categoria</h3>
-          <div id="cat-levels" class="cat-levels"></div>
-        </div>
-        <div class="stats-section">
-          <h3>🔴 Estils febles (on falles més)</h3>
-          <div id="weak-styles" class="weak-styles"></div>
-        </div>
-        <div class="stats-section">
-          <h3>❤️ Preferits</h3>
-          <div id="fav-styles-list" class="fav-styles-list"></div>
-        </div>
-      </div>
+  </main>
 
-      <div class="stats-actions">
-        <button class="btn btn-danger" onclick="App.resetProgress()">🗑 Reiniciar progrés</button>
-      </div>
-    </div>
-  </section>
+  <!-- Toast notifications -->
+  <div id="toast-container" class="toast-container"></div>
 
-</main>
-
-<!-- Toast notifications -->
-<div id="toast-container" class="toast-container"></div>
-
-<!-- Scripts -->
-<script src="data.js"></script>
-<script src="app.js"></script>
+  <!-- Scripts -->
+  <script src="data.js"></script>
+  <script src="app.js"></script>
 </body>
+
 </html>
