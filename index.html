@@ -3,20 +3,23 @@
 
 <head>
   <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','GTM-TLPDT8MP');</script>
+  <script>(function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({
+        'gtm.start':
+          new Date().getTime(), event: 'gtm.js'
+      }); var f = d.getElementsByTagName(s)[0],
+        j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+          'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', 'GTM-TLPDT8MP');</script>
   <!-- End Google Tag Manager -->
-  
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-F987VN6X3B"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-  
+
     gtag('config', 'G-F987VN6X3B');
   </script>
 
@@ -190,6 +193,14 @@
 
     .nav-logo span {
       color: var(--r)
+    }
+
+    .vector-logo {
+      height: 1.2em;
+      width: auto;
+      vertical-align: middle;
+      display: inline-block;
+      margin-top: -0.15em;
     }
 
     .nav-links {
@@ -467,7 +478,22 @@
     /* ── SECTIONS ── */
     section {
       padding: 100px 32px;
-      position: relative
+      position: relative;
+      overflow: hidden;
+    }
+
+    .watermark-bg {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120%;
+      max-width: 800px;
+      opacity: 0.1;
+      mix-blend-mode: screen;
+      filter: blur(4px);
+      pointer-events: none;
+      z-index: 0;
     }
 
     .container {
@@ -2186,10 +2212,10 @@
 </head>
 
 <body>
-<!-- Google Tag Manager (noscript) -->
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLPDT8MP"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<!-- End Google Tag Manager (noscript) -->
+  <!-- Google Tag Manager (noscript) -->
+  <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-TLPDT8MP" height="0" width="0"
+      style="display:none;visibility:hidden"></iframe></noscript>
+  <!-- End Google Tag Manager (noscript) -->
 
   <!-- ══ BACKGROUND ANIMATION ════════════════════════════════════ -->
   <canvas id="bg-canvas"
@@ -2197,7 +2223,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- ══ NAV ══════════════════════════════════════════════════ -->
   <nav id="main-nav">
-    <a class="nav-logo" href="#"><span>🍺</span> Börn Loka <span>Ales</span></a>
+    <a class="nav-logo" href="#"><span><img src="logo-icon.svg" alt="Börn Loka" class="vector-logo"></span> Börn Loka
+      <span>Ales</span></a>
     <ul class="nav-links">
       <li><a href="#sessions">Sessions</a></li>
       <li><a href="#app">L'App</a></li>
@@ -2256,6 +2283,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- ══ SESSIONS ══════════════════════════════════════════════ -->
   <section class=showcase id="sessions">
+    <img src="logo-watermark.svg" class="watermark-bg" alt="">
     <div class="container">
       <div class="section-eyebrow">El que ofereixo</div>
       <h2 class="section-title">Tres nivells<br>d'experiència</h2>
@@ -2275,7 +2303,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <!-- INICIAL -->
         <div class="session-card">
           <span class="session-tag tag-base">Sessió Inicial</span>
-          <span class="session-icon">🍺</span>
+          <span class="session-icon"><img src="logo-icon.svg" alt="Börn Loka" class="vector-logo"
+              style="height: 1em;"></span>
           <h3 class="session-name">Hop Starter 101</h3>
           <p class="session-tagline">El millor punt de partida per al món de la cervesa artesana.</p>
           <p class="session-desc">Una immersió completa per a qui vol entendre la cervesa de veritat. Teoria sobre
@@ -2380,7 +2409,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <div class="phone-notch"></div>
               <div class="phone-screen">
                 <div class="mock-welcome">
-                  <div style="font-size:2rem;margin-bottom:8px">🍺</div>
+                  <div style="font-size:2rem;margin-bottom:8px"><img src="logo-icon.svg" alt="Börn Loka"
+                      class="vector-logo" style="height: 1em;"></div>
                   <div class="mock-welcome-title">BJCP</div>
                   <div class="mock-welcome-sub">Beer Style Game</div>
                   <div
@@ -2398,7 +2428,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                       style="color:var(--sl);font-family:var(--fd);font-size:1rem;letter-spacing:6px">BJCP7</span></div>
                   <div
                     style="background:var(--r);color:#fff;width:100%;padding:8px;text-align:center;font-family:var(--fu);font-size:.6rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;margin-top:4px">
-                    🍺 Entrar</div>
+                    <img src="logo-icon.svg" alt="Börn Loka" class="vector-logo" style="height: 1em;"> Entrar
+                  </div>
                 </div>
               </div>
             </div>
@@ -2407,7 +2438,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <div class="phone-frame">
               <div class="phone-notch"></div>
               <div class="phone-screen">
-                <div class="mock-header"><span class="mock-logo">🍺 BJCP</span><span
+                <div class="mock-header"><span class="mock-logo"><img src="logo-icon.svg" alt="Börn Loka"
+                      class="vector-logo" style="height: 1em;"> BJCP</span><span
                     style="font-family:var(--fu);font-size:.5rem;color:var(--m);letter-spacing:.06em">Ronda 3/6</span>
                 </div>
                 <div class="mock-filters">
@@ -2680,7 +2712,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               style="animation: phoneFloat 5s ease-in-out infinite; box-shadow: 0 24px 60px rgba(196, 18, 48, .2), inset 0 1px 0 rgba(255, 255, 255, .07), 0 0 0 4px #0d0d0d, 0 0 0 6px #252525;">
               <div class="phone-notch"></div>
               <div class="phone-screen" style="background: var(--k2); display: flex; flex-direction: column;">
-                <div class="mock-header"><span class="mock-logo">🍺 BJCP</span><span
+                <div class="mock-header"><span class="mock-logo"><img src="logo-icon.svg" alt="Börn Loka"
+                      class="vector-logo" style="height: 1em;"> BJCP</span><span
                     style="font-family:var(--fu);font-size:.5rem;color:var(--r);letter-spacing:.08em">STUDY</span>
                 </div>
 
@@ -2759,7 +2792,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               style="animation: phoneFloat 5s ease-in-out infinite 0.5s; box-shadow: 0 24px 60px rgba(196, 18, 48, .2), inset 0 1px 0 rgba(255, 255, 255, .07), 0 0 0 4px #0d0d0d, 0 0 0 6px #252525;">
               <div class="phone-notch"></div>
               <div class="phone-screen" style="background: var(--k2); display: flex; flex-direction: column;">
-                <div class="mock-header"><span class="mock-logo">🍺 BJCP</span><span
+                <div class="mock-header"><span class="mock-logo"><img src="logo-icon.svg" alt="Börn Loka"
+                      class="vector-logo" style="height: 1em;"> BJCP</span><span
                     style="font-family:var(--fu);font-size:.5rem;color:var(--r);letter-spacing:.08em">STUDY</span>
                 </div>
 
@@ -2809,7 +2843,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               style="animation: phoneFloat 5s ease-in-out infinite 1s; box-shadow: 0 24px 60px rgba(196, 18, 48, .2), inset 0 1px 0 rgba(255, 255, 255, .07), 0 0 0 4px #0d0d0d, 0 0 0 6px #252525;">
               <div class="phone-notch"></div>
               <div class="phone-screen" style="background: var(--k2); display: flex; flex-direction: column;">
-                <div class="mock-header"><span class="mock-logo">🍺 BJCP</span><span
+                <div class="mock-header"><span class="mock-logo"><img src="logo-icon.svg" alt="Börn Loka"
+                      class="vector-logo" style="height: 1em;"> BJCP</span><span
                     style="font-family:var(--fu);font-size:.5rem;color:var(--r);letter-spacing:.08em">STUDY</span>
                 </div>
 
@@ -2962,6 +2997,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   <!-- ══ CATES ANTERIORS ═══════════════════════════════════════ -->
   <section id="cates" class="gallery-section">
+    <img src="logo-watermark.svg" class="watermark-bg" alt="">
     <div class="container">
       <div class="section-eyebrow">L'experiència acumulada</div>
       <h2 class="section-title">Cates anteriors</h2>
@@ -3175,7 +3211,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               placeholder="Explica'ns el context: és per a un aniversari, una empresa, un grup d'amics... i sobretot, proposa'm la data!"></textarea>
           </div>
           <button class="form-submit" type="submit">Enviar sol·licitud →</button>
-          <p class="form-note">Us respondrem el més aviat possible 🍺</p>
+          <p class="form-note">Us respondrem el més aviat possible <img src="logo-icon.svg" alt="Börn Loka"
+              class="vector-logo" style="height: 1em;"></p>
         </form>
       </div>
     </div>
@@ -3184,13 +3221,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <!-- ══ FOOTER ════════════════════════════════════════════════ -->
   <footer>
     <div class="footer-inner">
-      <div class="footer-logo">🍺 Börn Loka <span>Ales</span></div>
+      <div class="footer-logo" style="display: flex; flex-direction: column; align-items: flex-start;">
+        <img src="logo.svg" alt="Börn Loka Ales" style="height: 120px; margin-bottom: 16px;">
+      </div>
       <div class="footer-copy">© 2026 · Sessions de Tast de Cervesa Artesana (i de qualitat)</div>
       <div class="footer-links">
         <a href="#sessions">Sessions</a>
         <a href="#app">L'App</a>
         <a href="#contacte">Contacte</a>
-        <a href="bjcp/index.html">↗ BJCP Study</a>
+        <a href="bjcp/index.html" target="_blank">↗ BJCP Study</a>
         <a href="https://klemen-t.github.io/bjcp-game" target="_blank">↗ Obrir App</a>
       </div>
     </div>
