@@ -614,7 +614,7 @@ const Quiz = {
 
       if (q.profile === 'tasting') {
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">🍺 Tasting Mode — Identifica l'estil</div>
+          <div class="question-label">🍺 Tasting Mode — Identifica el estilo</div>
           <div class="question-title">¿Qué cerveza describe esta nota de cata?</div>
           <div class="tasting-note">${this.generateTastingNote(s)}</div>`;
       } else if (q.profile === 'history') {
@@ -635,7 +635,7 @@ const Quiz = {
           <div class="question-chars">${wide('Comentarios', s.comments, 420)}${cmpH}</div>`;
       } else if (q.profile === 'stylecomparison') {
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">⚖️ Comparació d'estils</div>
+          <div class="question-label">⚖️ Comparación de estilos</div>
           <div class="question-title">¿De qué estilo habla esta comparación?</div>
           <div class="question-chars">${wide('Comparación de estilos', s.stylecomparison, 450)}${tagsHTML}</div>`;
       } else {
@@ -646,7 +646,7 @@ const Quiz = {
           s.mouthfeel ? wide('Sensació', s.mouthfeel, 280) : '',
         ].join('');
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">🍺 Endevina l'estil BJCP</div>
+          <div class="question-label">🍺 Adivina el estilo BJCP</div>
           <div class="question-title">¿Qué estilo es esta cerveza?</div>
           <div class="question-chars">${statsHTML}${chars}</div>`;
       }
@@ -658,14 +658,14 @@ const Quiz = {
     } else {
       const s = q.style;
       let prompt = "Define este estilo";
-      if (q.subtype === 'abv') prompt = "Quin és el rang d'alcohol (ABV) d'aquest estil?";
-      else if (q.subtype === 'ibu') prompt = "Quin és el rang d'amargor (IBU) d'aquest estil?";
-      else if (q.subtype === 'srm') prompt = "Quin és el color típic (SRM) d'aquest estil?";
+      if (q.subtype === 'abv') prompt = "¿Cuál es el rango de alcohol (ABV) de este estilo?";
+      else if (q.subtype === 'ibu') prompt = "¿Cuál es el rango de amargor (IBU) de este estilo?";
+      else if (q.subtype === 'srm') prompt = "¿Cuál es el color típico (SRM) de este estilo?";
       else if (q.subtype === 'category') prompt = "¿A qué categoría pertenece este estilo?";
-      else if (q.subtype === 'examples') prompt = "Quins d'aquests són exemples comercials d'aquest estil?";
+      else if (q.subtype === 'examples') prompt = "¿Cuáles de estos son ejemplos comerciales de este estilo?";
 
       Utils.el('question-card').innerHTML = `
-        <div class="question-label">📋 Defineix l'estil</div>
+        <div class="question-label">📋 Define el estilo</div>
         <div class="question-title" style="margin-bottom:8px">${s.name}</div>
         <div style="font-size:14px;color:var(--accent);font-weight:600;margin-bottom:16px">${prompt}</div>`;
 
@@ -901,8 +901,8 @@ const Exam = {
     res.innerHTML = `
       <div class="quiz-results">
         <div style="font-size:72px;margin-bottom:16px">${emoji}</div>
-        <h2 class="result-title">${pct>=80?'Aprovat amb honors!':pct>=60?'Aprovat!':pct>=40?'Gairebé...':'Segueix practicant!'}</h2>
-        <p class="result-subtitle">Examen completat — ${total} preguntes</p>
+        <h2 class="result-title">${pct>=80?'¡Aprobado con honores!':pct>=60?'¡Aprobado!':pct>=40?'Casi...':'¡Sigue practicando!'}</h2>
+        <p class="result-subtitle">Examen completado — ${total} preguntas</p>
         <div class="result-breakdown">
           <div class="result-stat"><span class="result-stat-val" style="color:var(--accent)">${pct}%</span><span class="result-stat-key">Nota</span></div>
           <div class="result-stat"><span class="result-stat-val" style="color:var(--green)">${correct}</span><span class="result-stat-key">Correctos</span></div>
@@ -911,8 +911,8 @@ const Exam = {
         </div>
         ${this.errors.length?`<div class="errors-list"><h4 style="margin-bottom:12px">Errores:</h4>${this.errors.map(e=>`<div class="error-item"><div class="error-q">${e.q}</div><div class="error-correct">✓ ${e.correct}</div></div>`).join('')}</div>`:''}
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-          <button class="btn btn-primary" onclick="Exam.start()">🔄 Nou examen</button>
-          <button class="btn btn-outline" onclick="Exam.backToSetup()">← Configuració</button>
+          <button class="btn btn-primary" onclick="Exam.start()">🔄 Nuevo examen</button>
+          <button class="btn btn-outline" onclick="Exam.backToSetup()">← Configuración</button>
         </div>
       </div>`;
     res.classList.remove('hidden');
@@ -939,7 +939,7 @@ const Stats = {
     // Category levels
     const catLevels = Utils.el('cat-levels');
     const cats = Object.entries(d.catStats);
-    if(!cats.length) { catLevels.innerHTML = '<div class="empty-state">Encara no has practicat per categories</div>'; }
+    if(!cats.length) { catLevels.innerHTML = '<div class="empty-state">Todavía no has practicado por categorías</div>'; }
     else {
       catLevels.innerHTML = cats.sort((a,b)=>(b[1].correct+b[1].wrong)-(a[1].correct+a[1].wrong))
         .map(([cat,st]) => {
@@ -958,7 +958,7 @@ const Stats = {
     const weakStyles = Object.entries(d.styleStats)
       .filter(([,st])=>st.wrong>0)
       .sort((a,b)=>b[1].wrong-a[1].wrong).slice(0,10);
-    if(!weakStyles.length) { weak.innerHTML = '<div class="empty-state">Cap error de moment 🎉</div>'; }
+    if(!weakStyles.length) { weak.innerHTML = '<div class="empty-state">Ningún error por ahora 🎉</div>'; }
     else {
       weak.innerHTML = weakStyles.map(([name,st]) => `
         <div class="weak-style-item" onclick="Study.openModal('${name.replace(/'/g,"\\'")}');App.showMode('study')">
@@ -969,7 +969,7 @@ const Stats = {
 
     // Favorites
     const favEl = Utils.el('fav-styles-list');
-    if(!d.favorites.length) { favEl.innerHTML = '<div class="empty-state">Afegeix estils a preferits amb ❤️</div>'; }
+    if(!d.favorites.length) { favEl.innerHTML = '<div class="empty-state">Añade estilos a favoritos con ❤️</div>'; }
     else {
       favEl.innerHTML = d.favorites.map(name => `
         <div class="fav-style-item" onclick="Study.openModal('${name.replace(/'/g,"\\'")}');App.showMode('study')">

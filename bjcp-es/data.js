@@ -1,4 +1,4 @@
-const BJCP_STYLES_ES = [
+const BJCP_STYLES = [
   {
     "name": "American Light Lager",
     "number": "1A",
