@@ -124,8 +124,27 @@ const Utils = {
     setTimeout(()=>t.remove(), 3000);
   },
   el(id) { return document.getElementById(id); },
-  html(id,h) { document.getElementById(id).innerHTML = h; }
+  html(id,h) { document.getElementById(id).innerHTML = h; },
+
+  buildHelperHTML(style) {
+    if(typeof STUDY_HELPERS === 'undefined') return '';
+    const h = STUDY_HELPERS[style.number];
+    if(!h) return '';
+    const section = (icon, title, color, items) => items && items.length ? `
+      <div class="helper-section">
+        <div class="helper-title" style="color:${color}">${icon} ${title}</div>
+        <ul class="helper-list">
+          ${items.map(i=>`<li>${i}</li>`).join('')}
+        </ul>
+      </div>` : '';
+    return `<div class="study-helpers-panel">
+      ${section('🔀','Confusió habitual amb:','#E5A020', h.confusableWith)}
+      ${section('🔑','Identificadors clau:','#22c55e', h.keyIdentifiers)}
+      ${section('⚠️','Defectes comuns:','#E5172F', h.commonFaults)}
+    </div>`;
+  }
 };
+
 
 // ===== APP CONTROLLER =====
 const App = {
@@ -330,6 +349,7 @@ const Study = {
           </div>`).join('')}
       </div>
       ${tags.length?`<div class="modal-tags">${tags.map(t=>`<span class="tag-badge">${t}</span>`).join('')}</div>`:''}
+      ${Utils.buildHelperHTML(s)}
     `;
     const overlay = Utils.el('detail-modal');
     overlay.classList.add('open');
@@ -582,7 +602,8 @@ const Quiz = {
     fb.className = `quiz-feedback${isCorrect?'':' wrong-fb'}`;
     fb.innerHTML = `
       <div class="feedback-title">${isCorrect ? '\u2705 Correcte!' : `\u274c La resposta correcta era: ${correct}`}</div>
-      <div class="feedback-text">${q.style.overallimpression?.substring(0,200)||''}${q.style.overallimpression?.length>200?'\u2026':''}</div>`;
+      <div class="feedback-text">${q.style.overallimpression?.substring(0,200)||''}${q.style.overallimpression?.length>200?'\u2026':''}</div>
+      ${Utils.buildHelperHTML(q.style)}`;
     fb.classList.remove('hidden');
 
     Utils.el('quiz-confidence').classList.add('hidden');
@@ -877,8 +898,9 @@ const Exam = {
     const fb = Utils.el('exam-feedback');
     fb.className = `quiz-feedback${isCorrect?'':' wrong-fb'}`;
     fb.innerHTML = `
-      <div class="feedback-title">${isCorrect?'✅ Correcte!':'❌ Incorrecte — '+q.correct}</div>
-      <div class="feedback-text">${q.style.overallimpression?.substring(0,180)||''}…</div>`;
+      <div class="feedback-title">${isCorrect?'\u2705 Correcte!':'\u274c Incorrecte \u2014 '+q.correct}</div>
+      <div class="feedback-text">${q.style.overallimpression?.substring(0,180)||''}\u2026</div>
+      ${Utils.buildHelperHTML(q.style)}`;
     fb.classList.remove('hidden');
     Utils.el('exam-next-btn').classList.remove('hidden');
     Utils.el('exam-score-live').textContent = this.score;

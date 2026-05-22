@@ -330,6 +330,7 @@ const Study = {
           </div>`).join('')}
       </div>
       ${tags.length?`<div class="modal-tags">${tags.map(t=>`<span class="tag-badge">${t}</span>`).join('')}</div>`:''}
+      ${Utils.buildHelperHTML(s)}
     `;
     const overlay = Utils.el('detail-modal');
     overlay.classList.add('open');
@@ -582,7 +583,8 @@ const Quiz = {
     fb.className = `quiz-feedback${isCorrect?'':' wrong-fb'}`;
     fb.innerHTML = `
       <div class="feedback-title">${isCorrect ? '\u2705 ¡Correcto!' : `\u274c La respuesta correcta era: ${correct}`}</div>
-      <div class="feedback-text">${q.style.overallimpression?.substring(0,200)||''}${q.style.overallimpression?.length>200?'\u2026':''}</div>`;
+      <div class="feedback-text">${q.style.overallimpression?.substring(0,200)||''}${q.style.overallimpression?.length>200?'\u2026':''}</div>
+      ${Utils.buildHelperHTML(q.style)}`;
     fb.classList.remove('hidden');
 
     Utils.el('quiz-confidence').classList.add('hidden');
@@ -878,7 +880,8 @@ const Exam = {
     fb.className = `quiz-feedback${isCorrect?'':' wrong-fb'}`;
     fb.innerHTML = `
       <div class="feedback-title">${isCorrect?'✅ ¡Correcto!':'❌ Incorrecto — '+q.correct}</div>
-      <div class="feedback-text">${q.style.overallimpression?.substring(0,180)||''}…</div>`;
+      <div class="feedback-text">${q.style.overallimpression?.substring(0,180)||''}…</div>
+      ${Utils.buildHelperHTML(q.style)}`;
     fb.classList.remove('hidden');
     Utils.el('exam-next-btn').classList.remove('hidden');
     Utils.el('exam-score-live').textContent = this.score;

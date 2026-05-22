@@ -12,14 +12,14 @@
           'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
     })(window, document, 'script', 'dataLayer', 'GTM-TLPDT8MP');</script>
   <!-- End Google Tag Manager -->
-  
+
   <!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-F987VN6X3B"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
+    function gtag() { dataLayer.push(arguments); }
     gtag('js', new Date());
-  
+
     gtag('config', 'G-F987VN6X3B');
   </script>
 
@@ -47,7 +47,8 @@
   <!-- NAVBAR -->
   <nav class="navbar" id="navbar">
     <div class="nav-brand">
-      <span class="brand-icon"><img src="../logo-icon.svg" alt="Börn Loka" class="vector-logo" style="height: 1.2em; vertical-align: middle; margin-top: -0.15em;"></span>
+      <span class="brand-icon"><img src="../logo-icon.svg" alt="Börn Loka" class="vector-logo"
+          style="height: 1.2em; vertical-align: middle; margin-top: -0.15em;"></span>
       <span class="brand-text">BJCP<span class="brand-accent">Study</span></span>
     </div>
     <div class="nav-tabs">
@@ -76,7 +77,8 @@
       <button class="theme-toggle" id="theme-toggle" onclick="App.toggleTheme()" title="Cambiar tema">
         <span id="theme-icon">☀️</span>
       </button>
-      <a href="../bjcp/index.html" class="theme-toggle" title="Català" style="text-decoration:none; font-family:'Barlow Condensed', sans-serif; font-size:18px; font-weight:700; display:flex; align-items:center; justify-content:center; color:var(--text1);">CA</a>
+      <a href="../bjcp/index.html" class="theme-toggle" title="Català"
+        style="text-decoration:none; font-family:'Barlow Condensed', sans-serif; font-size:18px; font-weight:700; display:flex; align-items:center; justify-content:center; color:var(--text1);">CA</a>
     </div>
   </nav>
 
@@ -131,7 +133,7 @@
         <!-- Quiz type selector -->
         <div id="quiz-selector" class="quiz-selector">
           <div class="quiz-type-card" onclick="Quiz.start('guess')">
-            <div class="quiz-type-icon"><img src="../logo-icon.svg" alt="Börn Loka" class="vector-logo" style="height: 1em; vertical-align: middle;"></div>
+            <div class="quiz-type-icon">🍺</div>
             <h3>Adivina el Estilo</h3>
             <p>Se te muestran las características y tienes que adivinar qué estilo BJCP es</p>
             <div class="quiz-type-badge">Quiz A</div>
@@ -332,6 +334,7 @@
 
   <!-- Scripts -->
   <script src="data.js"></script>
+  <script src="study-helpers.js"></script>
   <script src="app.js"></script>
 </body>
 
