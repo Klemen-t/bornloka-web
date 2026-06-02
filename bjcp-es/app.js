@@ -124,7 +124,55 @@ const Utils = {
     setTimeout(()=>t.remove(), 3000);
   },
   el(id) { return document.getElementById(id); },
-  html(id,h) { document.getElementById(id).innerHTML = h; }
+  html(id,h) { document.getElementById(id).innerHTML = h; },
+
+  buildHelperHTML(style, context='modal', chosenName=null) {
+    if(typeof STUDY_HELPERS === 'undefined') return '';
+    const h = STUDY_HELPERS[style.number];
+    if(!h) return '';
+    const section = (icon, title, color, items) => items && items.length ? `
+      <div class="helper-section">
+        <div class="helper-title" style="color:${color}">${icon} ${title}</div>
+        <ul class="helper-list">
+          ${items.map(i=>`<li>${i}</li>`).join('')}
+        </ul>
+      </div>` : '';
+
+    if (context === 'feedback-correct') {
+      const confusionNote = h.confusableWith?.length
+        ? `<div class="helper-confusion-note">⚠️ Suele confundirse con: <em>${h.confusableWith.slice(0,2).join(', ')}</em></div>` : '';
+      return `<div class="study-helpers-panel helpers-correct">
+        <div class="helpers-header">🧩 Por qué has acertado — refuerzo</div>
+        ${section('🔑','Identificadores clave:','#22c55e', h.keyIdentifiers)}
+        ${confusionNote}
+      </div>`;
+    }
+
+    if (context === 'feedback-wrong') {
+      let confusionMsg = '';
+      if (chosenName && h.confusableWith) {
+        const chosenFirst = chosenName.toLowerCase().split(/[\s(]/)[0];
+        const matched = h.confusableWith.find(c => c.toLowerCase().includes(chosenFirst));
+        if (matched) {
+          confusionMsg = `<div class="helper-confusion-alert">💡 Has elegido <strong>${chosenName}</strong>, que es uno de los estilos que se confunden habitualmente con <strong>${style.name}</strong>. Recuerda las diferencias clave:</div>`;
+        }
+      }
+      return `<div class="study-helpers-panel helpers-wrong">
+        <div class="helpers-header">🧩 Para aprender del error</div>
+        ${confusionMsg}
+        ${section('🔑','Identificadores clave de "' + style.name + '":','#22c55e', h.keyIdentifiers?.slice(0,3))}
+        ${section('⚠️','Defectos comunes:','#E5172F', h.commonFaults?.slice(0,2))}
+        ${section('🔀','No confundir con:','#E5A020', h.confusableWith?.slice(0,3))}
+      </div>`;
+    }
+
+    // Default: 'modal'
+    return `<div class="study-helpers-panel">
+      ${section('🔀','Confusión habitual con:','#E5A020', h.confusableWith)}
+      ${section('🔑','Identificadores clave:','#22c55e', h.keyIdentifiers)}
+      ${section('⚠️','Defectos comunes:','#E5172F', h.commonFaults)}
+    </div>`;
+  }
 };
 
 // ===== APP CONTROLLER =====
@@ -146,6 +194,7 @@ const App = {
     Utils.el(`tab-${mode}`).classList.add('active');
     this.currentMode = mode;
     if(mode==='stats') Stats.render();
+    if(mode==='detect') Detector.showLanding();
   },
   refreshBadges() {
     const d = Store.get();
@@ -210,6 +259,7 @@ const Study = {
   cardHTML(s, d) {
     const isFav = d.favorites.includes(s.name);
     const isDiff = d.difficult.includes(s.name);
+    const hasHelper = typeof STUDY_HELPERS !== 'undefined' && !!STUDY_HELPERS[s.number];
     const abv = Utils.fmtRange(s.abvmin, s.abvmax, '%');
     const ibu = Utils.fmtRange(s.ibumin, s.ibumax);
     const srmMid = s.srmmin && s.srmmax ? (s.srmmin+s.srmmax)/2 : s.srmmin||s.srmmax;
@@ -232,6 +282,7 @@ const Study = {
       </div>
       <div class="card-desc">${s.overallimpression||s.aroma||''}</div>
       ${tags.length?`<div class="card-badges">${tags.map(t=>`<span class="tag-badge">${t}</span>`).join('')}</div>`:''}
+      ${hasHelper ? '<div class="card-helper-badge">🧩 Study helper</div>' : ''}
       <div class="srm-bar" style="background:linear-gradient(90deg,${Utils.srmToColor(s.srmmin||1)},${Utils.srmToColor(s.srmmax||10)})"></div>
     </div>`;
   },
@@ -322,6 +373,7 @@ const Study = {
           <div class="modal-stat-key">SRM</div>
         </div>
       </div>
+      ${Utils.buildHelperHTML(s)}
       <div class="modal-sections">
         ${sections.map(([title,text],i)=>`
           <div class="modal-section${i<4?'':' full'}">
@@ -330,7 +382,6 @@ const Study = {
           </div>`).join('')}
       </div>
       ${tags.length?`<div class="modal-tags">${tags.map(t=>`<span class="tag-badge">${t}</span>`).join('')}</div>`:''}
-      ${Utils.buildHelperHTML(s)}
     `;
     const overlay = Utils.el('detail-modal');
     overlay.classList.add('open');
@@ -389,18 +440,27 @@ const Quiz = {
 
   buildQuestion(style, type, pool) {
     if(type === 'guess') {
-      const distractors = this.getDistractors(style, pool, 3);
-      const options = Utils.shuffle([style, ...distractors]);
       const profile = this.pickGuessProfile(style);
-      return { style, type:'guess', options, correct: style.name, profile };
+      let distractors, keyClue;
+      if (profile === 'confusion') {
+        distractors = this.getDistractorsForConfusion(style, pool, 3);
+        const h_c = typeof STUDY_HELPERS !== 'undefined' ? STUDY_HELPERS[style.number] : null;
+        keyClue = h_c?.keyIdentifiers ? Utils.shuffle([...h_c.keyIdentifiers])[0] : '';
+      } else {
+        distractors = this.getDistractors(style, pool, 3);
+      }
+      const options = Utils.shuffle([style, ...distractors]);
+      return { style, type:'guess', options, correct: style.name, profile, keyClue };
     } else {
       // Show name, guess a random parameter (ABV, IBU, SRM, Category, Commercial Examples)
       const possibleSubtypes = [];
+      const h_key = typeof STUDY_HELPERS !== 'undefined' ? STUDY_HELPERS[style.number] : null;
       if ((style.abvmin !== undefined && style.abvmin !== null) || (style.abvmax !== undefined && style.abvmax !== null)) possibleSubtypes.push('abv');
       if ((style.ibumin !== undefined && style.ibumin !== null) || (style.ibumax !== undefined && style.ibumax !== null)) possibleSubtypes.push('ibu');
       if ((style.srmmin !== undefined && style.srmmin !== null) || (style.srmmax !== undefined && style.srmmax !== null)) possibleSubtypes.push('srm');
       if (style.category) possibleSubtypes.push('category');
       if (style.commercialexamples && style.commercialexamples.trim().length > 5 && style.commercialexamples !== '-') possibleSubtypes.push('examples');
+      if (h_key?.keyIdentifiers?.length) possibleSubtypes.push('key_id');
       
       const subtype = possibleSubtypes.length > 0 ? Utils.shuffle(possibleSubtypes)[0] : 'abv';
       
@@ -447,6 +507,16 @@ const Quiz = {
         const others = Utils.shuffle(pool.filter(s => s.name !== style.name && s.commercialexamples && s.commercialexamples.trim().length > 5 && s.commercialexamples !== '-'))
           .slice(0, 3).map(s => getCleanExamples(s));
         options = Utils.shuffle([correct, ...others]);
+      } else if (subtype === 'key_id') {
+        const keyClue = Utils.shuffle([...h_key.keyIdentifiers])[0];
+        correct = style.name;
+        const confusionNames = (h_key.confusableWith||[]).map(c => { const m = c.match(/^(.+?)\s*\(/); return m ? m[1].trim() : c.trim(); });
+        const confDist = Utils.shuffle(pool.filter(s => s.name !== style.name && confusionNames.includes(s.name)));
+        const fallDist = Utils.shuffle(pool.filter(s => s.name !== style.name && !confusionNames.includes(s.name)));
+        const kidDist = [...confDist, ...fallDist].slice(0, 3);
+        while (kidDist.length < 3) { const extra = Utils.shuffle(pool.filter(s => s.name !== style.name && !kidDist.find(d=>d.name===s.name)))[0]; if(extra) kidDist.push(extra); else break; }
+        options = Utils.shuffle([style.name, ...kidDist.map(s => s.name)]);
+        return { style, type:'define', subtype:'key_id', options, correct, keyClue };
       }
       
       // Ensure unique options
@@ -486,6 +556,9 @@ const Quiz = {
     if ((style.characteristicingredients||'').length > 20) c.push('ingredients');
     if ((style.comments||'').length > 30) c.push('comments');
     if ((style.stylecomparison||'').length > 30) c.push('stylecomparison');
+    if (typeof STUDY_HELPERS !== 'undefined' && STUDY_HELPERS[style.number]?.keyIdentifiers?.length) {
+      c.push('confusion'); c.push('confusion'); // weighted 2x
+    }
     return Utils.shuffle(c)[0];
   },
 
@@ -510,6 +583,19 @@ const Quiz = {
       return { style: s, pts };
     }).sort((a,b) => b.pts - a.pts);
     return Utils.shuffle(scored.slice(0, Math.max(n*4, 12))).slice(0, n).map(c => c.style);
+  },
+
+  getDistractorsForConfusion(style, pool, n) {
+    const h = typeof STUDY_HELPERS !== 'undefined' ? STUDY_HELPERS[style.number] : null;
+    if (!h?.confusableWith?.length) return this.getDistractors(style, pool, n);
+    const confusionNames = h.confusableWith.map(c => {
+      const m = c.match(/^(.+?)\s*\(/); return m ? m[1].trim() : c.trim();
+    });
+    const confusionStyles = Utils.shuffle(pool.filter(s =>
+      s.name !== style.name && confusionNames.some(cn => s.name === cn)
+    ));
+    const regular = this.getDistractors(style, pool, n * 2).filter(s => !confusionStyles.find(c => c.name === s.name));
+    return Utils.shuffle([...confusionStyles, ...regular]).slice(0, n);
   },
 
   generateTastingNote(s) {
@@ -581,10 +667,12 @@ const Quiz = {
     // Show feedback
     const fb = Utils.el('quiz-feedback');
     fb.className = `quiz-feedback${isCorrect?'':' wrong-fb'}`;
+    const chosenStyleName = (q.type === 'guess' || q.subtype === 'key_id') ? chosen : null;
+    const helperCtx = isCorrect ? 'feedback-correct' : 'feedback-wrong';
     fb.innerHTML = `
-      <div class="feedback-title">${isCorrect ? '\u2705 ¡Correcto!' : `\u274c La respuesta correcta era: ${correct}`}</div>
+      <div class="feedback-title">${isCorrect ? '\u2705 \u00a1Correcto!' : `\u274c La respuesta correcta era: ${correct}`}</div>
       <div class="feedback-text">${q.style.overallimpression?.substring(0,200)||''}${q.style.overallimpression?.length>200?'\u2026':''}</div>
-      ${Utils.buildHelperHTML(q.style)}`;
+      ${Utils.buildHelperHTML(q.style, helperCtx, isCorrect ? null : chosenStyleName)}`;
     fb.classList.remove('hidden');
 
     Utils.el('quiz-confidence').classList.add('hidden');
@@ -640,12 +728,25 @@ const Quiz = {
           <div class="question-label">⚖️ Comparación de estilos</div>
           <div class="question-title">¿De qué estilo habla esta comparación?</div>
           <div class="question-chars">${wide('Comparación de estilos', s.stylecomparison, 450)}${tagsHTML}</div>`;
+      } else if (q.profile === 'confusion') {
+        const keyClue = q.keyClue || (typeof STUDY_HELPERS!=='undefined' && STUDY_HELPERS[s.number]?.keyIdentifiers
+          ? Utils.shuffle([...STUDY_HELPERS[s.number].keyIdentifiers])[0] : '');
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">🧩 Confusión de estilos</div>
+          <div class="question-title">¿Qué estilo tiene este identificador clave?</div>
+          <div class="question-chars">
+            <div class="q-char wide q-char-keyid">
+              <div class="q-char-label">Identificador clave</div>
+              <div class="q-char-val" style="font-style:italic;font-size:15px">&ldquo;${keyClue}&rdquo;</div>
+            </div>
+            ${statsHTML}
+          </div>`;
       } else {
         // sensory (default)
         const chars = [
           s.aroma ? wide('Aroma', s.aroma, 380) : '',
           s.flavor ? wide('Sabor', s.flavor, 380) : '',
-          s.mouthfeel ? wide('Sensació', s.mouthfeel, 280) : '',
+          s.mouthfeel ? wide('Sensación', s.mouthfeel, 280) : '',
         ].join('');
         Utils.el('question-card').innerHTML = `
           <div class="question-label">🍺 Adivina el estilo BJCP</div>
@@ -665,11 +766,24 @@ const Quiz = {
       else if (q.subtype === 'srm') prompt = "¿Cuál es el color típico (SRM) de este estilo?";
       else if (q.subtype === 'category') prompt = "¿A qué categoría pertenece este estilo?";
       else if (q.subtype === 'examples') prompt = "¿Cuáles de estos son ejemplos comerciales de este estilo?";
+      else if (q.subtype === 'key_id') prompt = "¿A qué estilo pertenece este identificador clave?";
 
-      Utils.el('question-card').innerHTML = `
-        <div class="question-label">📋 Define el estilo</div>
-        <div class="question-title" style="margin-bottom:8px">${s.name}</div>
-        <div style="font-size:14px;color:var(--accent);font-weight:600;margin-bottom:16px">${prompt}</div>`;
+      if (q.subtype === 'key_id') {
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">🧩 Identifica el estilo</div>
+          <div class="question-title">¿A qué estilo pertenece este identificador clave?</div>
+          <div class="question-chars">
+            <div class="q-char wide q-char-keyid">
+              <div class="q-char-label">Identificador clave</div>
+              <div class="q-char-val" style="font-style:italic">&ldquo;${q.keyClue}&rdquo;</div>
+            </div>
+          </div>`;
+      } else {
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">📋 Define el estilo</div>
+          <div class="question-title" style="margin-bottom:8px">${s.name}</div>
+          <div style="font-size:14px;color:var(--accent);font-weight:600;margin-bottom:16px">${prompt}</div>`;
+      }
 
       Utils.el('answers-grid').innerHTML = q.options.map(opt => `
         <button class="answer-btn" onclick="Quiz.answer('${opt.replace(/'/g,"\\'")}')">
@@ -878,10 +992,12 @@ const Exam = {
 
     const fb = Utils.el('exam-feedback');
     fb.className = `quiz-feedback${isCorrect?'':' wrong-fb'}`;
+    const examCtx = isCorrect ? 'feedback-correct' : 'feedback-wrong';
+    const examChosen = isCorrect ? null : chosen;
     fb.innerHTML = `
-      <div class="feedback-title">${isCorrect?'✅ ¡Correcto!':'❌ Incorrecto — '+q.correct}</div>
+      <div class="feedback-title">${isCorrect?'\u2705 \u00a1Correcto!':'\u274c Incorrecto \u2014 '+q.correct}</div>
       <div class="feedback-text">${q.style.overallimpression?.substring(0,180)||''}…</div>
-      ${Utils.buildHelperHTML(q.style)}`;
+      ${Utils.buildHelperHTML(q.style, examCtx, examChosen)}`;
     fb.classList.remove('hidden');
     Utils.el('exam-next-btn').classList.remove('hidden');
     Utils.el('exam-score-live').textContent = this.score;
@@ -1037,3 +1153,360 @@ document.addEventListener('DOMContentLoaded', () => {
     frame();
   })();
 });
+
+// ===== DETECTOR MODULE (ES) =====
+const Detector = {
+  currentQ: 0,
+  scores: null,
+  answers: {},
+
+  QUESTIONS: [
+    {
+      id:'color', icon:'🎨', skip:true,
+      text: '¿Cuál es el color de la cerveza?',
+      hint: 'Obsérvala contra la luz si puedes',
+      opts: [
+        {label:'Paja / Amarillo pálido', icon:'🌾', v:{min:1,max:4}},
+        {label:'Amarillo / Dorado',        icon:'🍯', v:{min:4,max:9}},
+        {label:'Ámbar',                   icon:'🧡', v:{min:9,max:17}},
+        {label:'Cobre / Rojizo',           icon:'🔶', v:{min:17,max:24}},
+        {label:'Marrón',                   icon:'🟤', v:{min:24,max:33}},
+        {label:'Negro oscuro',             icon:'⬛', v:{min:30,max:42}},
+        {label:'Negro opaco',              icon:'🖤', v:{min:38,max:99}},
+      ],
+      score(style, opt) {
+        const {min:tMin,max:tMax} = opt.v;
+        const a = style.srmmin||style.srmmax, b = style.srmmax||style.srmmin;
+        if(!a && !b) return 0;
+        const sMid = (a+b)/2;
+        if(b>=tMin && a<=tMax) return 25;
+        const dist = Math.min(Math.abs(sMid-tMin), Math.abs(sMid-tMax));
+        return dist<=6 ? -5 : -20;
+      }
+    },
+    {
+      id:'abv', icon:'⚗️', skip:true,
+      text: '¿Cuál es la graduación alcohólica (ABV)?',
+      hint: 'En la etiqueta o por la sensación de calor en garganta',
+      opts: [
+        {label:'Muy baja (<3.5%)',          icon:'💧', v:{min:0,max:3.5}},
+        {label:'Baja (3.5–5%)',             icon:'🍵', v:{min:3.5,max:5.2}},
+        {label:'Estándar (4.5–6.5%)',     icon:'🍺', v:{min:4.5,max:6.8}},
+        {label:'Alta (6–9%)',               icon:'🔥', v:{min:6,max:9}},
+        {label:'Muy alta (>9%)',            icon:'💥', v:{min:9,max:25}},
+      ],
+      score(style, opt) {
+        const {min:tMin,max:tMax} = opt.v;
+        const a = style.abvmin||style.abvmax, b = style.abvmax||style.abvmin;
+        if(!a && !b) return 0;
+        const sMid = (a+b)/2;
+        if(b>=tMin && a<=tMax) return 25;
+        const dist = Math.min(Math.abs(sMid-tMin), Math.abs(sMid-tMax));
+        return dist<=1.5 ? -5 : dist<=3 ? -14 : -22;
+      }
+    },
+    {
+      id:'ibu', icon:'🌿', skip:true,
+      text: '¿Cómo percibes el amargor?',
+      hint: 'El amargor residual al final de boca',
+      opts: [
+        {label:'Casi ausente (<10 IBU)',  icon:'🧧', v:{min:0,max:12}},
+        {label:'Suave (10–25)',           icon:'🍃', v:{min:10,max:27}},
+        {label:'Moderado (25–45)',        icon:'🌿', v:{min:25,max:48}},
+        {label:'Marcado (45–70)',         icon:'🌶️', v:{min:45,max:73}},
+        {label:'Muy intenso (>70)',       icon:'⚡', v:{min:68,max:200}},
+      ],
+      score(style, opt) {
+        const {min:tMin,max:tMax} = opt.v;
+        const a = style.ibumin||style.ibumax, b = style.ibumax||style.ibumin;
+        if(!a && !b) return 0;
+        const sMid = (a+b)/2;
+        if(b>=tMin && a<=tMax) return 22;
+        const dist = Math.min(Math.abs(sMid-tMin), Math.abs(sMid-tMax));
+        return dist<=10 ? -5 : dist<=25 ? -13 : -20;
+      }
+    },
+    {
+      id:'ferment', icon:'🧫', skip:true,
+      text: '¿Cómo es el carácter de fermentación?',
+      hint: 'La impresión de la levadura: limpio como una lager, afrutado, fenólico...',
+      opts: [
+        {label:'Limpio / Lager — sin notas de levadura', icon:'❄️', kw:['lager','neutro','limpio','clean','crisp','neutral'], negKw:['belga','belgian','trappist','sour','ácido','ahumado','humo','smoke']},
+        {label:'Ale — ligeramente afrutado / éstery',    icon:'🍎', kw:['afrutado','éster','frutal','manzana','pera','fruta'], negKw:['lager','sour','ácido','belga','belgian','ahumado']},
+        {label:'Belga — muy afrutado o fenólico',       icon:'🍐', kw:['belga','belgian','trappist','fenól','clavo','plátano','especiado','spice'], negKw:['lager','sour','ahumado']},
+        {label:'Ácido / Láctico / Salvaje',              icon:'🧴', kw:['sour','ácido','láctico','brett','salvaje','agrio','lambic','wild'], negKw:['lager','belga','ahumado']},
+        {label:'Ahumado o especiado (adición)',          icon:'🔥', kw:['ahumado','humo','smoke','turba','smoked','peat'], negKw:['sour','ácido']},
+      ],
+      score(style, opt) {
+        const text = ((style.aroma||'')+(style.flavor||'')+(style.tags||'')+(style.category||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        const neg = (opt.negKw||[]).filter(k=>text.includes(k)).length;
+        return neg > 0 ? -22 : hits>=3 ? 32 : hits>=2 ? 22 : hits>=1 ? 12 : -5;
+      }
+    },
+    {
+      id:'aroma', icon:'👃', skip:true,
+      text: '¿Cuál es el aroma dominante?',
+      hint: 'Lo primero que percibes en nariz',
+      opts: [
+        {label:'Lúpulo (cítrico/floral/resinoso)', icon:'🍋', kw:['hop','lupul','citric','floral','citrus','pine','resin','tropical','grapefruit','herbal']},
+        {label:'Malta / Pan / Galleta',            icon:'🍞', kw:['malt','bread','biscuit','toast','grain','cereal','bready','malta','pan']},
+        {label:'Tostado / Café / Chocolate',      icon:'☕', kw:['roast','coffee','chocolate','burnt','dark','cocoa','char','tostado','café']},
+        {label:'Afrutado / Éstery',               icon:'🍎', kw:['fruit','ester','banana','apple','pear','cherry','plum','dried','tropical','stone','fruta']},
+        {label:'Especiado / Herbal',               icon:'🌶️', kw:['spice','spicy','pepper','clove','coriander','herbal','herb','especia']},
+        {label:'Ácido / Funk / Láctico',           icon:'🧴', kw:['sour','acid','tart','lactic','brett','barnyard','wild','funk','vinegar','lambic','ácido']},
+        {label:'Limpio / Neutro / Mineral',        icon:'🧧', kw:['clean','neutral','crisp','mineral','delicate','subtle','lager','limpio']},
+      ],
+      score(style, opt) {
+        const text = ((style.aroma||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=3 ? 28 : hits>=2 ? 18 : hits>=1 ? 10 : -8;
+      }
+    },
+    {
+      id:'flavor', icon:'👅', skip:true,
+      text: '¿Cuál es el sabor principal?',
+      hint: 'La impresión general en el paladar y el final de boca',
+      opts: [
+        {label:'Amargo de lúpulo / Seco',  icon:'🌿', kw:['hop','bitter','dry','resin','harsh','hoppy']},
+        {label:'Dulce / Caramelo / Toffee', icon:'🍯', kw:['sweet','caramel','toffee','malt','molasses','candy','dulce','caramelo']},
+        {label:'Tostado seco / Amargo oscuro', icon:'☕', kw:['roast','dry','burnt','coffee','chocolate','bitter','char','tostado']},
+        {label:'Afrutado / Éstery',         icon:'🍎', kw:['fruit','ester','fruity','banana','apple','cherry','pear','plum','fruta']},
+        {label:'Especiado',                 icon:'🌶️', kw:['spice','pepper','clove','coriander','spicy','warm','especia']},
+        {label:'Ácido / Agrio',              icon:'🧴', kw:['sour','tart','acid','lactic','citric','brett','vinegar','acetic','ácido']},
+        {label:'Equilibrado / Maltoso',     icon:'⚖️', kw:['balance','balanced','malt','clean','biscuit','bread','mild','equilibrado']},
+      ],
+      score(style, opt) {
+        const text = ((style.flavor||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=3 ? 25 : hits>=2 ? 15 : hits>=1 ? 7 : -6;
+      }
+    },
+    {
+      id:'body', icon:'🧣', skip:true,
+      text: '¿Cómo es el cuerpo y la sensación en boca?',
+      hint: 'La textura, el peso y la carbonatación',
+      opts: [
+        {label:'Ligero / Aéreo / Gasificado', icon:'💨', kw:['light','thin','crisp','refreshing','highly carbonated','prickly','effervescent','watery']},
+        {label:'Medio / Suave / Cremoso',      icon:'🍺', kw:['medium','smooth','creamy','moderate','balanced']},
+        {label:'Pleno / Robusto / Viscoso',    icon:'🥛', kw:['full','robust','heavy','rich','thick','chewy','viscous','warming']},
+        {label:'Sedoso / Nitrogenado',         icon:'🧈', kw:['silky','satiny','nitro','nitrogen','velvety']},
+      ],
+      score(style, opt) {
+        const text = ((style.mouthfeel||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=2 ? 20 : hits>=1 ? 11 : -5;
+      }
+    },
+    {
+      id:'carbo', icon:'🫧', skip:true,
+      text: '¿Cómo es la carbonatación?',
+      hint: 'Puedes saltar si no estás seguro',
+      opts: [
+        {label:'Muy baja (nitro / tirado natural)', icon:'🧈', kw:['nitro','nitrogen','low carbonation','smooth','cask','nitrogenado']},
+        {label:'Baja a media (ales inglesas)',       icon:'🍺', kw:['low','moderate carbon','medium carbon','media','baja']},
+        {label:'Alta (lager / ale estándar)',        icon:'💧', kw:['high carbon','alta carbon','highly carbonated','moderadamente']},
+        {label:'Muy alta (belga / trigo / brut)',    icon:'✨', kw:['highly carbonated','muy alta','very high carbon','effervescent','belgian','champagne','brut']},
+      ],
+      score(style, opt) {
+        const text = ((style.mouthfeel||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=2 ? 20 : hits>=1 ? 10 : -3;
+      }
+    },
+    {
+      id:'clarity', icon:'🔍', skip:true,
+      text: '¿Cómo es la transparencia de la cerveza?',
+      hint: 'Puedes saltar si no estás seguro',
+      opts: [
+        {label:'Brillante / Cristalino / Filtrado',  icon:'💎', kw:['brilliant','clear','bright','brillante','cristalino','filtered','filtrada','cristal']},
+        {label:'Ligeramente turbio (aceptable)',      icon:'🌤️', kw:['slight haze','chill haze','ligeramente turbio','slight turbidity']},
+        {label:'Muy turbio / Lechoso / Opaco',        icon:'🌫️', kw:['turbid','hazy','opaque','cloudy','turbio','lechoso','opaco','unfiltered','yeast in suspension','sin filtrar']},
+      ],
+      score(style, opt) {
+        const text = ((style.appearance||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=2 ? 22 : hits>=1 ? 12 : -6;
+      }
+    },
+    {
+      id:'origin', icon:'🌍', skip:true,
+      text: '¿Cuál es el origen o tradición de esta cerveza?',
+      hint: 'Puedes saltar esta pregunta si no lo sabes',
+      opts: [
+        {label:'Británica', icon:'🇬🇧', cats:['British Pale','Scottish','Irish','Brown British','Strong British','Dark British']},
+        {label:'Alemana / Austríaca', icon:'🇩🇪', cats:['German Lager','Munich','Bock','German Ale','European']},
+        {label:'Belga / Francesa', icon:'🇧🇪', cats:['Belgian','Trappist','Historical']},
+        {label:'Americana', icon:'🇺🇸', cats:['American Lager','American Pale','American Porter','American Wild']},
+        {label:'Otras / No sé', icon:'🌍', cats:[]},
+      ],
+      score(style, opt) {
+        if(!opt.cats.length) return 0;
+        const cat = style.category||'';
+        return opt.cats.some(c=>cat.toLowerCase().includes(c.split(' ')[0].toLowerCase())) ? 20 : -15;
+      }
+    },
+  ],
+
+  _initScores() {
+    this.scores = BJCP_STYLES.filter(s=>s.name&&s.category).map(s=>({style:s,score:0}));
+  },
+
+  _recomputeScores() {
+    this._initScores();
+    Object.entries(this.answers).forEach(([qIdx, optIdx]) => {
+      if (optIdx === null) return;
+      const q = this.QUESTIONS[parseInt(qIdx)];
+      const opt = q.opts[optIdx];
+      this.scores.forEach(item => { item.score += q.score(item.style, opt); });
+    });
+  },
+
+  start() {
+    this.currentQ = 0;
+    this.answers = {};
+    this._initScores();
+    Utils.el('detect-landing').classList.add('hidden');
+    Utils.el('detect-game').classList.remove('hidden');
+    Utils.el('detect-results').classList.add('hidden');
+    this.showQuestion();
+  },
+
+  showLanding() {
+    Utils.el('detect-landing').classList.remove('hidden');
+    Utils.el('detect-game').classList.add('hidden');
+    Utils.el('detect-results').classList.add('hidden');
+  },
+
+  showQuestion() {
+    const q = this.QUESTIONS[this.currentQ];
+    const total = this.QUESTIONS.length;
+    Utils.el('detect-progress-fill').style.width = ((this.currentQ/total)*100)+'%';
+    Utils.el('detect-q-counter').textContent = `${this.currentQ+1} / ${total}`;
+    Utils.el('detect-question-card').innerHTML = `
+      <div class="detect-q-icon">${q.icon}</div>
+      <div class="detect-q-text">${q.text}</div>
+      ${q.hint?`<div class="detect-q-hint">💡 ${q.hint}</div>`:''}
+      <div class="detect-opts">
+        ${q.opts.map((opt,i)=>`
+          <button class="detect-opt-btn" onclick="Detector.pickAnswer(${i})">
+            <span class="detect-opt-icon">${opt.icon}</span>
+            <span class="detect-opt-label">${opt.label}</span>
+          </button>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;">
+        ${q.skip?`<button class="btn btn-outline btn-sm" onclick="Detector.skip()">Saltar →</button>`:''}
+        <div id="detect-nav-btns" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+      </div>
+    `;
+    const prev = this.answers[this.currentQ];
+    if (prev !== undefined && prev !== null)
+      document.querySelectorAll('.detect-opt-btn')[prev]?.classList.add('selected');
+    this._renderNavBtns();
+    this.renderLiveRanking();
+  },
+
+  pickAnswer(optIdx) {
+    this.answers[this.currentQ] = optIdx;
+    this._recomputeScores();
+    document.querySelectorAll('.detect-opt-btn').forEach((btn, i) =>
+      btn.classList.toggle('selected', i === optIdx));
+    this.renderLiveRanking();
+    this._renderNavBtns();
+  },
+
+  _renderNavBtns() {
+    const el = document.getElementById('detect-nav-btns');
+    if (!el) return;
+    const isLast = this.currentQ === this.QUESTIONS.length - 1;
+    const hasAns = this.answers[this.currentQ] !== undefined;
+    el.innerHTML =
+      (this.currentQ > 0 ? `<button class="btn btn-outline btn-sm" onclick="Detector.prev()">← Anterior</button>` : '') +
+      (hasAns ? (isLast
+        ? `<button class="btn btn-primary btn-sm" onclick="Detector.showResults()">Ver resultados ✓</button>`
+        : `<button class="btn btn-primary btn-sm" onclick="Detector.next()">Siguiente →</button>`) : '');
+  },
+
+  prev() {
+    if (this.currentQ > 0) { this.currentQ--; this.showQuestion(); }
+  },
+
+  next() {
+    this.currentQ++;
+    if (this.currentQ >= this.QUESTIONS.length) this.showResults();
+    else this.showQuestion();
+  },
+
+  skip() {
+    this.answers[this.currentQ] = null;
+    this._recomputeScores();
+    this.next();
+  },
+
+  _sorted() { return [...this.scores].sort((a,b)=>b.score-a.score); },
+
+  renderLiveRanking() {
+    if(!this.scores) return;
+    const sorted = this._sorted();
+    const maxScore = Math.max(1, sorted[0]?.score||0);
+    const answered = this.currentQ > 0;
+    Utils.el('detect-live-ranking').innerHTML = `
+      <div class="rank-title">🎯 ${answered?'Estilos más probables':'Estilos posibles'}</div>
+      ${sorted.slice(0,10).map((item,i)=>{
+        const pct = answered ? Math.max(0,Math.round((item.score/maxScore)*100)) : 0;
+        const srmMid = item.style.srmmin&&item.style.srmmax
+          ?(item.style.srmmin+item.style.srmmax)/2:item.style.srmmin||item.style.srmmax||10;
+        const color = Utils.srmToColor(srmMid);
+        return `
+          <div class="rank-item" onclick="Study.openModal('${item.style.name.replace(/'/g,"\\'")}')">
+            <div class="rank-pos">${i+1}</div>
+            <div class="rank-info">
+              <div class="rank-name">${item.style.name}</div>
+              <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+            </div>
+            <div class="rank-pct">${pct}%</div>
+          </div>`;
+      }).join('')}
+    `;
+  },
+
+  showResults() {
+    Utils.el('detect-game').classList.add('hidden');
+    Utils.el('detect-results').classList.remove('hidden');
+    const sorted = this._sorted();
+    const maxScore = Math.max(1, sorted[0]?.score||0);
+    const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+    Utils.el('detect-results').innerHTML = `
+      <div class="detect-results-header">
+        <div style="font-size:56px;margin-bottom:12px">🕵️</div>
+        <h2 class="detect-results-title">Resultado del Detective</h2>
+        <p class="detect-results-sub">Basándonos en tus respuestas, los estilos más probables son:</p>
+      </div>
+      <div class="detect-top-results">
+        ${sorted.slice(0,5).map((item,i)=>{
+          const pct = Math.max(0,Math.round((item.score/maxScore)*100));
+          const srmMid = item.style.srmmin&&item.style.srmmax
+            ?(item.style.srmmin+item.style.srmmax)/2:item.style.srmmin||item.style.srmmax||10;
+          const color = Utils.srmToColor(srmMid);
+          return `
+            <div class="detect-result-card" onclick="Study.openModal('${item.style.name.replace(/'/g,"\\'")}')">
+              <div class="detect-result-medal">${medals[i]}</div>
+              <div class="detect-result-main">
+                <div class="detect-result-name">${item.style.name}</div>
+                <div class="detect-result-num">${item.style.number||''} · ${item.style.category||''}</div>
+                <div class="detect-result-bar-wrap"><div class="detect-result-bar" style="width:${pct}%;background:linear-gradient(90deg,${color},var(--accent))"></div></div>
+              </div>
+              <div class="detect-result-pct" style="color:${color}">${pct}%</div>
+            </div>`;
+        }).join('')}
+      </div>
+      <p style="font-size:12px;color:var(--text3);text-align:center;margin-bottom:20px">Toca cualquier estilo para ver todos los detalles 👀</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="Detector.start()">🔄 Detectar de nuevo</button>
+        <button class="btn btn-outline" onclick="Detector.showLanding()">← Inicio detective</button>
+      </div>
+    `;
+    Store.addXP(5);
+    Utils.toast('🕵️ ¡Detección completada! +5 XP', 'success');
+  },
+};

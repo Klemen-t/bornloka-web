@@ -176,6 +176,7 @@ const STUDY_HELPERS = {
     confusableWith: ["Weissbier (10A)", "Doppelbock (9A)", "Weizenbock oscuro vs Dunkles Weissbier (10B)"],
     keyIdentifiers: ["Bock de trigo: fuerte 6.5–9% ABV", "Plátano+clavo + rica maltosidad de bock", "Versiones pálidas y oscuras", "Alta carbonatación como todo weizen", "Fruta oscura en versiones oscuras (ciruelas)"],
     commonFaults: ["Alcohol caliente (debe ser suave)", "Sin carácter Weizen (plátano/clavo)", "Demasiado dulce sin atenuación para la fuerza"]
+  },
   // ── CAT 11: British Bitter ──
   "11A": {
       confusableWith: ["Best Bitter (11B)", "Dark Mild (13A)", "Scottish Light (14A)"],
@@ -357,6 +358,43 @@ const STUDY_HELPERS = {
       keyIdentifiers: ["Lúpulo americano: cítrico, pino, tropical, resinoso", "ABV 6.3–7.5%", "Malta neutra de soporte (clean base)", "IBU 40–70: amargo pero equilibrado"],
       commonFaults: ["Demasiado maltoso/equilibrado (sería APA)", "Oxidado (¡el lúpulo envejece muy rápido!)", "Amargor sin sabor de lúpulo (extracción incorrecta)"]
     },
+
+  // ── CAT 21B: Specialty IPA (subcategorías) ──
+  "21B1": {
+    confusableWith: ["Belgian Tripel (26C)", "Belgian Golden Strong (25C)", "American IPA (21A)"],
+    keyIdentifiers: ["Levadura BELGA: ésteres (pera, manzana, plátano) + especias (clavo, pimienta)", "Final muy SECO y muy ATENUADO", "ABV fuerte: 6.2–9.5%", "Dorado claro a ámbar (5–8 SRM)", "Lúpulo americano/NM O europeo — ambos posibles"],
+    commonFaults: ["Sin carácter de levadura belga (sería American IPA)", "Final dulce o poco atenuado (debe ser seco como una Tripel)", "Conflicto desagradable entre levadura y lúpulo"]
+  },
+  "21B2": {
+    confusableWith: ["American IPA (21A)", "American Stout (20B)", "American Porter (20A)"],
+    keyIdentifiers: ["NEGRO (25–40 SRM) ¡pero con perfil de IPA!", "Tostado MÍNIMO y SUAVE: chocolate/café sin quemar", "Lúpulo americano dominante: cítrico, pino, tropical", "Final seco como una IPA, cuerpo ligero-medio", "El tostado NO debe enmascarar ni chocar con el lúpulo"],
+    commonFaults: ["Tostado quemado o dominante (sería Porter/Stout)", "Demasiado cuerpo/pesado (debe ser ligera como una IPA)", "Sin presencia de lúpulo (el tostado no puede robar protagonismo)"]
+  },
+  "21B3": {
+    confusableWith: ["American Amber Ale (19A)", "Red IPA (21B5)", "American Brown Ale (19C)"],
+    keyIdentifiers: ["Marrón (18–35 SRM): CHOCOLATE + caramelo oscuro + lúpulo americano", "Chocolate/cacao/toffee MÁS INTENSO que la Red IPA", "ABV 5.5–7.5%", "La malta casi equilibra la amargor", "MENOS tostado que la Black IPA"],
+    commonFaults: ["Tostado quemado (sería Black IPA o Porter)", "Demasiado dulce sin sequedad (debe tener final seco)", "Sin el tándem chocolate+lúpulo americano"]
+  },
+  "21B4": {
+    confusableWith: ["American IPA (21A)", "Hazy IPA (21C)", "Belgian Golden Strong (25C)"],
+    keyIdentifiers: ["EXTREMADAMENTE SECA: ¡FG puede bajar de 1.000!", "Carbonatación altísima, recordando champagne", "Muy pálida (2–4 SRM): casi como el agua", "IBU PERCIBIDOS muy bajos (20–30) por la sequedad extrema", "Enzimas (amyloglucosidase) para eliminar azúcares residuales"],
+    commonFaults: ["Final dulce o no suficientemente seco (el rasgo distintivo es la sequedad extrema)", "Diacetilo (defecto de enzima mal aplicado)", "Turbio u oscuro (debe ser cristalino y muy pálido)"]
+  },
+  "21B5": {
+    confusableWith: ["American Amber Ale (19A)", "Brown IPA (21B3)", "American IPA (21A)"],
+    keyIdentifiers: ["ÁMBAR-ROJO (11–17 SRM): caramelo medio-oscuro + toffee", "Lúpulo americano dominante como una IPA", "MENOS chocolate que la Brown IPA", "ABV 5.5–7.5%, final seco", "Equilibrio: caramelo suave de soporte sin ocultar el lúpulo"],
+    commonFaults: ["Caramelo demasiado dominante (oculta el lúpulo)", "Demasiado oscuro/chocolatoso (sería Brown IPA)", "Demasiado pálido (sería American IPA o Amber Ale)"]
+  },
+  "21B6": {
+    confusableWith: ["American IPA (21A)", "Rye Beer (31A)", "Red IPA (21B5)"],
+    keyIdentifiers: ["CENTENO claramente perceptible: pimienta, especias, pan de centeno", "Textura ligeramente más cremosa que una IPA regular", "Final seco y ESPECIADO por el centeno", "Dorado a ámbar rojizo (6–14 SRM)", "Si no se aprecia el centeno → clasificar como American IPA"],
+    commonFaults: ["Ningún carácter de centeno (debe ser claramente perceptible)", "Demasiado cremoso o pesado (debe ser seco y bebible)", "Caravea o roble (no deben usarse)"]
+  },
+  "21B7": {
+    confusableWith: ["Witbier (24A)", "American IPA (21A)", "Belgian IPA (21B1)"],
+    keyIdentifiers: ["TURBIO + ESPECIAS: puente entre Witbier e IPA", "Ésteres de levadura belga: naranja, pomelo, albaricoque", "Cilantro y piel de naranja opcionales (como la Wit)", "5–6 SRM: muy pálido a dorado", "Menos dry-hop que una American IPA normal"],
+    commonFaults: ["Sin carácter de Witbier (ésteres/especias)", "Demasiado tostado u oscuro (debe ser muy pálido)", "Sin lúpulo americano (debe tener la huella IPA)"]
+  },
 
     // ── CAT 22: Strong American Ale ──
     "22A": {

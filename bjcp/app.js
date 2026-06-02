@@ -126,7 +126,7 @@ const Utils = {
   el(id) { return document.getElementById(id); },
   html(id,h) { document.getElementById(id).innerHTML = h; },
 
-  buildHelperHTML(style) {
+  buildHelperHTML(style, context='modal', chosenName=null) {
     if(typeof STUDY_HELPERS === 'undefined') return '';
     const h = STUDY_HELPERS[style.number];
     if(!h) return '';
@@ -137,6 +137,36 @@ const Utils = {
           ${items.map(i=>`<li>${i}</li>`).join('')}
         </ul>
       </div>` : '';
+
+    if (context === 'feedback-correct') {
+      const confusionNote = h.confusableWith?.length
+        ? `<div class="helper-confusion-note">⚠️ Sovint es confon amb: <em>${h.confusableWith.slice(0,2).join(', ')}</em></div>` : '';
+      return `<div class="study-helpers-panel helpers-correct">
+        <div class="helpers-header">🧩 Perquè has encertat — reforç</div>
+        ${section('🔑','Identificadors clau:','#22c55e', h.keyIdentifiers)}
+        ${confusionNote}
+      </div>`;
+    }
+
+    if (context === 'feedback-wrong') {
+      let confusionMsg = '';
+      if (chosenName && h.confusableWith) {
+        const chosenFirst = chosenName.toLowerCase().split(/[\s(]/)[0];
+        const matched = h.confusableWith.find(c => c.toLowerCase().includes(chosenFirst));
+        if (matched) {
+          confusionMsg = `<div class="helper-confusion-alert">💡 Has triat <strong>${chosenName}</strong>, que és un dels estils que es confonen habitualment amb <strong>${style.name}</strong>. Recorda les diferències clau:</div>`;
+        }
+      }
+      return `<div class="study-helpers-panel helpers-wrong">
+        <div class="helpers-header">🧩 Per aprendre de l'error</div>
+        ${confusionMsg}
+        ${section('🔑','Identificadors clau de "' + style.name + '":','#22c55e', h.keyIdentifiers?.slice(0,3))}
+        ${section('⚠️','Defectes comuns:','#E5172F', h.commonFaults?.slice(0,2))}
+        ${section('🔀','No confondre amb:','#E5A020', h.confusableWith?.slice(0,3))}
+      </div>`;
+    }
+
+    // Default: 'modal'
     return `<div class="study-helpers-panel">
       ${section('🔀','Confusió habitual amb:','#E5A020', h.confusableWith)}
       ${section('🔑','Identificadors clau:','#22c55e', h.keyIdentifiers)}
@@ -165,6 +195,7 @@ const App = {
     Utils.el(`tab-${mode}`).classList.add('active');
     this.currentMode = mode;
     if(mode==='stats') Stats.render();
+    if(mode==='detect') Detector.showLanding();
   },
   refreshBadges() {
     const d = Store.get();
@@ -229,6 +260,7 @@ const Study = {
   cardHTML(s, d) {
     const isFav = d.favorites.includes(s.name);
     const isDiff = d.difficult.includes(s.name);
+    const hasHelper = typeof STUDY_HELPERS !== 'undefined' && !!STUDY_HELPERS[s.number];
     const abv = Utils.fmtRange(s.abvmin, s.abvmax, '%');
     const ibu = Utils.fmtRange(s.ibumin, s.ibumax);
     const srmMid = s.srmmin && s.srmmax ? (s.srmmin+s.srmmax)/2 : s.srmmin||s.srmmax;
@@ -251,6 +283,7 @@ const Study = {
       </div>
       <div class="card-desc">${s.overallimpression||s.aroma||''}</div>
       ${tags.length?`<div class="card-badges">${tags.map(t=>`<span class="tag-badge">${t}</span>`).join('')}</div>`:''}
+      ${hasHelper ? '<div class="card-helper-badge">🧩 Study helper</div>' : ''}
       <div class="srm-bar" style="background:linear-gradient(90deg,${Utils.srmToColor(s.srmmin||1)},${Utils.srmToColor(s.srmmax||10)})"></div>
     </div>`;
   },
@@ -341,6 +374,7 @@ const Study = {
           <div class="modal-stat-key">SRM</div>
         </div>
       </div>
+      ${Utils.buildHelperHTML(s)}
       <div class="modal-sections">
         ${sections.map(([title,text],i)=>`
           <div class="modal-section${i<4?'':' full'}">
@@ -349,7 +383,6 @@ const Study = {
           </div>`).join('')}
       </div>
       ${tags.length?`<div class="modal-tags">${tags.map(t=>`<span class="tag-badge">${t}</span>`).join('')}</div>`:''}
-      ${Utils.buildHelperHTML(s)}
     `;
     const overlay = Utils.el('detail-modal');
     overlay.classList.add('open');
@@ -408,18 +441,27 @@ const Quiz = {
 
   buildQuestion(style, type, pool) {
     if(type === 'guess') {
-      const distractors = this.getDistractors(style, pool, 3);
-      const options = Utils.shuffle([style, ...distractors]);
       const profile = this.pickGuessProfile(style);
-      return { style, type:'guess', options, correct: style.name, profile };
+      let distractors, keyClue;
+      if (profile === 'confusion') {
+        distractors = this.getDistractorsForConfusion(style, pool, 3);
+        const h_c = typeof STUDY_HELPERS !== 'undefined' ? STUDY_HELPERS[style.number] : null;
+        keyClue = h_c?.keyIdentifiers ? Utils.shuffle([...h_c.keyIdentifiers])[0] : '';
+      } else {
+        distractors = this.getDistractors(style, pool, 3);
+      }
+      const options = Utils.shuffle([style, ...distractors]);
+      return { style, type:'guess', options, correct: style.name, profile, keyClue };
     } else {
       // Show name, guess a random parameter (ABV, IBU, SRM, Category, Commercial Examples)
       const possibleSubtypes = [];
+      const h_key = typeof STUDY_HELPERS !== 'undefined' ? STUDY_HELPERS[style.number] : null;
       if ((style.abvmin !== undefined && style.abvmin !== null) || (style.abvmax !== undefined && style.abvmax !== null)) possibleSubtypes.push('abv');
       if ((style.ibumin !== undefined && style.ibumin !== null) || (style.ibumax !== undefined && style.ibumax !== null)) possibleSubtypes.push('ibu');
       if ((style.srmmin !== undefined && style.srmmin !== null) || (style.srmmax !== undefined && style.srmmax !== null)) possibleSubtypes.push('srm');
       if (style.category) possibleSubtypes.push('category');
       if (style.commercialexamples && style.commercialexamples.trim().length > 5 && style.commercialexamples !== '-') possibleSubtypes.push('examples');
+      if (h_key?.keyIdentifiers?.length) possibleSubtypes.push('key_id');
       
       const subtype = possibleSubtypes.length > 0 ? Utils.shuffle(possibleSubtypes)[0] : 'abv';
       
@@ -466,6 +508,16 @@ const Quiz = {
         const others = Utils.shuffle(pool.filter(s => s.name !== style.name && s.commercialexamples && s.commercialexamples.trim().length > 5 && s.commercialexamples !== '-'))
           .slice(0, 3).map(s => getCleanExamples(s));
         options = Utils.shuffle([correct, ...others]);
+      } else if (subtype === 'key_id') {
+        const keyClue = Utils.shuffle([...h_key.keyIdentifiers])[0];
+        correct = style.name;
+        const confusionNames = (h_key.confusableWith||[]).map(c => { const m = c.match(/^(.+?)\s*\(/); return m ? m[1].trim() : c.trim(); });
+        const confDist = Utils.shuffle(pool.filter(s => s.name !== style.name && confusionNames.includes(s.name)));
+        const fallDist = Utils.shuffle(pool.filter(s => s.name !== style.name && !confusionNames.includes(s.name)));
+        const kidDist = [...confDist, ...fallDist].slice(0, 3);
+        while (kidDist.length < 3) { const extra = Utils.shuffle(pool.filter(s => s.name !== style.name && !kidDist.find(d=>d.name===s.name)))[0]; if(extra) kidDist.push(extra); else break; }
+        options = Utils.shuffle([style.name, ...kidDist.map(s => s.name)]);
+        return { style, type:'define', subtype:'key_id', options, correct, keyClue };
       }
       
       // Ensure unique options
@@ -505,6 +557,9 @@ const Quiz = {
     if ((style.characteristicingredients||'').length > 20) c.push('ingredients');
     if ((style.comments||'').length > 30) c.push('comments');
     if ((style.stylecomparison||'').length > 30) c.push('stylecomparison');
+    if (typeof STUDY_HELPERS !== 'undefined' && STUDY_HELPERS[style.number]?.keyIdentifiers?.length) {
+      c.push('confusion'); c.push('confusion'); // weighted 2x
+    }
     return Utils.shuffle(c)[0];
   },
 
@@ -529,6 +584,19 @@ const Quiz = {
       return { style: s, pts };
     }).sort((a,b) => b.pts - a.pts);
     return Utils.shuffle(scored.slice(0, Math.max(n*4, 12))).slice(0, n).map(c => c.style);
+  },
+
+  getDistractorsForConfusion(style, pool, n) {
+    const h = typeof STUDY_HELPERS !== 'undefined' ? STUDY_HELPERS[style.number] : null;
+    if (!h?.confusableWith?.length) return this.getDistractors(style, pool, n);
+    const confusionNames = h.confusableWith.map(c => {
+      const m = c.match(/^(.+?)\s*\(/); return m ? m[1].trim() : c.trim();
+    });
+    const confusionStyles = Utils.shuffle(pool.filter(s =>
+      s.name !== style.name && confusionNames.some(cn => s.name === cn)
+    ));
+    const regular = this.getDistractors(style, pool, n * 2).filter(s => !confusionStyles.find(c => c.name === s.name));
+    return Utils.shuffle([...confusionStyles, ...regular]).slice(0, n);
   },
 
   generateTastingNote(s) {
@@ -600,10 +668,12 @@ const Quiz = {
     // Show feedback
     const fb = Utils.el('quiz-feedback');
     fb.className = `quiz-feedback${isCorrect?'':' wrong-fb'}`;
+    const chosenStyleName = (q.type === 'guess' || q.subtype === 'key_id') ? chosen : null;
+    const helperCtx = isCorrect ? 'feedback-correct' : 'feedback-wrong';
     fb.innerHTML = `
       <div class="feedback-title">${isCorrect ? '\u2705 Correcte!' : `\u274c La resposta correcta era: ${correct}`}</div>
       <div class="feedback-text">${q.style.overallimpression?.substring(0,200)||''}${q.style.overallimpression?.length>200?'\u2026':''}</div>
-      ${Utils.buildHelperHTML(q.style)}`;
+      ${Utils.buildHelperHTML(q.style, helperCtx, isCorrect ? null : chosenStyleName)}`;
     fb.classList.remove('hidden');
 
     Utils.el('quiz-confidence').classList.add('hidden');
@@ -659,6 +729,19 @@ const Quiz = {
           <div class="question-label">⚖️ Comparació d'estils</div>
           <div class="question-title">De quin estil parla aquesta comparació?</div>
           <div class="question-chars">${wide('Comparació d\'estils', s.stylecomparison, 450)}${tagsHTML}</div>`;
+      } else if (q.profile === 'confusion') {
+        const keyClue = q.keyClue || (typeof STUDY_HELPERS!=='undefined' && STUDY_HELPERS[s.number]?.keyIdentifiers
+          ? Utils.shuffle([...STUDY_HELPERS[s.number].keyIdentifiers])[0] : '');
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">🧩 Confusió d'estils</div>
+          <div class="question-title">Quin estil té aquest identificador clau?</div>
+          <div class="question-chars">
+            <div class="q-char wide q-char-keyid">
+              <div class="q-char-label">Identificador clau</div>
+              <div class="q-char-val" style="font-style:italic;font-size:15px">&ldquo;${keyClue}&rdquo;</div>
+            </div>
+            ${statsHTML}
+          </div>`;
       } else {
         // sensory (default)
         const chars = [
@@ -684,11 +767,24 @@ const Quiz = {
       else if (q.subtype === 'srm') prompt = "Quin és el color típic (SRM) d'aquest estil?";
       else if (q.subtype === 'category') prompt = "A quina categoria pertany aquest estil?";
       else if (q.subtype === 'examples') prompt = "Quins d'aquests són exemples comercials d'aquest estil?";
+      else if (q.subtype === 'key_id') prompt = "A quin estil pertany aquest identificador clau?";
 
-      Utils.el('question-card').innerHTML = `
-        <div class="question-label">📋 Defineix l'estil</div>
-        <div class="question-title" style="margin-bottom:8px">${s.name}</div>
-        <div style="font-size:14px;color:var(--accent);font-weight:600;margin-bottom:16px">${prompt}</div>`;
+      if (q.subtype === 'key_id') {
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">🧩 Identifica l'estil</div>
+          <div class="question-title">A quin estil pertany aquest identificador clau?</div>
+          <div class="question-chars">
+            <div class="q-char wide q-char-keyid">
+              <div class="q-char-label">Identificador clau</div>
+              <div class="q-char-val" style="font-style:italic">&ldquo;${q.keyClue}&rdquo;</div>
+            </div>
+          </div>`;
+      } else {
+        Utils.el('question-card').innerHTML = `
+          <div class="question-label">📋 Defineix l'estil</div>
+          <div class="question-title" style="margin-bottom:8px">${s.name}</div>
+          <div style="font-size:14px;color:var(--accent);font-weight:600;margin-bottom:16px">${prompt}</div>`;
+      }
 
       Utils.el('answers-grid').innerHTML = q.options.map(opt => `
         <button class="answer-btn" onclick="Quiz.answer('${opt.replace(/'/g,"\\'")}')">
@@ -897,10 +993,11 @@ const Exam = {
 
     const fb = Utils.el('exam-feedback');
     fb.className = `quiz-feedback${isCorrect?'':' wrong-fb'}`;
+    const examHelperCtx = isCorrect ? 'feedback-correct' : 'feedback-wrong';
     fb.innerHTML = `
       <div class="feedback-title">${isCorrect?'\u2705 Correcte!':'\u274c Incorrecte \u2014 '+q.correct}</div>
       <div class="feedback-text">${q.style.overallimpression?.substring(0,180)||''}\u2026</div>
-      ${Utils.buildHelperHTML(q.style)}`;
+      ${Utils.buildHelperHTML(q.style, examHelperCtx, isCorrect ? null : chosen)}`;
     fb.classList.remove('hidden');
     Utils.el('exam-next-btn').classList.remove('hidden');
     Utils.el('exam-score-live').textContent = this.score;
@@ -1056,3 +1153,361 @@ document.addEventListener('DOMContentLoaded', () => {
     frame();
   })();
 });
+
+// ===== DETECTOR MODULE =====
+const Detector = {
+  currentQ: 0,
+  scores: null,
+  answers: {},
+
+  QUESTIONS: [
+    {
+      id:'color', icon:'🎨', skip:true,
+      text: 'Quin és el color de la cervesa?',
+      hint: 'Observa-la contra la llum — si pots',
+      opts: [
+        {label:'Palla / Groc pàl·lid', icon:'🌾', v:{min:1,max:4}},
+        {label:'Groc / Daurat',          icon:'🍯', v:{min:4,max:9}},
+        {label:'Ambre',                  icon:'🧡', v:{min:9,max:17}},
+        {label:'Coure / Vermellós',      icon:'🔶', v:{min:17,max:24}},
+        {label:'Marró',                  icon:'🟤', v:{min:24,max:33}},
+        {label:'Negre fosc',             icon:'⬛', v:{min:30,max:42}},
+        {label:'Negre opac',             icon:'🖤', v:{min:38,max:99}},
+      ],
+      score(style, opt) {
+        const {min:tMin,max:tMax} = opt.v;
+        const a = style.srmmin||style.srmmax, b = style.srmmax||style.srmmin;
+        if(!a && !b) return 0;
+        const sMid = (a+b)/2;
+        if(b>=tMin && a<=tMax) return 25;
+        const dist = Math.min(Math.abs(sMid-tMin), Math.abs(sMid-tMax));
+        return dist<=6 ? -5 : -20;
+      }
+    },
+    {
+      id:'abv', icon:'⚗️', skip:true,
+      text: 'Quina és la graduació alcohòlica (ABV)?',
+      hint: 'A l\'etiqueta o la percepció de calor a la gola',
+      opts: [
+        {label:'Molt baixa (<3.5%)',       icon:'💧', v:{min:0,max:3.5}},
+        {label:'Baixa (3.5–5%)',           icon:'🍵', v:{min:3.5,max:5.2}},
+        {label:'Estàndard (4.5–6.5%)',    icon:'🍺', v:{min:4.5,max:6.8}},
+        {label:'Alta (6–9%)',              icon:'🔥', v:{min:6,max:9}},
+        {label:'Molt alta (>9%)',           icon:'💥', v:{min:9,max:25}},
+      ],
+      score(style, opt) {
+        const {min:tMin,max:tMax} = opt.v;
+        const a = style.abvmin||style.abvmax, b = style.abvmax||style.abvmin;
+        if(!a && !b) return 0;
+        const sMid = (a+b)/2;
+        if(b>=tMin && a<=tMax) return 25;
+        const dist = Math.min(Math.abs(sMid-tMin), Math.abs(sMid-tMax));
+        return dist<=1.5 ? -5 : dist<=3 ? -14 : -22;
+      }
+    },
+    {
+      id:'ibu', icon:'🌿', skip:true,
+      text: 'Com perceps l\'amargor?',
+      hint: 'L\'amargor residual al final de boca',
+      opts: [
+        {label:'Quasi absent (<10 IBU)', icon:'🧧', v:{min:0,max:12}},
+        {label:'Suau (10–25)',            icon:'🍃', v:{min:10,max:27}},
+        {label:'Moderat (25–45)',         icon:'🌿', v:{min:25,max:48}},
+        {label:'Marcat (45–70)',          icon:'🌶️', v:{min:45,max:73}},
+        {label:'Molt intens (>70)',       icon:'⚡', v:{min:68,max:200}},
+      ],
+      score(style, opt) {
+        const {min:tMin,max:tMax} = opt.v;
+        const a = style.ibumin||style.ibumax, b = style.ibumax||style.ibumin;
+        if(!a && !b) return 0;
+        const sMid = (a+b)/2;
+        if(b>=tMin && a<=tMax) return 22;
+        const dist = Math.min(Math.abs(sMid-tMin), Math.abs(sMid-tMax));
+        return dist<=10 ? -5 : dist<=25 ? -13 : -20;
+      }
+    },
+    {
+      id:'ferment', icon:'🧫', skip:true,
+      text: 'Quin és el caràcter de fermentació?',
+      hint: 'La impressió del llevat: net com una lager, afruitat, fenòlic...',
+      opts: [
+        {label:'Net / Lager — sense notes de llevat', icon:'❄️', kw:['lager','neutre','net','clean','crisp','neutral'], negKw:['belga','belgian','trappist','sour','àcid','fumat','fum','smoke']},
+        {label:'Ale — lleument afruitat / estery',    icon:'🍎', kw:['afruitat','ester','fruitat','poma','pera','fruita'], negKw:['lager','sour','àcid','belga','belgian','fumat']},
+        {label:'Belga — molt afruitat o fenòlic',     icon:'🍐', kw:['belga','belgian','trappist','fenòl','clau','plàtan','especiat','spice'], negKw:['lager','sour','fumat']},
+        {label:'Àcid / Làctic / Salvatge',            icon:'🧴', kw:['sour','àcid','làctic','brett','salvatge','agre','lambic','wild'], negKw:['lager','belga','fumat']},
+        {label:'Fumat o especiat (addició)',          icon:'🔥', kw:['fumat','fum','smoke','torba','smoked','peat'], negKw:['sour','àcid']},
+      ],
+      score(style, opt) {
+        const text = ((style.aroma||'')+(style.flavor||'')+(style.tags||'')+(style.category||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        const neg = (opt.negKw||[]).filter(k=>text.includes(k)).length;
+        return neg > 0 ? -22 : hits>=3 ? 32 : hits>=2 ? 22 : hits>=1 ? 12 : -5;
+      }
+    },
+    {
+      id:'aroma', icon:'👃', skip:true,
+      text: 'Quin és l\'aroma dominant?',
+      hint: 'El primer que perceps al nas',
+      opts: [
+        {label:'Llúpol (cítric/floral/resonós)', icon:'🍋', kw:['hop','lup','citric','floral','citrus','pine','resin','tropical','grapefruit','herbal']},
+        {label:'Malta / Pa / Bescüit',            icon:'🍞', kw:['malt','bread','biscuit','toast','grain','cereal','bready']},
+        {label:'Torrat / Cafè / Xocolata',        icon:'☕', kw:['roast','coffee','chocolate','burnt','dark','cocoa','char']},
+        {label:'Fruitat / Estery',                 icon:'🍎', kw:['fruit','ester','banana','apple','pear','cherry','plum','dried','tropical','stone']},
+        {label:'Especiat / Herbal',                icon:'🌶️', kw:['spice','spicy','pepper','clove','coriander','herbal','herb']},
+        {label:'Àcid / Funk / Làctic',             icon:'🧴', kw:['sour','acid','tart','lactic','brett','barnyard','wild','funk','vinegar','lambic']},
+        {label:'Net / Neutre / Mineral',           icon:'🧧', kw:['clean','neutral','crisp','mineral','delicate','subtle','lager']},
+      ],
+      score(style, opt) {
+        const text = ((style.aroma||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=3 ? 28 : hits>=2 ? 18 : hits>=1 ? 10 : -8;
+      }
+    },
+    {
+      id:'flavor', icon:'👅', skip:true,
+      text: 'Quin és el sabor principal?',
+      hint: 'La impresió general al paladar i el final de boca',
+      opts: [
+        {label:'Amarg de llúpol / Sec',     icon:'🌿', kw:['hop','bitter','dry','resin','harsh','hoppy']},
+        {label:'Dolc / Caramel / Toffee',    icon:'🍯', kw:['sweet','caramel','toffee','malt','molasses','candy']},
+        {label:'Torrat sec / Amarg fosc',    icon:'☕', kw:['roast','dry','burnt','coffee','chocolate','bitter','char']},
+        {label:'Fruitat / Estery',           icon:'🍎', kw:['fruit','ester','fruity','banana','apple','cherry','pear','plum']},
+        {label:'Especiat',                   icon:'🌶️', kw:['spice','pepper','clove','coriander','spicy','warm']},
+        {label:'Àcid / Agre',                icon:'🧴', kw:['sour','tart','acid','lactic','citric','brett','vinegar','acetic']},
+        {label:'Equilibrat / Maltós',       icon:'⚖️', kw:['balance','balanced','malt','clean','biscuit','bread','mild']},
+      ],
+      score(style, opt) {
+        const text = ((style.flavor||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=3 ? 25 : hits>=2 ? 15 : hits>=1 ? 7 : -6;
+      }
+    },
+    {
+      id:'body', icon:'🧣', skip:true,
+      text: 'Com és el cos i la sensació en boca?',
+      hint: 'La textura, el pes i la carbonatació',
+      opts: [
+        {label:'Lleuger / Airesc / Gasificat', icon:'💨', kw:['light','thin','crisp','refreshing','highly carbonated','prickly','effervescent','watery']},
+        {label:'Mig / Suau / Cremós',         icon:'🍺', kw:['medium','smooth','creamy','moderate','balanced']},
+        {label:'Ple / Robust / Viscós',        icon:'🥛', kw:['full','robust','heavy','rich','thick','chewy','viscous','warming']},
+        {label:'Sedós / Nitrogenat',            icon:'🧈', kw:['silky','satiny','nitro','nitrogen','velvety']},
+      ],
+      score(style, opt) {
+        const text = ((style.mouthfeel||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=2 ? 20 : hits>=1 ? 11 : -5;
+      }
+    },
+    {
+      id:'carbo', icon:'🫧', skip:true,
+      text: 'Com és la carbonatació?',
+      hint: 'Pots saltar si no n\'estàs segur',
+      opts: [
+        {label:'Molt baixa (nitro / tirat natural)', icon:'🧈', kw:['nitro','nitrogen','low carbonation','smooth','cask','nitrogenat']},
+        {label:'Baixa a mitja (ales angleses)',      icon:'🍺', kw:['low','moderate carbon','medium carbon','mitja','baixa']},
+        {label:'Alta (lager / ale estàndard)',       icon:'💧', kw:['high carbon','alta carbon','highly carbonated','moderadament']},
+        {label:'Molt alta (belga / blat / brut)',    icon:'✨', kw:['highly carbonated','molt alta','very high carbon','effervescent','belgian','champagne','brut']},
+      ],
+      score(style, opt) {
+        const text = ((style.mouthfeel||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=2 ? 20 : hits>=1 ? 10 : -3;
+      }
+    },
+    {
+      id:'clarity', icon:'🔍', skip:true,
+      text: 'Com és la transparència de la cervesa?',
+      hint: 'Pots saltar si no n\'estàs segur',
+      opts: [
+        {label:'Brillant / Cristal·lí / Filtrat',   icon:'💎', kw:['brilliant','clear','bright','brillant','cristall','filtered','filtrada','cristal']},
+        {label:'Lleugerament tèrbol (acceptable)',   icon:'🌤️', kw:['slight haze','chill haze','lleugerament tèrbol','slight turbidity']},
+        {label:'Molt tèrbol / Lletós / Opac',        icon:'🌫️', kw:['turbid','hazy','opaque','cloudy','tèrbol','lletós','opac','unfiltered','yeast in suspension','sense filtrar']},
+      ],
+      score(style, opt) {
+        const text = ((style.appearance||'')+(style.tags||'')).toLowerCase();
+        const hits = opt.kw.filter(k=>text.includes(k)).length;
+        return hits>=2 ? 22 : hits>=1 ? 12 : -6;
+      }
+    },
+    {
+      id:'origin', icon:'🌍', skip:true,
+      text: 'Quina és l\'origen o tradició d\'aquesta cervesa?',
+      hint: 'Pots saltar aquesta pregunta si no ho sàpiga\'s',
+      opts: [
+        {label:'Britànica', icon:'🇬🇧', cats:['British Pale','Scottish','Irish','Brown British','Strong British','Dark British']},
+        {label:'Alemanya / Austríaca', icon:'🇩🇪', cats:['German Lager','Munich','Bock','German Ale','European']},
+        {label:'Belga / Francesa', icon:'🇧🇪', cats:['Belgian','Trappist','Historical']},
+        {label:'Americana', icon:'🇺🇸', cats:['American Lager','American Pale','American Porter','American Wild']},
+        {label:'Altres / No sé', icon:'🌍', cats:[]},
+      ],
+      score(style, opt) {
+        if(!opt.cats.length) return 0;
+        const cat = style.category||'';
+        return opt.cats.some(c=>cat.toLowerCase().includes(c.split(' ')[0].toLowerCase())) ? 20 : -15;
+      }
+    },
+  ],
+
+  _initScores() {
+    this.scores = BJCP_STYLES.filter(s=>s.name&&s.category).map(s=>({style:s,score:0}));
+  },
+
+  _recomputeScores() {
+    this._initScores();
+    Object.entries(this.answers).forEach(([qIdx, optIdx]) => {
+      if (optIdx === null) return;
+      const q = this.QUESTIONS[parseInt(qIdx)];
+      const opt = q.opts[optIdx];
+      this.scores.forEach(item => { item.score += q.score(item.style, opt); });
+    });
+  },
+
+  start() {
+    this.currentQ = 0;
+    this.answers = {};
+    this._initScores();
+    Utils.el('detect-landing').classList.add('hidden');
+    Utils.el('detect-game').classList.remove('hidden');
+    Utils.el('detect-results').classList.add('hidden');
+    this.showQuestion();
+  },
+
+  showLanding() {
+    Utils.el('detect-landing').classList.remove('hidden');
+    Utils.el('detect-game').classList.add('hidden');
+    Utils.el('detect-results').classList.add('hidden');
+  },
+
+  showQuestion() {
+    const q = this.QUESTIONS[this.currentQ];
+    const total = this.QUESTIONS.length;
+    Utils.el('detect-progress-fill').style.width = ((this.currentQ/total)*100)+'%';
+    Utils.el('detect-q-counter').textContent = `${this.currentQ+1} / ${total}`;
+    Utils.el('detect-question-card').innerHTML = `
+      <div class="detect-q-icon">${q.icon}</div>
+      <div class="detect-q-text">${q.text}</div>
+      ${q.hint?`<div class="detect-q-hint">💡 ${q.hint}</div>`:''}
+      <div class="detect-opts">
+        ${q.opts.map((opt,i)=>`
+          <button class="detect-opt-btn" onclick="Detector.pickAnswer(${i})">
+            <span class="detect-opt-icon">${opt.icon}</span>
+            <span class="detect-opt-label">${opt.label}</span>
+          </button>`).join('')}
+      </div>
+      <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:12px;">
+        ${q.skip?`<button class="btn btn-outline btn-sm" onclick="Detector.skip()">Saltar →</button>`:''}
+        <div id="detect-nav-btns" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
+      </div>
+    `;
+    const prev = this.answers[this.currentQ];
+    if (prev !== undefined && prev !== null)
+      document.querySelectorAll('.detect-opt-btn')[prev]?.classList.add('selected');
+    this._renderNavBtns();
+    this.renderLiveRanking();
+  },
+
+  pickAnswer(optIdx) {
+    this.answers[this.currentQ] = optIdx;
+    this._recomputeScores();
+    document.querySelectorAll('.detect-opt-btn').forEach((btn, i) =>
+      btn.classList.toggle('selected', i === optIdx));
+    this.renderLiveRanking();
+    this._renderNavBtns();
+  },
+
+  _renderNavBtns() {
+    const el = document.getElementById('detect-nav-btns');
+    if (!el) return;
+    const isLast = this.currentQ === this.QUESTIONS.length - 1;
+    const hasAns = this.answers[this.currentQ] !== undefined;
+    el.innerHTML =
+      (this.currentQ > 0 ? `<button class="btn btn-outline btn-sm" onclick="Detector.prev()">← Anterior</button>` : '') +
+      (hasAns ? (isLast
+        ? `<button class="btn btn-primary btn-sm" onclick="Detector.showResults()">Veure resultats ✓</button>`
+        : `<button class="btn btn-primary btn-sm" onclick="Detector.next()">Següent →</button>`) : '');
+  },
+
+  prev() {
+    if (this.currentQ > 0) { this.currentQ--; this.showQuestion(); }
+  },
+
+  next() {
+    this.currentQ++;
+    if (this.currentQ >= this.QUESTIONS.length) this.showResults();
+    else this.showQuestion();
+  },
+
+  skip() {
+    this.answers[this.currentQ] = null;
+    this._recomputeScores();
+    this.next();
+  },
+
+  _sorted() { return [...this.scores].sort((a,b)=>b.score-a.score); },
+
+  renderLiveRanking() {
+    if(!this.scores) return;
+    const sorted = this._sorted();
+    const maxScore = Math.max(1, sorted[0]?.score||0);
+    const answered = this.currentQ > 0;
+    Utils.el('detect-live-ranking').innerHTML = `
+      <div class="rank-title">🎯 ${answered?'Estils més probables':'Estils possibles'}</div>
+      ${sorted.slice(0,10).map((item,i)=>{
+        const pct = answered ? Math.max(0,Math.round((item.score/maxScore)*100)) : 0;
+        const srmMid = item.style.srmmin&&item.style.srmmax
+          ?(item.style.srmmin+item.style.srmmax)/2:item.style.srmmin||item.style.srmmax||10;
+        const color = Utils.srmToColor(srmMid);
+        return `
+          <div class="rank-item" onclick="Study.openModal('${item.style.name.replace(/'/g,"\\'")}')">  
+            <div class="rank-pos">${i+1}</div>
+            <div class="rank-info">
+              <div class="rank-name">${item.style.name}</div>
+              <div class="rank-bar-wrap"><div class="rank-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+            </div>
+            <div class="rank-pct">${pct}%</div>
+          </div>`;
+      }).join('')}
+    `;
+  },
+
+  showResults() {
+    Utils.el('detect-game').classList.add('hidden');
+    Utils.el('detect-results').classList.remove('hidden');
+    const sorted = this._sorted();
+    const maxScore = Math.max(1, sorted[0]?.score||0);
+    const medals = ['🥇','🥈','🥉','4️⃣','5️⃣'];
+    Utils.el('detect-results').innerHTML = `
+      <div class="detect-results-header">
+        <div style="font-size:56px;margin-bottom:12px">🕵️</div>
+        <h2 class="detect-results-title">Resultat del Detective</h2>
+        <p class="detect-results-sub">Basant-nos en les teves respostes, els estils més probables són:</p>
+      </div>
+      <div class="detect-top-results">
+        ${sorted.slice(0,5).map((item,i)=>{
+          const pct = Math.max(0,Math.round((item.score/maxScore)*100));
+          const srmMid = item.style.srmmin&&item.style.srmmax
+            ?(item.style.srmmin+item.style.srmmax)/2:item.style.srmmin||item.style.srmmax||10;
+          const color = Utils.srmToColor(srmMid);
+          return `
+            <div class="detect-result-card" onclick="Study.openModal('${item.style.name.replace(/'/g,"\\'")}')">  
+              <div class="detect-result-medal">${medals[i]}</div>
+              <div class="detect-result-main">
+                <div class="detect-result-name">${item.style.name}</div>
+                <div class="detect-result-num">${item.style.number||''} · ${item.style.category||''}</div>
+                <div class="detect-result-bar-wrap"><div class="detect-result-bar" style="width:${pct}%;background:linear-gradient(90deg,${color},var(--accent))"></div></div>
+              </div>
+              <div class="detect-result-pct" style="color:${color}">${pct}%</div>
+            </div>`;
+        }).join('')}
+      </div>
+      <p style="font-size:12px;color:var(--text3);text-align:center;margin-bottom:20px">Toca qualsevol estil per veure'n tots els detalls 👀</p>
+      <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+        <button class="btn btn-primary" onclick="Detector.start()">🔄 Tornar a detectar</button>
+        <button class="btn btn-outline" onclick="Detector.showLanding()">← Inici detective</button>
+      </div>
+    `;
+    Store.addXP(5);
+    Utils.toast('🕵️ Detecció completada! +5 XP', 'success');
+  },
+};
+

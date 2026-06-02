@@ -61,6 +61,9 @@
       <button class="nav-tab" id="tab-exam" onclick="App.showMode('exam')">
         <span>🧪</span> Examen
       </button>
+      <button class="nav-tab" id="tab-detect" onclick="App.showMode('detect')">
+        <span>🕵️</span> Detecta
+      </button>
       <button class="nav-tab" id="tab-stats" onclick="App.showMode('stats')">
         <span>📊</span> Estadísticas
       </button>
@@ -275,6 +278,46 @@
 
         <!-- Exam results -->
         <div id="exam-results" class="hidden"></div>
+      </div>
+    </section>
+
+    <!-- ===== MODE DETECTIVE ===== -->
+    <section id="mode-detect" class="mode-section">
+      <div class="detect-container">
+
+        <!-- Landing -->
+        <div id="detect-landing" class="detect-landing">
+          <div style="font-size:72px;margin-bottom:16px">🕵️</div>
+          <h2 class="detect-title">Detective de Estilo</h2>
+          <p class="detect-desc">Responde preguntas sobre las características de la cerveza que estás catando y te diremos los estilos BJCP más probables, con las probabilidades en tiempo real.</p>
+          <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+            <button class="btn btn-primary btn-xl" onclick="Detector.start()">🔍 Iniciar detección</button>
+          </div>
+        </div>
+
+        <!-- Game (preguntas) -->
+        <div id="detect-game" class="detect-game hidden">
+          <div class="quiz-progress-bar" style="margin-bottom:20px">
+            <div class="quiz-progress-fill" id="detect-progress-fill"></div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
+            <span id="detect-q-counter" style="font-size:13px;color:var(--text2)">1 / 7</span>
+            <button class="btn btn-outline btn-sm" onclick="Detector.showLanding()">✕ Salir</button>
+          </div>
+          <div class="detect-layout">
+            <div id="detect-question-card" class="detect-question-card"></div>
+            <div class="detect-ranking-panel">
+              <div id="detect-live-ranking" class="detect-live-ranking">
+                <div class="rank-title">🎯 Estilos posibles</div>
+                <div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Responde las preguntas para ver el ranking</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Resultados -->
+        <div id="detect-results" class="hidden"></div>
+
       </div>
     </section>
 

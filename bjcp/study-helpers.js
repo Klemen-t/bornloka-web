@@ -177,6 +177,7 @@ const STUDY_HELPERS = {
     confusableWith: ["Weissbier (10A)", "Doppelbock (9A)", "Weizenbock fosc vs Dunkles Weissbier (10B)"],
     keyIdentifiers: ["Bock de blat: fort 6.5–9% ABV", "Plàtan+clau + rica maltesa de bock", "Versions pàl·lides i fosques", "Alta carbonatació com tot weizen", "Fruita fosca en versions fosques (prunes)"],
     commonFaults: ["Alcohol calent (hauria de ser suau)", "Cap caràcter Weizen (plàtan/clau)", "Massa dolç sense atenuació per a la força"]
+  },
   // ── CAT 11: British Bitter ──
   "11A": {
     confusableWith: ["Best Bitter (11B)", "Dark Mild (13A)", "Scottish Light (14A)"],
@@ -357,6 +358,43 @@ const STUDY_HELPERS = {
     confusableWith: ["Double IPA (22A)", "American Pale Ale (18B)", "English IPA (12C)"],
     keyIdentifiers: ["Llúpol americà: cítric, piní, tropical, resinós", "ABV 6.3–7.5%", "Malt neutre de suport (clean base)", "IBU 40–70: amarg però equilibrat"],
     commonFaults: ["Massa maltat/equilibrat (seria APA)", "Oxidat (llúpol envelleix molt ràpid!)", "Amargor sense sabor de llúpol (extracció incorrecta)"]
+  },
+
+  // ── CAT 21B: Specialty IPA (subcategories) ──
+  "21B1": {
+    confusableWith: ["Belgian Tripel (26C)", "Belgian Golden Strong (25C)", "American IPA (21A)"],
+    keyIdentifiers: ["Llevat BELGA: èsters (pera, poma, plàtan) + espècies (clau, pebre)", "Final molt SEC i molt ATENUAT", "ABV fort: 6.2–9.5%", "Daurat clar a ambre (5–8 SRM)", "Llúpol americà/NM O europeu — ambdós possibles"],
+    commonFaults: ["Sense caràcter de llevat belga (seria American IPA)", "Final dolç o poc atenuat (ha de ser sec com una Tripel)", "Conflicte desagradable entre llevat i llúpol"]
+  },
+  "21B2": {
+    confusableWith: ["American IPA (21A)", "American Stout (20B)", "American Porter (20A)"],
+    keyIdentifiers: ["NEGRE (25–40 SRM) però amb perfil d'IPA!", "Torrat MÍNim i SUAU: xocolata/cafè sense cremar", "Llúpol americà dominant: cítric, piní, tropical", "Final sec com una IPA, cos lleuger-mitjà", "El torrat NO ha d'enmascarar ni xocar amb el llúpol"],
+    commonFaults: ["Torrat cremat o dominant (seria Porter/Stout)", "Massa cos/pesant (ha de ser lleugera com una IPA)", "Sense presència de llúpol (el torrat no pot robar el protagonisme)"]
+  },
+  "21B3": {
+    confusableWith: ["American Amber Ale (19A)", "Red IPA (21B5)", "American Brown Ale (19C)"],
+    keyIdentifiers: ["Marró (18–35 SRM): XOCOLATA + caramel fosc + llúpol americà", "Xocolata/cacau/toffee MÉS INTENS que la Red IPA", "ABV 5.5–7.5%", "La malta quasi equilibra l'amargor", "MENYS torrat que la Black IPA"],
+    commonFaults: ["Torrat cremat (seria Black IPA o Porter)", "Massa dolç sense sequedat (ha de tenir final sec)", "Sense el tàndem xocolata+llúpol americà"]
+  },
+  "21B4": {
+    confusableWith: ["American IPA (21A)", "Hazy IPA (21C)", "Belgian Golden Strong (25C)"],
+    keyIdentifiers: ["EXTREMADAMENT SECA: FG pot baixar de 1.000!", "Carbonatació altíssima, recordant xampany", "Molt pàl·lida (2–4 SRM): quasi com l'aigua", "IBU PERCEBUTS molt baixos (20–30) per la sequedat extrema", "Enzims (amyloglucosidase) per eliminar sucres residuals"],
+    commonFaults: ["Final dolç o no suficientment sec (el signe distintiu és la sequedat extrema)", "Diacetil (defecte d'enzim mal aplicat)", "Tèrbol o fosc (ha de ser cristal·lí i molt pàl·lid)"]
+  },
+  "21B5": {
+    confusableWith: ["American Amber Ale (19A)", "Brown IPA (21B3)", "American IPA (21A)"],
+    keyIdentifiers: ["AMBRE-VERMELL (11–17 SRM): caramel mig-fosc + toffee", "Llúpol americà dominant com una IPA", "MENYS xocolata que la Brown IPA", "ABV 5.5–7.5%, final sec", "Equilibri: caramel suau de suport sense amagar el llúpol"],
+    commonFaults: ["Caramel massa dominant (amaga el llúpol)", "Massa fosc/xocolatós (seria Brown IPA)", "Massa pàl·lid (seria American IPA o Amber Ale)"]
+  },
+  "21B6": {
+    confusableWith: ["American IPA (21A)", "Rye Beer (31A)", "Red IPA (21B5)"],
+    keyIdentifiers: ["SÈGOL clarament perceptible: pebre, espècies, pa de sègol", "Textura lleugerament més cremosa que una IPA regular", "Final sec i ESPECIAT pel sègol", "Daurat a ambre vermellós (6–14 SRM)", "Si no s'aprecia el sègol → classifica com American IPA"],
+    commonFaults: ["Cap caràcter de sègol (ha de ser clarament perceptible)", "Massa cremós o pesant (ha de ser sec i potable)", "Caravea o roure (no s'han d'usar)"]
+  },
+  "21B7": {
+    confusableWith: ["Witbier (24A)", "American IPA (21A)", "Belgian IPA (21B1)"],
+    keyIdentifiers: ["TÈRBOL + ESPÈCIES: pont entre Witbier i IPA", "Èsters de llevat belga: taronja, aranja, albercoc", "Coriandre i pell de taronja opcionals (com la Wit)", "5–6 SRM: molt pàl·lid a daurat", "Menys dry-hop que una American IPA normal"],
+    commonFaults: ["Sense caràcter de Witbier (èsters/espècies)", "Massa torrat o fosc (ha de ser molt pàl·lid)", "Sense llúpol americà (ha de tenir l'empremta IPA)"]
   },
 
   // ── CAT 22: Strong American Ale ──
