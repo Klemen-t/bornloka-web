@@ -200,6 +200,68 @@ const Utils = {
     }).join(', ');
   },
 
+  linkifyGlossary(text) {
+    if (!text || typeof GLOSSARY_TERMS === 'undefined') return text;
+    let res = text;
+    
+    const allAliases = [];
+    GLOSSARY_TERMS.forEach((termObj, termIdx) => {
+      (termObj.aliases || []).forEach(alias => {
+        allAliases.push({ alias: alias.trim(), termIdx });
+      });
+    });
+    allAliases.sort((a, b) => b.alias.length - a.alias.length);
+
+    const replacements = [];
+    allAliases.forEach(({ alias, termIdx }) => {
+      // Use lookarounds with \\p{L} (any unicode letter) to avoid matching inside other words, since \\b fails on accents.
+      const regex = new RegExp(`(?<![\\p{L}\\p{N}])(${alias})(?![\\p{L}\\p{N}])`, 'giu');
+      let match;
+      while ((match = regex.exec(res)) !== null) {
+        // Prevent double replacement if we already tokenized something overlapping
+        if (res.substring(Math.max(0, match.index - 15), match.index).includes('__GLOSS_LINK_')) continue;
+        const token = `__GLOSS_LINK_${replacements.length}__`;
+        replacements.push({ token, termIdx, original: match[1] });
+        res = res.substring(0, match.index) + token + res.substring(match.index + match[1].length);
+        regex.lastIndex = match.index + token.length;
+      }
+    });
+
+    replacements.forEach(({ token, termIdx, original }) => {
+      res = res.split(token).join(`<span class="glossary-link" onclick="App.showGlossaryPopup(event, ${termIdx}); event.stopPropagation();" title="Ver definición">${original}</span>`);
+    });
+
+    return res;
+  },
+
+  getGlossaryExamples(termObj) {
+    if (typeof BJCP_STYLES === 'undefined' || !termObj || !termObj.aliases || !termObj.aliases.length) return '';
+    const examples = [];
+    const fields = ['overallimpression', 'aroma', 'appearance', 'flavor', 'mouthfeel', 'comments', 'history'];
+    
+    for (let s of BJCP_STYLES) {
+      if (!s.name) continue;
+      let matched = false;
+      for (let f of fields) {
+        if (!s[f]) continue;
+        const textLow = s[f].toLowerCase();
+        for (let alias of termObj.aliases) {
+          if (textLow.includes(alias.toLowerCase())) {
+            examples.push(s.number ? `${s.number} ${s.name}` : s.name);
+            matched = true;
+            break;
+          }
+        }
+        if (matched) break;
+      }
+    }
+    if (examples.length === 0) return '';
+    const topExamples = this.pick(examples, 3);
+    return `<div style="margin-top:8px;font-size:0.85em;color:var(--text3);">
+              <strong>Ejemplos donde aparece:</strong> ${topExamples.join(', ')}
+            </div>`;
+  },
+
   buildHelperHTML(style, context = 'modal', chosenName = null) {
     if (typeof STUDY_HELPERS === 'undefined') return '';
     const h = STUDY_HELPERS[style.number];
@@ -275,6 +337,49 @@ const App = {
     const d = Store.get();
     Utils.el('xp-display').textContent = `${d.xp} XP`;
     Utils.el('streak-display').textContent = d.streak;
+  },
+  openGlossary() {
+    Utils.el('modal-content').innerHTML = `
+      <div class="modal-top" style="border-bottom:1px solid var(--border); margin-bottom:16px;">
+        <div>
+          <div class="modal-name">📖 Glosario de términos</div>
+        </div>
+        <div style="display:flex;gap:8px;align-items:flex-start">
+          <button class="modal-close" onclick="Study.closeModal()">✕</button>
+        </div>
+      </div>
+      <div class="helper-list" style="padding: 0 8px;">
+        ${(typeof GLOSSARY_TERMS !== 'undefined' ? GLOSSARY_TERMS : []).map(t => `
+          <div style="margin-bottom:16px;">
+            <strong style="color:var(--accent);font-size:1.1em;">${t.term}</strong>
+            <p style="margin-top:4px;color:var(--text2);line-height:1.5;">${t.def}</p>
+            ${Utils.getGlossaryExamples(t)}
+          </div>
+        `).join('')}
+      </div>
+    `;
+    Utils.el('detail-modal').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  },
+  showGlossaryPopup(event, termIdx) {
+    if (typeof GLOSSARY_TERMS === 'undefined') return;
+    const termObj = GLOSSARY_TERMS[termIdx];
+    if (!termObj) return;
+
+    let popup = document.getElementById('glossary-popup-layer');
+    if (!popup) {
+      popup = document.createElement('div');
+      popup.id = 'glossary-popup-layer';
+      document.body.appendChild(popup);
+    }
+    popup.innerHTML = `
+      <div class="glossary-popup-overlay" onclick="document.getElementById('glossary-popup-layer').innerHTML=''"></div>
+      <div class="glossary-popup">
+        <button class="glossary-popup-close" onclick="document.getElementById('glossary-popup-layer').innerHTML=''">✕</button>
+        <h3 style="color:var(--accent); margin:0 0 8px 0; font-size:1.2em;">${termObj.term}</h3>
+        <p style="color:var(--text); margin:0; line-height:1.5;">${termObj.def}</p>
+      </div>
+    `;
   },
   toggleTheme() {
     const html = document.documentElement;
@@ -458,7 +563,7 @@ const Study = {
           <div class="modal-number">${s.number || ''} · ${s.category || ''}</div>
           <div class="modal-name">
             ${s.name}
-            ${s.pronunciation ? `<span class="pronunciation-btn" style="font-size:0.6em;color:var(--text3);font-weight:500;margin-left:8px;cursor:pointer;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'" onclick="Utils.speak('${s.pronunciation.replace(/-/g, ' ').replace(/'/g, "\\'")}')" title="Escuchar pronunciación">🔊 / ${s.pronunciation} /</span>` : ''}
+            <span class="pronunciation-btn" style="font-size:0.6em;color:var(--text3);font-weight:500;margin-left:8px;cursor:pointer;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'" onclick="Utils.speak('${(s.pronunciation || s.name).replace(/-/g, ' ').replace(/'/g, "\\'")}')" title="Escuchar pronunciación">🔊${s.pronunciation ? ` / ${s.pronunciation} /` : ''}</span>
           </div>
         </div>
         <div style="display:flex;gap:8px;align-items:flex-start">
@@ -484,7 +589,12 @@ const Study = {
           const bgStyle = isComm ? 'background: var(--purple-bg); border-color: rgba(200,150,10,0.3);' : '';
           const titleStyle = isComm ? 'color: var(--purple);' : '';
           const textStyle = isComm ? 'color: var(--text);' : '';
-          const content = isComm ? Utils.linkifyExamples(text) : text;
+          let content = text;
+          if (isComm) {
+            content = Utils.linkifyExamples(text);
+          } else if (title !== 'Comparación de estilos') {
+            content = Utils.linkifyGlossary(text);
+          }
           return `
           <div class="modal-section${i < 4 ? '' : ' full'}" ${bgStyle ? `style="${bgStyle}"` : ''}>
             <div class="modal-section-title" ${titleStyle ? `style="${titleStyle}"` : ''}>${title}</div>

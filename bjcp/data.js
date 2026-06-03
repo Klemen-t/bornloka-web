@@ -693,7 +693,7 @@ const BJCP_STYLES = [
     "ogmax": 1.053,
     "fgmin": 1.008,
     "fgmax": 1.014,
-    "pronunciation": "vyse-beer"
+    "pronunciation": "vice-beer"
   },
   {
     "name": "Dunkles Weissbier",
@@ -717,7 +717,7 @@ const BJCP_STYLES = [
     "ogmax": 1.057,
     "fgmin": 1.008,
     "fgmax": 1.014,
-    "pronunciation": "doon-kuls vyse-beer"
+    "pronunciation": "doon-kuls vice-beer"
   },
   {
     "name": "Weizenbock",
@@ -741,7 +741,7 @@ const BJCP_STYLES = [
     "ogmax": 1.09,
     "fgmin": 1.015,
     "fgmax": 1.022,
-    "pronunciation": "vy-tsen-bok"
+    "pronunciation": "vice-en-bok"
   },
   {
     "name": "Ordinary Bitter",
@@ -1842,7 +1842,7 @@ const BJCP_STYLES = [
     "ogmax": 1.032,
     "fgmin": 1.003,
     "fgmax": 1.006,
-    "pronunciation": "bear-lee-ner vy-suh"
+    "pronunciation": "ber-lee-ner vice-uh"
   },
   {
     "name": "Flanders Red Ale",
@@ -1890,7 +1890,7 @@ const BJCP_STYLES = [
     "ogmax": 1.074,
     "fgmin": 1.008,
     "fgmax": 1.012,
-    "pronunciation": "owt brown"
+    "pronunciation": "out brown"
   },
   {
     "name": "Lambic",
@@ -1938,7 +1938,7 @@ const BJCP_STYLES = [
     "ogmax": 1.054,
     "fgmin": 1,
     "fgmax": 1.006,
-    "pronunciation": "gur-zuh"
+    "pronunciation": "gerr-zuh"
   },
   {
     "name": "Fruit Lambic",
