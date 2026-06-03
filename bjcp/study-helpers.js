@@ -12,7 +12,7 @@ const STUDY_HELPERS = {
   },
   "1B": {
     confusableWith: ["American Light Lager (1A)", "International Pale Lager (2A)", "Cream Ale (1C)"],
-    keyIdentifiers: ["ABV 4.2–5.3%", "Adjunts de blat de moro o arròs", "Sabor neutre-granulat, fi sec", "Molt pàl·lid 2–3.5 SRM", "Carbonatació alta"],
+    keyIdentifiers: ["ABV 4.2–5.3%", "Adjunts de blat de moro o arròs", "Sabor neutre-granulat, final sec", "Molt pàl·lid 2–3.5 SRM", "Carbonatació alta"],
     commonFaults: ["DMS (blat de moro cuit)", "Diacetil", "Massa sabor a malta (hauria de ser neutre)"]
   },
   "1C": {
@@ -400,14 +400,14 @@ const STUDY_HELPERS = {
   // ── CAT 22: Strong American Ale ──
   "22A": {
     confusableWith: ["American IPA (21A)", "English Barleywine (17D)", "Imperial Stout (20C)"],
-    keyIdentifiers: ["ABV 7.5–10%+: molt fort", "Llúpol americà intensíssim: cítric/tropical/piní", "Malt de suport però fi i sec al final", "Pliny the Elder com a referent"],
+    keyIdentifiers: ["ABV 7.5–10%+: molt fort", "Llúpol americà intensíssim: cítric/tropical/piní", "Malt de suport però final suau i sec al final", "Pliny the Elder com a referent"],
     commonFaults: ["Massa dolç/maltat (hauria ser relativament sec)", "Alcohol calent", "Llúpol oxidat (stale hops = defecte greu)"]
   },
 
   // ── CAT 24: Belgian Ale ──
   "24A": {
     confusableWith: ["Weissbier (10A)", "American Wheat Beer (1D)", "Saison (25B)"],
-    keyIdentifiers: ["Coriandre + pell de taronja: espècies clau", "Blat no maltat (30–50%)", "TÈRBOL/lletós: aparença definitòria", "ABV 4.5–5.5%", "Poc llúpol"],
+    keyIdentifiers: ["Coriandre + pell de taronja: espècies clau", "Blat no maltat (30–50%)", "TÈRBOL/lactós: aparença definitòria", "ABV 4.5–5.5%", "Poc llúpol"],
     commonFaults: ["Sense caràcter d'espècies", "Massa llúpol", "No tèrbol (hauria ser opac)", "Caràcter de plàtan/clau (seria Weizen!)"]
   },
   "24B": {
