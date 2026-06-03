@@ -62,6 +62,31 @@ const Store = {
 
 // ===== UTILS =====
 const Utils = {
+  speak(text) {
+    if (!window.speechSynthesis) {
+      Utils.toast('El teu navegador no suporta àudio', 'error');
+      return;
+    }
+    window.speechSynthesis.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'en-US';
+    utterance.rate = 0.85; // Slightly slower for clarity
+    window.speechSynthesis.speak(utterance);
+  },
+  getAbvColor(val) {
+    if (!val) return 'var(--text2)';
+    if (val < 4.5) return 'var(--blue)';
+    if (val <= 6.0) return 'var(--green)';
+    if (val <= 8.5) return '#fb923c'; // orange
+    return 'var(--red)';
+  },
+  getIbuColor(val) {
+    if (!val) return 'var(--text2)';
+    if (val <= 20) return 'var(--blue)';
+    if (val <= 40) return 'var(--green)';
+    if (val <= 60) return '#fb923c'; // orange
+    return 'var(--red)';
+  },
   srmToColor(srm) {
     const colors = ['#FFE699', '#FFD878', '#FFCA5A', '#FFBF42', '#FBB123', '#F8A600',
       '#F39C00', '#EA8F00', '#E58500', '#DE7C00', '#D77200', '#CF6900', '#CB6200',
@@ -125,6 +150,11 @@ const Utils = {
   },
   el(id) { return document.getElementById(id); },
   html(id, h) { document.getElementById(id).innerHTML = h; },
+  trackEvent(eventName, params = {}) {
+    if (typeof window.gtag === 'function') {
+      window.gtag('event', eventName, params);
+    }
+  },
 
   linkify(text) {
     if (!text) return '';
@@ -238,6 +268,7 @@ const App = {
     Utils.el(`mode-${mode}`).classList.add('active');
     Utils.el(`tab-${mode}`).classList.add('active');
     this.currentMode = mode;
+    Utils.trackEvent('page_view', { page_title: mode, page_path: '/' + mode });
     if (mode === 'stats') Stats.render();
     if (mode === 'detect') Detector.showLanding();
   },
@@ -396,6 +427,7 @@ const Study = {
   openModal(name) {
     const s = BJCP_STYLES.find(x => x.name === name);
     if (!s) return;
+    Utils.trackEvent('view_item', { item_name: s.name, item_category: s.category || 'Unknown' });
     const d = Store.get();
     const isFav = d.favorites.includes(s.name);
     const isDiff = d.difficult.includes(s.name);
@@ -404,6 +436,8 @@ const Study = {
     const og = Utils.fmtRange(s.ogmin, s.ogmax);
     const fg = Utils.fmtRange(s.fgmin, s.fgmax);
     const srmMid = s.srmmin && s.srmmax ? (s.srmmin + s.srmmax) / 2 : s.srmmin || s.srmmax;
+    const abvMid = s.abvmin && s.abvmax ? (s.abvmin + s.abvmax) / 2 : s.abvmin || s.abvmax;
+    const ibuMid = s.ibumin && s.ibumax ? (s.ibumin + s.ibumax) / 2 : s.ibumin || s.ibumax;
     const tags = (s.tags || '').split(',').map(t => t.trim()).filter(Boolean);
 
     const sections = [
@@ -423,7 +457,10 @@ const Study = {
       <div class="modal-top">
         <div>
           <div class="modal-number">${s.number || ''} · ${s.category || ''}</div>
-          <div class="modal-name">${s.name}</div>
+          <div class="modal-name">
+            ${s.name}
+            ${s.pronunciation ? `<span class="pronunciation-btn" style="font-size:0.6em;color:var(--text3);font-weight:500;margin-left:8px;cursor:pointer;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'" onclick="Utils.speak('${s.pronunciation.replace(/-/g, ' ').replace(/'/g, "\\'")}')" title="Escoltar pronunciació">🔊 / ${s.pronunciation} /</span>` : ''}
+          </div>
         </div>
         <div style="display:flex;gap:8px;align-items:flex-start">
           <button class="card-action-btn" title="Preferit" style="font-size:20px" onclick="Study.toggleFav('${s.name.replace(/'/g, "\\'")}',this)">${isFav ? '❤️' : '🤍'}</button>
@@ -432,10 +469,10 @@ const Study = {
         </div>
       </div>
       <div class="modal-stats">
-        <div class="modal-stat"><div class="modal-stat-val">${abv}</div><div class="modal-stat-key">ABV</div></div>
-        <div class="modal-stat"><div class="modal-stat-val">${ibu}</div><div class="modal-stat-key">IBU</div></div>
-        <div class="modal-stat"><div class="modal-stat-val">${og}</div><div class="modal-stat-key">OG</div></div>
-        <div class="modal-stat"><div class="modal-stat-val">${fg}</div><div class="modal-stat-key">FG</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" style="color:${abvMid ? Utils.getAbvColor(abvMid) : 'inherit'}">${abv}</div><div class="modal-stat-key">ABV</div></div>
+        <div class="modal-stat"><div class="modal-stat-val" style="color:${ibuMid ? Utils.getIbuColor(ibuMid) : 'inherit'}">${ibu}</div><div class="modal-stat-key">IBU</div></div>
+        ${og !== '—' ? `<div class="modal-stat"><div class="modal-stat-val" style="color:var(--purple)">${og}</div><div class="modal-stat-key">OG</div></div>` : ''}
+        ${fg !== '—' ? `<div class="modal-stat"><div class="modal-stat-val" style="color:var(--purple)">${fg}</div><div class="modal-stat-key">FG</div></div>` : ''}
         <div class="modal-stat">
           <div class="modal-stat-val" style="color:${srmMid ? Utils.srmToColor(srmMid) : 'var(--text2)'}">${Utils.fmtRange(s.srmmin, s.srmmax)}</div>
           <div class="modal-stat-key">SRM</div>
@@ -894,9 +931,11 @@ const Quiz = {
     this.showQuestion();
   },
 
-  showResults() {
-    Utils.el('quiz-game').classList.add('hidden');
+  renderResults() {
     const pct = Math.round((this.score / (this.questions.length * 10)) * 100);
+    Utils.trackEvent('quiz_completed', { score: this.score, percentage: pct, type: 'quiz' });
+
+    Utils.el('quiz-progress').innerHTML = '';
     const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '👍' : pct >= 40 ? '🤔' : '💪';
     const msg = pct >= 80 ? 'Excel·lent!' : pct >= 60 ? 'Molt bé!' : pct >= 40 ? 'Continua practicant!' : 'Cal estudiar més!';
     const errHTML = this.errors.length ? `
@@ -927,6 +966,11 @@ const Quiz = {
         </div>
       </div>`;
     res.classList.remove('hidden');
+  },
+
+  showResults() {
+    Utils.el('quiz-game').classList.add('hidden');
+    this.renderResults();
   },
 
   abort() { this.backToSelector(); },
@@ -1086,6 +1130,7 @@ const Exam = {
   showResults() {
     clearInterval(this.timerInterval);
     Utils.el('exam-game').classList.add('hidden');
+    Utils.trackEvent('quiz_completed', { score: this.score, type: 'exam' });
     const total = this.questions.length;
     const correct = total - this.errors.length;
     const pct = Math.round((correct / total) * 100);
@@ -1550,6 +1595,7 @@ const Detector = {
     Utils.el('detect-game').classList.add('hidden');
     Utils.el('detect-results').classList.remove('hidden');
     const sorted = this._sorted();
+    Utils.trackEvent('use_detector', { top_result: sorted[0]?.style.name || 'Unknown' });
     const maxScore = Math.max(1, sorted[0]?.score || 0);
     const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
     Utils.el('detect-results').innerHTML = `

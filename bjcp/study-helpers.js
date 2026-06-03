@@ -33,7 +33,7 @@ const STUDY_HELPERS = {
     commonFaults: ["DMS", "Sulfur", "Massa caràcter (hauria de ser suau i neutre)"]
   },
   "2B": {
-    confusableWith: ["Märzen (6A)", "Vienna Lager (7A)", "International Pale Lager (2A)"],
+    confusableWith: ["Marzen (6A)", "Vienna Lager (7A)", "International Pale Lager (2A)"],
     keyIdentifiers: ["Versió ambre de la lager internacional", "Caramel lleuger a moderat", "ABV 4.5–6%, cos lleuger-mig", "Adjunts possibles (menys ric que 6A o 7A)", "Brooklyn Lager, Dos Equis"],
     commonFaults: ["Massa ric/complex per a 2B (confondre amb Märzen)", "DMS", "Massa dolç sense equilibri"]
   },
@@ -55,7 +55,7 @@ const STUDY_HELPERS = {
     commonFaults: ["Amargor dura (aigüa dura — caràcter alemany)", "Sense diacetil acceptable en versions txeques autèntiques", "Massa neutre (hauria de tenir personalitat maltosa)"]
   },
   "3C": {
-    confusableWith: ["Märzen (6A)", "Vienna Lager (7A)", "Czech Dark Lager (3D)"],
+    confusableWith: ["Marzen (6A)", "Vienna Lager (7A)", "Czech Dark Lager (3D)"],
     keyIdentifiers: ["Polotmavé: semi-fosc txec", "10–16 SRM: ambre-coure", "Malt Maillard o caramel, variant", "Saaz visible però no dominant", "Diacetil baix acceptable"],
     commonFaults: ["Massa caramel dolç (Märzen excessiu)", "Sense distinció amb 3B o 3D", "Aigüa dura (defecte txec)"]
   },
@@ -72,12 +72,12 @@ const STUDY_HELPERS = {
     commonFaults: ["Massa llúpol/amargor (no és una Pils!)", "Massa dolç al final (ha de ser sec)", "Cap riquesa de malt (hauria de ser gran-dolç)"]
   },
   "4B": {
-    confusableWith: ["Munich Helles (4A)", "Märzen (6A)", "Helles Bock (4C)"],
+    confusableWith: ["Munich Helles (4A)", "Marzen (6A)", "Helles Bock (4C)"],
     keyIdentifiers: ["Oktoberfest modern (pal·lid, no ambre!)", "ABV 5.8–6.3%: més fort que Helles", "4–6 SRM: daurat, NO ambre", "Malta torrada lleugerament, pastosa", "Festbier ≠ Märzen tradicional"],
     commonFaults: ["Color ambre (seria Märzen, no Festbier!)", "Massa dolç o massa fort", "Confondre amb el Märzen tradicional"]
   },
   "4C": {
-    confusableWith: ["Festbier (4B)", "Doppelbock (9A) versió pàl·lida", "German Pils (5D)"],
+    confusableWith: ["Festbier (4B)", "Doppelbock (9A)", "German Pils (5D)"],
     keyIdentifiers: ["Maibock: bock pàl·lid de primavera", "ABV 6.3–7.4%: bock fort", "Malta gran-dolça rica + llúpol visible (més que bocks foscos)", "6–9 SRM: daurat a ambre clar", "Acabat relativament sec per la força"],
     commonFaults: ["Massa fosc (seria Dunkles Bock)", "Alcohol massa calent/dur", "Massa llúpol per a un bock"]
   },
@@ -94,12 +94,12 @@ const STUDY_HELPERS = {
     commonFaults: ["Massa fruita/èsters (hauria de ser molt subtil)", "Diacetil", "Massa llúpol o massa maltat"]
   },
   "5C": {
-    confusableWith: ["Munich Helles (4A)", "German Pils (5D)", "Kölsch (5B)"],
+    confusableWith: ["Munich Helles (4A)", "German Pils (5D)", "Kolsch (5B)"],
     keyIdentifiers: ["Dortmunder Export: equilibri malta+llúpol", "ABV 5–6%: més fort que Helles", "Caràcter mineral de l'aigüa de Dortmund", "IBU 20–30: equilibrat, no amarg com la Pils", "Daurat mig a profund"],
     commonFaults: ["Massa suau (Helles) o massa amarg (Pils)", "Cap caràcter mineral", "Massa maltat sense equilibri de llúpol"]
   },
   "5D": {
-    confusableWith: ["Czech Premium Pale Lager (3B)", "German Helles Exportbier (5C)", "Kölsch (5B)"],
+    confusableWith: ["Czech Premium Pale Lager (3B)", "German Helles Exportbier (5C)", "Kolsch (5B)"],
     keyIdentifiers: ["Finalamarg i sec: diferència clau vs 3B!", "Aigüa amb sulfat (Jever, König): sequedat mineral", "Llúpol alemany floral/picant al front", "IBU 22–40", "Molt pàl·lid 2–4 SRM"],
     commonFaults: ["Final suau/rodó (caràcter txec, no alemany)", "Massa maltat (hauria de ser hop-forward)", "Aigua tova = no és una German Pils autèntica"]
   },
@@ -111,19 +111,19 @@ const STUDY_HELPERS = {
     commonFaults: ["Color daurat (seria Festbier)", "Caramel prominent (Märzen NO té caramel dominant)", "Massa dolç al final"]
   },
   "6B": {
-    confusableWith: ["Märzen (6A)", "Classic Style Smoked Beer (32A)"],
+    confusableWith: ["Marzen (6A)", "Classic Style Smoked Beer (32A)"],
     keyIdentifiers: ["Base de Märzen + fum de FAIA (no torba!)", "Fum que varia de subtil a intens", "Fum = cansalada/llenya, no creosota", "ABV 4.8–6%", "Equilibri fum↔malta inversament proporcional"],
     commonFaults: ["Fum de torba (caràcter escocès, incorrecte aquí)", "Fum amb aromes aspres, cremades o de goma", "Cap presència de fum (hauria de ser identificable)"]
   },
   "6C": {
-    confusableWith: ["Doppelbock (9A) fosc", "Munich Dunkel (8A)", "Baltic Porter (9C)"],
+    confusableWith: ["Doppelbock (9A)", "Munich Dunkel (8A)", "Baltic Porter (9C)"],
     keyIdentifiers: ["Bock fosc: ABV 6.3–7.2%", "Maillard ric i torrat, NO rostit", "14–22 SRM: coure a marró", "Quasi sense llúpol al sabor", "Sense caràcter de galetes torrades/cremades"],
     commonFaults: ["Rostit de xocolata/cafè (seria Porter o Stout!)", "Massa dolç o empalagós", "Massa llúpol per a un bock"]
   },
 
   // ── CAT 7: Amber Bitter European Beer ──
   "7A": {
-    confusableWith: ["Märzen (6A)", "International Amber Lager (2B)", "Altbier (7B)"],
+    confusableWith: ["Marzen (6A)", "International Amber Lager (2B)", "Altbier (7B)"],
     keyIdentifiers: ["Ambre vermellós elegant (9–15 SRM)", "Malta torrada — NO caramel dominant", "ABV 4.7–5.5%", "Moderadament amarg, sec-suau al final", "Elegància: Maillard sense dolçor"],
     commonFaults: ["Caramel dominant (hauria ser torrat elegant)", "Massa fosc o massa pàl·lid", "Massa dolç o empalagós"]
   },
@@ -135,7 +135,7 @@ const STUDY_HELPERS = {
 
   // ── CAT 8: Dark European Lager ──
   "8A": {
-    confusableWith: ["Schwarzbier (8B)", "Munich Dark Dunkel (=8A)", "Czech Dark Lager (3D)", "Dunkles Bock (6C)"],
+    confusableWith: ["Schwarzbier (8B)", "Czech Dark Lager (3D)", "Dunkles Bock (6C)"],
     keyIdentifiers: ["Pa de malt de Munich torrat ric", "17–28 SRM: coure fosc a marró", "Xocolata lleugera i fruits secs, cap rostit dur", "ABV 4.5–5.6%", "Caràcter lager net i suau"],
     commonFaults: ["Rostit o cremat (seria Schwarzbier o Stout)", "Massa dolç o empalagós", "Cap riquesa de malt de Munich (hauria de ser l'estrella)"]
   },
@@ -157,7 +157,7 @@ const STUDY_HELPERS = {
     commonFaults: ["Alcohol dur/picant (fusels)", "Massa dolç sense equilibri alcohòlic", "Cap sensació de concentració/viscositat"]
   },
   "9C": {
-    confusableWith: ["American Porter (20A)", "Imperial Stout (20C)", "Doppelbock (9A) fosc"],
+    confusableWith: ["American Porter (20A)", "Imperial Stout (20C)", "Doppelbock (9A)"],
     keyIdentifiers: ["Porter del Bàltic: fermentat amb llevat lager (o cold-conditioned)", "Fruita fosca: prunes, panses, groselles", "ABV 6.5–9.5%: fort però suau", "Rostit de xocolata negra SENSE cremar", "Sense notes d'ale: molt net i suau"],
     commonFaults: ["Caràcter d'ale (massa fruit/astringència d'una ale fosca)", "Rostit cremat o dur (seria Imperial Stout)", "Massa fluix per a la força"]
   },
@@ -169,12 +169,12 @@ const STUDY_HELPERS = {
     commonFaults: ["Xiclet (massa isoamil acetat sense clau)", "Massa fenòlic (massa clau sense plàtan)", "Fum (defecte del llevat)", "Acidesa (contaminació)"]
   },
   "10B": {
-    confusableWith: ["Weissbier (10A)", "Weizenbock (10C) fosc", "Munich Dunkel (8A)"],
+    confusableWith: ["Weissbier (10A)", "Weizenbock (10C)", "Munich Dunkel (8A)"],
     keyIdentifiers: ["Versió fosca del Weissbier: 14–23 SRM", "Plàtan+clau + notes de caramel i pa torrat", "ABV 4.3–5.6%", "Alta carbonatació igual que 10A", "Caramel pot emmascarar el clau (acceptable)"],
     commonFaults: ["Massa rostit/torrat (seria Dunkel ale)", "Cap plàtan ni clau (ha de tenir perfil Weizen)", "Massa dolç o empalagós"]
   },
   "10C": {
-    confusableWith: ["Weissbier (10A)", "Doppelbock (9A)", "Weizenbock fosc vs Dunkles Weissbier (10B)"],
+    confusableWith: ["Weissbier (10A)", "Doppelbock (9A)", "Dunkles Weissbier (10B)"],
     keyIdentifiers: ["Bock de blat: fort 6.5–9% ABV", "Plàtan+clau + rica maltesa de bock", "Versions pàl·lides i fosques", "Alta carbonatació com tot weizen", "Fruita fosca en versions fosques (prunes)"],
     commonFaults: ["Alcohol calent (hauria de ser suau)", "Cap caràcter Weizen (plàtan/clau)", "Massa dolç sense atenuació per a la força"]
   },
@@ -197,7 +197,7 @@ const STUDY_HELPERS = {
 
   // ── CAT 12: Pale Commonwealth Beer ──
   "12A": {
-    confusableWith: ["Best Bitter (11B)", "American Pale Ale (18B)", "Kölsch (5B)"],
+    confusableWith: ["Best Bitter (11B)", "American Pale Ale (18B)", "Kolsch (5B)"],
     keyIdentifiers: ["Estil d'estiu anglès: molt pàl·lid (2–6 SRM)", "Llúpol anglès floral/fruitat (NO americà)", "ABV 3.8–5%", "Cos lleuger i refrescant"],
     commonFaults: ["Llúpol americà (cítrics, tropical: defecte!)", "Massa maltat o fosc", "Caràcter de fermentació excessiu"]
   },
@@ -214,7 +214,7 @@ const STUDY_HELPERS = {
 
   // ── CAT 13: Brown British Beer ──
   "13A": {
-    confusableWith: ["British Brown Ale (13B)", "Scottish Light (14A)", "Irish Stout (15B) (color)"],
+    confusableWith: ["British Brown Ale (13B)", "Scottish Light (14A)", "Irish Stout (15B)"],
     keyIdentifiers: ["ABV molt baix: 3–3.8% (session fosca)", "14–25 SRM: ambre fosc a marró", "Gamma de sabors àmplia: caramel, xocolata, terrós", "Molt drinkable malgrat el color fosc"],
     commonFaults: ["Massa rostit (seria Porter)", "Massa fort (perd el caràcter session)", "Cap sabor complex (hauria tenir personalitat)"]
   },
@@ -287,17 +287,17 @@ const STUDY_HELPERS = {
 
   // ── CAT 17: Strong British Ale ──
   "17A": {
-    confusableWith: ["Old Ale (17B)", "Wee Heavy (17C)", "English Barleywine (17D)"],
+    confusableWith: ["Old Ale (17B)", "Wee Heavy (17C)", "English Barley Wine (17D)"],
     keyIdentifiers: ["Categoria molt àmplia: 5.5–9%", "Varies interpretació: Old Peculier, etc.", "Malt predominant, complex", "Estils que no entren en d'altres categories"],
     commonFaults: ["Cap complexitat per a la força", "Massa semblant a una altra categoria definida"]
   },
   "17B": {
-    confusableWith: ["British Strong Ale (17A)", "English Barleywine (17D)", "Wee Heavy (17C)"],
+    confusableWith: ["British Strong Ale (17A)", "English Barley Wine (17D)", "Wee Heavy (17C)"],
     keyIdentifiers: ["Caràcter d'envelliment: vinós, oxidat acceptable", "ABV 5.5–9%", "Complex: caramel fosc, fruita madura, terra", "Estil tradicional britànic (Theakston Old Peculier)"],
     commonFaults: ["Durament oxidat (no és el caràcter que es vol)", "Cap caràcter d'envelliment", "Massa simple per a la complexitat esperada"]
   },
   "17C": {
-    confusableWith: ["English Barleywine (17D)", "Old Ale (17B)", "Doppelbock (9A)"],
+    confusableWith: ["English Barley Wine (17D)", "Old Ale (17B)", "Doppelbock (9A)"],
     keyIdentifiers: ["Scottish Strong Ale: 6.5–10%", "Caramel/toffee ric i intens", "Poc llúpol (tradició escocesa)", "Ordi torrat pot donar color però no sabor dominant"],
     commonFaults: ["Massa llúpol (tradició escocesa = poc hop!)", "Massa sabor de torrat", "Massa semblant a un Barleywine anglès (massa llúpol)"]
   },
@@ -309,7 +309,7 @@ const STUDY_HELPERS = {
 
   // ── CAT 18: Pale American Ale ──
   "18A": {
-    confusableWith: ["Kölsch (5B)", "British Golden Ale (12A)", "American Pale Ale (18B)"],
+    confusableWith: ["Kolsch (5B)", "British Golden Ale (12A)", "American Pale Ale (18B)"],
     keyIdentifiers: ["Entry-level craft: accessible i simple", "ABV 3.8–5.5%", "Qualsevol fermentació acceptable", "Poc caràcter de llúpol o malt destacable"],
     commonFaults: ["Massa complexitat per a Blonde (hauria ser simple)", "Caràcter de fermentació excessiu (esters, fenòlics)", "Massa semblant a una APA o IPA"]
   },
@@ -362,7 +362,7 @@ const STUDY_HELPERS = {
 
   // ── CAT 21B: Specialty IPA (subcategories) ──
   "21B1": {
-    confusableWith: ["Belgian Tripel (26C)", "Belgian Golden Strong (25C)", "American IPA (21A)"],
+    confusableWith: ["Belgian Tripel (26C)", "Belgian Golden Strong Ale (25C)", "American IPA (21A)"],
     keyIdentifiers: ["Llevat BELGA: èsters (pera, poma, plàtan) + espècies (clau, pebre)", "Final molt SEC i molt ATENUAT", "ABV fort: 6.2–9.5%", "Daurat clar a ambre (5–8 SRM)", "Llúpol americà/NM O europeu — ambdós possibles"],
     commonFaults: ["Sense caràcter de llevat belga (seria American IPA)", "Final dolç o poc atenuat (ha de ser sec com una Tripel)", "Conflicte desagradable entre llevat i llúpol"]
   },
@@ -377,7 +377,7 @@ const STUDY_HELPERS = {
     commonFaults: ["Torrat cremat (seria Black IPA o Porter)", "Massa dolç sense sequedat (ha de tenir final sec)", "Sense el tàndem xocolata+llúpol americà"]
   },
   "21B4": {
-    confusableWith: ["American IPA (21A)", "Hazy IPA (21C)", "Belgian Golden Strong (25C)"],
+    confusableWith: ["American IPA (21A)", "Hazy IPA (21C)", "Belgian Golden Strong Ale (25C)"],
     keyIdentifiers: ["EXTREMADAMENT SECA: FG pot baixar de 1.000!", "Carbonatació altíssima, recordant xampany", "Molt pàl·lida (2–4 SRM): quasi com l'aigua", "IBU PERCEBUTS molt baixos (20–30) per la sequedat extrema", "Enzims (amyloglucosidase) per eliminar sucres residuals"],
     commonFaults: ["Final dolç o no suficientment sec (el signe distintiu és la sequedat extrema)", "Diacetil (defecte d'enzim mal aplicat)", "Tèrbol o fosc (ha de ser cristal·lí i molt pàl·lid)"]
   },
@@ -387,7 +387,7 @@ const STUDY_HELPERS = {
     commonFaults: ["Caramel massa dominant (amaga el llúpol)", "Massa fosc/xocolatós (seria Brown IPA)", "Massa pàl·lid (seria American IPA o Amber Ale)"]
   },
   "21B6": {
-    confusableWith: ["American IPA (21A)", "Rye Beer (31A)", "Red IPA (21B5)"],
+    confusableWith: ["American IPA (21A)", "Alternative Grain Beer (31A)", "Red IPA (21B5)"],
     keyIdentifiers: ["SÈGOL clarament perceptible: pebre, espècies, pa de sègol", "Textura lleugerament més cremosa que una IPA regular", "Final sec i ESPECIAT pel sègol", "Daurat a ambre vermellós (6–14 SRM)", "Si no s'aprecia el sègol → classifica com American IPA"],
     commonFaults: ["Cap caràcter de sègol (ha de ser clarament perceptible)", "Massa cremós o pesant (ha de ser sec i potable)", "Caravea o roure (no s'han d'usar)"]
   },
@@ -399,7 +399,7 @@ const STUDY_HELPERS = {
 
   // ── CAT 22: Strong American Ale ──
   "22A": {
-    confusableWith: ["American IPA (21A)", "English Barleywine (17D)", "Imperial Stout (20C)"],
+    confusableWith: ["American IPA (21A)", "English Barley Wine (17D)", "Imperial Stout (20C)"],
     keyIdentifiers: ["ABV 7.5–10%+: molt fort", "Llúpol americà intensíssim: cítric/tropical/piní", "Malt de suport però final suau i sec al final", "Pliny the Elder com a referent"],
     commonFaults: ["Massa dolç/maltat (hauria ser relativament sec)", "Alcohol calent", "Llúpol oxidat (stale hops = defecte greu)"]
   },
@@ -423,7 +423,7 @@ const STUDY_HELPERS = {
 
   // ── CAT 25: Strong Belgian Ale ──
   "25A": {
-    confusableWith: ["Belgian Golden Strong (25C)", "Belgian Pale Ale (24B)", "Tripel (26C)"],
+    confusableWith: ["Belgian Golden Strong Ale (25C)", "Belgian Pale Ale (24B)", "Belgian Tripel (26C)"],
     keyIdentifiers: ["Força moderada: 6–7.5%", "Net i suau, lleugerament afruitat/especiat", "Daurat pàl·lid", "Leffe Blond com a referent"],
     commonFaults: ["Massa fort (seria Belgian Golden Strong)", "Massa fenòlic o especiat", "Sense la delicat fruita del llevat belga"]
   },
@@ -450,14 +450,241 @@ const STUDY_HELPERS = {
     commonFaults: ["Massa fort/fosc (seria Dark Strong Ale)", "Massa dolç sense elegància", "Caràcter de Malta Malt dominant (hauria ser sucre de candi)"]
   },
   "26C": {
-    confusableWith: ["Belgian Golden Strong (25C)", "Belgian Dark Strong (26D)", "Dubbel (26B)"],
+    confusableWith: ["Belgian Golden Strong Ale (25C)", "Belgian Dark Strong Ale (26D)", "Belgian Dubbel (26B)"],
     keyIdentifiers: ["Daurat malgrat la força (7.5–9.5%)!", "Final sec, molt carbonat", "Complex afruitat/especiat", "Westmalle Tripel: el model"],
     commonFaults: ["Color ambre (hauria ser daurat)", "Massa dolç (hauria ser sec)", "Alcohol cremat (hauria ser suau malgrat la força)"]
   },
   "26D": {
-    confusableWith: ["Belgian Dubbel (26B)", "Doppelbock (9A) fosc", "Wee Heavy (17C)"],
+    confusableWith: ["Belgian Dubbel (26B)", "Doppelbock (9A)", "Wee Heavy (17C)"],
     keyIdentifiers: ["8–12% ABV: molt fort", "Molt complex: fruita fosca, espècies, alcohol suau", "Sec malgrat la riquesa (no empalagós!)", "Rochefort 10, Westvleteren 12"],
     commonFaults: ["Massa dolç/empalagós (hauria ser sec)", "Alcohol obvi (hauria ser elegant)", "Massa semblant a un Dubbel (poc caràcter per a la força)"]
+  },
+
+  // ── CAT 21: IPA (Restants) ──
+  "21C": {
+    confusableWith: ["American IPA (21A)", "Double IPA (22A)", "Specialty IPA (21B)"],
+    keyIdentifiers: ["Aspecte tèrbol (hazy) i opac", "Sabor i aroma de suc de fruita (tropical)", "Amargor molt baixa", "Sense aspror del llúpol (hop burn)", "Cos suau i cremós degut al blat/civada"],
+    commonFaults: ["Massa amargor (hauria de ser molt baixa)", "Aspror del llúpol persistent o coïssor", "Claredat excessiva (ha de ser completament tèrbola)"]
+  },
+
+  // ── CAT 22: Strong American Ale ──
+  "22B": {
+    confusableWith: ["American Barleywine (22C)", "Double IPA (22A)", "Imperial Stout (20C)"],
+    keyIdentifiers: ["Molt forta (7–10% ABV)", "Equilibri intens entre maltes fosques/caramel i llúpol", "No tan amarga com una DIPA, però més que un Barleywine", "Color ambre fosc a negre"],
+    commonFaults: ["Massa lleugera (és forta!)", "Desequilibrada (només llúpol o només malta)", "Sensació d'alcohol ardent o aspre"]
+  },
+  "22C": {
+    confusableWith: ["English Barley Wine (17D)", "American Strong Ale (22B)", "Double IPA (22A)"],
+    keyIdentifiers: ["Llúpol americà molt marcat (a diferència de l'anglès)", "Amargor alta o agressiva", "ABV molt alt (8-12%)", "Perfil de malta rica però menys complexa o afruitada que l'anglesa", "Aromes resinosos, pinis i cítrics potents"],
+    commonFaults: ["Massa semblant a l'English Barleywine (falta caràcter de llúpol americà)", "Falta la calidesa de l'alcohol", "Oxidació inacceptable (hauria de ser envelliment net)"]
+  },
+  "22D": {
+    confusableWith: ["Weizenbock (10C)", "American Barleywine (22C)"],
+    keyIdentifiers: ["Meitat o més de la malta base és blat", "Cos ric, espès i molt sedós", "Llevat net o amb èsters afruitats (sense clau/plàtan com Weizenbock)", "Daurat a ambre", "Protagonisme de la suavitat del blat"],
+    commonFaults: ["Caràcter de llevat Weizen alemany (fenòlic/clau)", "Poc protagonisme de la textura del blat", "Massa llupolada per la força de la malta"]
+  },
+
+  // ── CAT 23: European Sour Ale ──
+  "23A": {
+    confusableWith: ["Gose (23G)", "Lambic (23D)"],
+    keyIdentifiers: ["Acidesa làctica molt neta i dominant", "Sabor de massa de pa crua o gra (blat)", "Sensació molt lleugera i súper refrescant (ABV 2.8–3.8%)", "Sense sal ni coriandre"],
+    commonFaults: ["Acidesa acètica tipus vinagre (defecte!)", "Caràcter funk de Brettanomyces (no n'hauria de tenir)", "Amargor de llúpol perceptible"]
+  },
+  "23B": {
+    confusableWith: ["Oud Bruin (23C)", "Lambic (23D)"],
+    keyIdentifiers: ["Cervesa vermellosa de Flandes", "Acidesa acètica moderada (tipus vinagre balsàmic / vi negre)", "Aromes afruitats foscos i intensos (cirera negra, pruna, grosella)", "Envellida en foudres de roure", "\"El vi de Borgonya de la cervesa\""],
+    commonFaults: ["Acidesa acètica massa agressiva o semblant a dissolvent", "Sense complexitat de fruita vermella/fusta", "Diacetil elevat o amargor de llúpol visible"]
+  },
+  "23C": {
+    confusableWith: ["Flanders Red Ale (23B)", "Belgian Dubbel (26B)"],
+    keyIdentifiers: ["Més maltosa, dolça i fosca que la Flanders Red", "Més acidesa làctica que acètica (menys avinagrada que la Red)", "Generalment envellida en acer, no en fusta", "Complexitat de figues, panses, dàtils i caramel fosc", "Equilibri agredolç"],
+    commonFaults: ["Acidesa acètica forta (vinagre - això seria propi de la Flanders Red)", "Massa seca (hauria de retenir certa dolçor maltosa)", "Sabor de fusta/roure molt marcat"]
+  },
+  "23D": {
+    confusableWith: ["Gueuze (23E)", "Berliner Weisse (23A)", "Mixed-Fermentation Sour Beer (28B)"],
+    keyIdentifiers: ["Cervesa base Lambic jove servida directament del barril", "Plana o molt poc carbonatada", "Llevats salvatges: cuir, corral, manta de cavall (Brett)", "Acidesa làctica pronunciada"],
+    commonFaults: ["Alta carbonatació (és de barril pla)", "Caràcter de llúpol", "Falta del caràcter funky salvatge típic de Bèlgica"]
+  },
+  "23E": {
+    confusableWith: ["Lambic (23D)", "Fruit Lambic (23F)"],
+    keyIdentifiers: ["Barreja (blend) acurada de lambics joves (d'1 any) i vells (2 o 3 anys)", "Efervescent i altament carbonatada", "Balanç impecable entre acidesa profunda, aspror i funk (Brett)", "Final seca com un xampany sec"],
+    commonFaults: ["Poca carbonatació (hauria de ser molt efervescent)", "Falta de profunditat o complexitat de l'envelliment", "Notes enterament acètiques i intractables (vinagre pur)"]
+  },
+  "23F": {
+    confusableWith: ["Fruit Beer (29A)", "Gueuze (23E)"],
+    keyIdentifiers: ["Base lambic però amb fruita afegida (tradicionalment cirera/Kriek o gerd/Framboise)", "Fruita vibrant barrejada amb el caràcter funk/salvatge", "Acidesa vivaç contrastada amb la fruita fresca", "La fruita s'ha de notar real, mai artificial"],
+    commonFaults: ["Sabor de xarop dolç exagerat", "Pèrdua total del caràcter funky salvatge belga sota la fruita", "Sabor de llúpol perceptible"]
+  },
+  "23G": {
+    confusableWith: ["Berliner Weisse (23A)", "Wild Specialty Beer (28C)"],
+    keyIdentifiers: ["Acidesa làctica neta i refrescant", "Ingredients clau essencials: addició de sal i coriandre", "Carbonatació alta", "Súper refrescant amb caràcter de blat subratllant"],
+    commonFaults: ["Massa salada (l'aigua de mar és un error)", "Notes intenses de coriandre que amaguen l'acidesa", "Qualsevol nota de llevat Weizen (sense plàtan/clau!)"]
+  },
+
+  // ── CAT 27: Historical Beer ──
+  "27A": {
+    confusableWith: ["Munich Helles (4A)", "German Pils (5D)", "Festbier (4B)"],
+    keyIdentifiers: ["Jove, sense filtrar i sense pasteuritzar (tèrbola)", "Servida tradicionalment de barril obert", "Caràcter rústic i lleuger diacetil (opcional)", "Aromes vius de malta i llúpol alemany"],
+    commonFaults: ["Massa neta o clara (ha de ser rústica i no filtrada)", "Acidesa", "Aspror o astringència"]
+  },
+  "27B": {
+    confusableWith: ["Cream Ale (1C)", "California Common (19B)"],
+    keyIdentifiers: ["Lleugerament fosca (ambre a marró clar)", "Fermentació alta ràpida amb gran quantitat de blat de moro", "Cervesa de sessió de Kentucky", "Poca amargor, final sec", "Sense acidesa (malgrat el mite)"],
+    commonFaults: ["Sabor agre o àcid (és un mite històric, no ha de ser agre)", "Notes torrades o cremades fortes", "Amargor elevada"]
+  },
+  "27C": {
+    confusableWith: ["Berliner Weisse (23A)", "Gose (23G)", "Historical Beer: Piwo Grodziskie (27E)"],
+    keyIdentifiers: ["Una cervesa de blat FUMADA i ÀCIDA", "Acidesa làctica neta", "Sabor de fum de fusta de roure o faig (moderat)", "Súper refrescant, 3.2-4.0% ABV"],
+    commonFaults: ["Fum excessiu (ha de ser moderat)", "Massa forta o alcohòlica", "Sal o coriandre (això seria una Gose)"]
+  },
+  "27D": {
+    confusableWith: ["British Brown Ale (13B)", "Dark Mild (13A)"],
+    keyIdentifiers: ["Més dolça i fluixa (ABV ~3-3.6%)", "Sabor fort a caramel dolç", "Històrica cervesa de classe obrera de Londres", "Amargor molt baixa"],
+    commonFaults: ["Massa forta (és molt fluixa)", "Massa amarga (és dolça)", "Sabors torrats o cafè forts"]
+  },
+  "27E": {
+    confusableWith: ["Historical Beer: Lichtenhainer (27C)", "Berliner Weisse (23A)"],
+    keyIdentifiers: ["El 'Xampany polonès'", "100% malt de blat FUMAT amb roure", "Alta carbonatació, clara, MOLT baixa densitat (ABV 2.5-3.3%)", "SENSE acidesa (a diferència de la Lichtenhainer)"],
+    commonFaults: ["Acidesa (és un error, no és sour)", "Opaca o tèrbola (ha de ser molt clara)", "Sabors de malta d'ordi"]
+  },
+  "27F": {
+    confusableWith: ["American Lager (1B)", "International Pale Lager (2A)"],
+    keyIdentifiers: ["Com era la lager americana abans de la Llei Seca", "Feta amb ordi de 6 carreres i grans quantitats de blat de moro (fins a 30%)", "Més amarga i robusta que les lagers modernes", "Llúpols americans clàssics (Cluster)"],
+    commonFaults: ["Massa suau o aigualida (això és la 1B)", "Caràcter de llúpol modern de la Costa Oest (fruita/resina)", "Excés de DMS"]
+  },
+  "27G": {
+    confusableWith: ["American Porter (20A)", "English Porter (13C)"],
+    keyIdentifiers: ["Com era la porter americana abans de la Llei Seca", "Té adjunts (blat de moro, melassa o sucre)", "Menys aspror torrada que l'American Porter moderna", "Amargor i llúpol americans clàssics (Cluster)"],
+    commonFaults: ["Aromes moderns de llúpol cítric/resina", "Extremadament torrada o cremada com una Stout", "Massa complexitat de malta anglesa"]
+  },
+  "27H": {
+    confusableWith: ["Dunkles Weissbier (10B)", "Weizenbock (10C)"],
+    keyIdentifiers: ["Feta amb SÈGOL (Rye) en comptes de blat", "Textura oliosa, espessa i picant pel sègol", "Llevat Weizen clàssic (plàtan i clau)", "Aparença vermellosa/coure i tèrbola"],
+    commonFaults: ["Falta de la viscositat del sègol", "Falta del caràcter plàtan/clau del llevat", "Amargor de llúpol elevada"]
+  },
+  "27I": {
+    confusableWith: ["Weizenbock (10C)"],
+    keyIdentifiers: ["Cervesa rústica de Finlàndia", "Feta amb branques de GINEBRE (Juniper)", "Llevat de forner rústic (no plàtan net)", "SENSE llúpol o molt poc, densitat molt alta (7-11% ABV)", "Es filtra tradicionalment a través d'una capa de branques (Kuurna)"],
+    commonFaults: ["Amargor o sabor de llúpol", "Sabor de llevat molt net o modern", "Carbonatació alta (acostuma a ser baixa o plana)"]
+  },
+
+  // ── CAT 28: American Wild Ale ──
+  "28A": {
+    confusableWith: ["Saison (25B)", "Mixed-Fermentation Sour Beer (28B)"],
+    keyIdentifiers: ["Fermentada principalment amb Brettanomyces", "Sovint més afruitada (tropical, pinya) que funk", "Lleugerament aspre però NO àcida (no conté bacteris productors d'àcid làctic)", "Normalment molt seca i atenuada"],
+    commonFaults: ["Forta acidesa làctica o acètica (és un defecte gravíssim aquí)", "Sense caràcter de Brett", "Cervesa dolça o pesada"]
+  },
+  "28B": {
+    confusableWith: ["Wild Specialty Beer (28C)", "Gueuze (23E)", "Straight Sour Beer (28D)"],
+    keyIdentifiers: ["Acidesa marcada (làctica/acètica) barrejada amb caràcter funk salvatge (Brett)", "Pot ser de qualsevol color o força", "NO té fruita ni espècies afegides", "Gran complexitat de fermentació múltiple"],
+    commonFaults: ["Acidesa a nivell dissolvent", "Només àcida però totalment sense funk/Brett", "Sensació de fruita afegida artificial"]
+  },
+  "28C": {
+    confusableWith: ["Mixed-Fermentation Sour Beer (28B)", "Fruit Lambic (23F)", "Fruit Beer (29A)"],
+    keyIdentifiers: ["Cervesa àcida i salvatge AMB FRUITA, espècies o criances addicionals", "Equilibri magistral entre l'ingredient especial i l'acidesa/funk", "Molt freqüent el raïm, cireres, gerds o préssecs", "La base és normalment 28B o 28A"],
+    commonFaults: ["Xarop de fruita que domina i fa desaparèixer l'acidesa/funk", "Sense equilibri", "Base neutra sense salvatgisme"]
+  },
+  "28D": {
+    confusableWith: ["Berliner Weisse (23A)", "Mixed-Fermentation Sour Beer (28B)"],
+    keyIdentifiers: ["Cervesa NOMÉS ÀCIDA, absolutament sense caràcter salvatge/funk ni fruita afegida", "Kettle souring és molt comú", "Acidesa làctica ràpida i neta", "Normalment serveix de base per experimentar, de color pàl·lid"],
+    commonFaults: ["Caràcter funk de corral/Brett (això seria 28B)", "Notes de vinagre (acètiques) indesitjades", "Notes envellides"]
+  },
+
+  // ── CAT 29: Fruit Beer ──
+  "29A": {
+    confusableWith: ["Fruit and Spice Beer (29B)", "Specialty Fruit Beer (29C)"],
+    keyIdentifiers: ["Una cervesa base clàssica AMB fruita afegida", "La fruita s'ha de notar i estar en harmonia", "Equilibri perfecte entre la cervesa base i la fruita", "NO té espècies ni xocolata/altres adjunts"],
+    commonFaults: ["Extracte artificial de fruita (sabor sintètic)", "La cervesa base desapareix sota un xarop dolç", "Falta d'harmonia"]
+  },
+  "29B": {
+    confusableWith: ["Fruit Beer (29A)", "Specialty Spice Beer (30D)"],
+    keyIdentifiers: ["Afegeix FRUITA i ESPÈCIES/HERBES a una cervesa base", "Molt habitual afegir xocolata, cafè o vainilla amb fruita", "L'equilibri és molt més complex que a la 29A"],
+    commonFaults: ["Xoc de sabors (les espècies i la fruita no combinen bé)", "Pèrdua de la identificació de la cervesa base"]
+  },
+  "29C": {
+    confusableWith: ["Fruit Beer (29A)", "Fruit Lambic (23F)"],
+    keyIdentifiers: ["Fruit Beer on la cervesa base NO és un estil clàssic (és una especialitat)", "Afegit de sucres fermentables especials o cereals inusuals", "Molt útil quan el cerveser no pot definir la cervesa base"],
+    commonFaults: ["Massa simple (si es pot identificar la cervesa base clàssica, hauria de ser 29A)", "Falta de presència afruitada"]
+  },
+  "29D": {
+    confusableWith: ["Fruit Beer (29A)", "Wild Specialty Beer (28C)"],
+    keyIdentifiers: ["Italian Grape Ale (IGA)", "Raïm o most de raïm afegit a una cervesa (sovint d'inspiració belga o pàl·lida)", "Complexitat de vi i cervesa", "Pot ser lleugerament àcida o salvatge, però la base de cervesa és evident"],
+    commonFaults: ["Sembla més vi que cervesa", "Notes acètiques o oxidades fortes (dissolvent)"]
+  },
+
+  // ── CAT 30: Spiced Beer ──
+  "30A": {
+    confusableWith: ["Specialty Spice Beer (30D)", "Autumn Seasonal Beer (30B)"],
+    keyIdentifiers: ["Cervesa base amb ESPÈCIES, HERBES o VEGETALS afegits", "S'inclouen xile/picants, cacau, cafè, roses...", "L'ingredient afegit no ha d'aclaparar la cervesa"],
+    commonFaults: ["L'espècia domina tant que sembla un extracte o potingue", "Verdura crua o sabor vegetal no desitjat"]
+  },
+  "30B": {
+    confusableWith: ["Winter Seasonal Beer (30C)", "Spice, Herb, or Vegetable Beer (30A)"],
+    keyIdentifiers: ["Cerveses de tardor: carabassa, espècies de pastís (canyella, nou moscada)", "Cervesa base sovint ambre, rica o de color coure", "Evoca la tardor, Thanksgiving i els pastissos de carabassa"],
+    commonFaults: ["Massa picant, deixant una sensació aspre a la gola", "Cervesa base pàl·lida i prima (no evoca la tardor)"]
+  },
+  "30C": {
+    confusableWith: ["Autumn Seasonal Beer (30B)", "Belgian Dark Strong Ale (26D)"],
+    keyIdentifiers: ["Cerveses d'hivern i Nadal (Christmas ales)", "Base fosca, rica, maltosa i sovint alcohòlica", "Espècies de festa (clau, gingebre, canyella, melassa)", "Càlida i reconfortant"],
+    commonFaults: ["Falta de cos o d'alcohol per equilibrar les espècies fortes", "Massa clau o nou moscada que la fa imbevible"]
+  },
+  "30D": {
+    confusableWith: ["Spice, Herb, or Vegetable Beer (30A)"],
+    keyIdentifiers: ["Cerveses especiades amb components extra: sucres rics, mel, xarop d'auró...", "Cerveses especiades on la base NO és un estil clàssic", "Permet combinacions complexes que no encaixen a la 30A"],
+    commonFaults: ["Confusió de sabors per un excés d'ingredients", "Desequilibri dolç/especiat"]
+  },
+
+  // ── CAT 31: Alternative Fermentables ──
+  "31A": {
+    confusableWith: ["Commercial Specialty Beer (34A)"],
+    keyIdentifiers: ["Fermentables alternatius: sègol, civada, fajol, espelta (per sobre dels límits d'un estil clàssic)", "També inclou cerveses sense gluten", "La base es reconeix, però el gra alternatiu destaca en la textura i sabor"],
+    commonFaults: ["L'ingredient no es nota", "Aspror excessiva o textura gomatosa", "Sense equilibri amb la malta base"]
+  },
+  "31B": {
+    confusableWith: ["Commercial Specialty Beer (34A)"],
+    keyIdentifiers: ["Fermentables amb sucres afegits: mel, xarop d'auró, atzavara", "El sucre afegit ha d'aportar sabor (no només assecar o pujar l'alcohol)", "Exemples clàssics: Honey Ale o Maple Porter"],
+    commonFaults: ["Sucre totalment fermentat sense deixar gust (excepte si és una belga, que ja ho preveu l'estil)", "Massa dolçor residual empalagosa"]
+  },
+
+  // ── CAT 32: Smoked Beer ──
+  "32A": {
+    confusableWith: ["Rauchbier (6B)", "Specialty Smoked Beer (32B)"],
+    keyIdentifiers: ["Cerveses clàssiques amb fum afegit (ex: Smoked Porter, Smoked Helles)", "El fum no prové del faig de Bamberg (com a la Rauchbier 6B) sinó sovint de fustes locals com cirerer, noguera o torba", "L'equilibri és clau, el fum dóna suport, no asfíxia"],
+    commonFaults: ["Caràcter de 'foguera de campament', cendres o plàstic", "Notes de torba excessives (sabor a tireta/iode)", "Amargor xocant amb el fum"]
+  },
+  "32B": {
+    confusableWith: ["Classic Style Smoked Beer (32A)", "Wood-Aged Beer (33A)"],
+    keyIdentifiers: ["Cerveses fumades amb altres ingredients: fruita, espècies, o cerveses base no clàssiques", "Molt creativa", "Equilibri a tres bandes: cervesa base, fum i l'ingredient extra"],
+    commonFaults: ["Cendres fortes", "Pèrdua de la identitat de la fruita/espècia sota el fum"]
+  },
+
+  // ── CAT 33: Wood Beer ──
+  "33A": {
+    confusableWith: ["Specialty Wood-Aged Beer (33B)"],
+    keyIdentifiers: ["Cervesa base envellida en fusta (roure normalment)", "Notes de fusta, vainilla, caramel, coco o roure torrat", "LA BÓTA ERA NOVA o neutra, sense licor previ", "No ha de tenir caràcter salvatge (sour/funk)"],
+    commonFaults: ["Excés de tanins (astringent/raspós)", "Sabor com de fusta verda o serradures", "Sabor de licor/bourbon (això aniria a 33B)"]
+  },
+  "33B": {
+    confusableWith: ["Wood-Aged Beer (33A)"],
+    keyIdentifiers: ["Cervesa envellida en bóta que abans contenia LICOR (bourbon, rom, tequila, vi, porto)", "Caràcter de la beguda original molt present barrejada amb la fusta", "Normalment cerveses base molt fortes (Stouts, Barleywines) per aguantar la bóta"],
+    commonFaults: ["Sabor de licor barat o alcohol ardent que crema el coll", "Excés d'astringència", "La cervesa base es perd totalment sota el bourbon"]
+  },
+
+  // ── CAT 34: Specialty Beer ──
+  "34A": {
+    confusableWith: ["Mixed-Style Beer (34B)"],
+    keyIdentifiers: ["Cerveses comercials icòniques que no encaixen en cap altre lloc (clon de marques específiques)", "Cerveses amb processos inusuals", "L'objectiu final ho defineix el cerveser", "El calaix de sastre per les idees esbojarrades, però no estils barrejats"],
+    commonFaults: ["La cervesa base és defectuosa i s'amaga sota conceptes estranys", "Incapacitat per complir l'objectiu proposat pel cerveser"]
+  },
+  "34B": {
+    confusableWith: ["Commercial Specialty Beer (34A)"],
+    keyIdentifiers: ["L'encreuament genètic de dos o més estils de cervesa clàssics", "Exemples: White IPA (Blat belga + IPA), Black Pilsner", "S'han de poder identificar característiques dels dos estils pares"],
+    commonFaults: ["Un estil domina completament a l'altre", "Xoc terrible de sabors que no lliguen gens"]
+  },
+  "34C": {
+    confusableWith: ["Commercial Specialty Beer (34A)"],
+    keyIdentifiers: ["Cervesa completament experimental (nova tècnica, ingredient mai vist o extrem)", "Ha de ser bebible i plaent (no una aberració)", "Aquesta categoria és l'últim recurs si no pot anar a cap de les 100 anteriors"],
+    commonFaults: ["Conceptes que sonen bé però saben fatal", "Experimentació fallida i imbevible", "No s'adiu amb el nom donat"]
   }
 };
 
