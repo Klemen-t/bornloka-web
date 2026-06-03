@@ -21,7 +21,7 @@ const BJCP_STYLES = [
     "ogmax": 1.04,
     "fgmin": 0.998,
     "fgmax": 1.008,
-    "pronunciation": "uh-meh-ri-kan lyt lay-ger"
+    "pronunciation": "American light lager"
   },
   {
     "name": "American Lager",
@@ -45,7 +45,7 @@ const BJCP_STYLES = [
     "ogmax": 1.05,
     "fgmin": 1.004,
     "fgmax": 1.01,
-    "pronunciation": "uh-meh-ri-kan lay-ger"
+    "pronunciation": "American lager"
   },
   {
     "name": "Cream Ale",
@@ -69,7 +69,7 @@ const BJCP_STYLES = [
     "ogmax": 1.055,
     "fgmin": 1.006,
     "fgmax": 1.012,
-    "pronunciation": "kreem ayl"
+    "pronunciation": "cream ale"
   },
   {
     "name": "American Wheat Beer",
@@ -93,7 +93,7 @@ const BJCP_STYLES = [
     "ogmax": 1.055,
     "fgmin": 1.008,
     "fgmax": 1.013,
-    "pronunciation": "uh-meh-ri-kan weet beey-er"
+    "pronunciation": "American wheat beey-er"
   },
   {
     "name": "International Pale Lager",
@@ -117,7 +117,7 @@ const BJCP_STYLES = [
     "ogmax": 1.05,
     "fgmin": 1.008,
     "fgmax": 1.012,
-    "pronunciation": "in-ter-nash-un-al payl lay-ger"
+    "pronunciation": "International pale lager"
   },
   {
     "name": "International Amber Lager",
@@ -141,7 +141,7 @@ const BJCP_STYLES = [
     "ogmax": 1.055,
     "fgmin": 1.008,
     "fgmax": 1.014,
-    "pronunciation": "in-ter-nash-un-al am-ber lay-ger"
+    "pronunciation": "International amber lager"
   },
   {
     "name": "International Dark Lager",
@@ -165,7 +165,7 @@ const BJCP_STYLES = [
     "ogmax": 1.056,
     "fgmin": 1.008,
     "fgmax": 1.012,
-    "pronunciation": "in-ter-nash-un-al dark lay-ger"
+    "pronunciation": "International dark lager"
   },
   {
     "name": "Czech Pale Lager",
@@ -189,7 +189,7 @@ const BJCP_STYLES = [
     "ogmax": 1.044,
     "fgmin": 1.008,
     "fgmax": 1.014,
-    "pronunciation": "chek payl lay-ger"
+    "pronunciation": "chek pale lager"
   },
   {
     "name": "Czech Premium Pale Lager",
@@ -213,7 +213,7 @@ const BJCP_STYLES = [
     "ogmax": 1.06,
     "fgmin": 1.013,
     "fgmax": 1.017,
-    "pronunciation": "chek pree-mee-um payl lay-ger"
+    "pronunciation": "chek pree-mee-um pale lager"
   },
   {
     "name": "Czech Amber Lager",
@@ -237,7 +237,7 @@ const BJCP_STYLES = [
     "ogmax": 1.06,
     "fgmin": 1.013,
     "fgmax": 1.017,
-    "pronunciation": "chek am-ber lay-ger"
+    "pronunciation": "chek amber lager"
   },
   {
     "name": "Czech Dark Lager",
@@ -261,7 +261,7 @@ const BJCP_STYLES = [
     "ogmax": 1.06,
     "fgmin": 1.013,
     "fgmax": 1.017,
-    "pronunciation": "chek dark lay-ger"
+    "pronunciation": "chek dark lager"
   },
   {
     "name": "Munich Helles",
@@ -357,7 +357,7 @@ const BJCP_STYLES = [
     "ogmax": 1.034,
     "fgmin": 1.006,
     "fgmax": 1.01,
-    "pronunciation": "jer-man lyt-beer"
+    "pronunciation": "jer-man light-beer"
   },
   {
     "name": "Kolsch",
@@ -381,7 +381,7 @@ const BJCP_STYLES = [
     "ogmax": 1.05,
     "fgmin": 1.007,
     "fgmax": 1.011,
-    "pronunciation": "coolsh"
+    "pronunciation": "kerlsh"
   },
   {
     "name": "German Helles Exportbier",
@@ -525,7 +525,7 @@ const BJCP_STYLES = [
     "ogmax": 1.055,
     "fgmin": 1.01,
     "fgmax": 1.014,
-    "pronunciation": "vee-en-uh lay-ger"
+    "pronunciation": "vee-en-uh lager"
   },
   {
     "name": "Altbier",
@@ -669,7 +669,7 @@ const BJCP_STYLES = [
     "ogmax": 1.09,
     "fgmin": 1.016,
     "fgmax": 1.024,
-    "pronunciation": "bawl-tik por-ter"
+    "pronunciation": "Baltic porter"
   },
   {
     "name": "Weissbier",
@@ -765,7 +765,7 @@ const BJCP_STYLES = [
     "ogmax": 1.039,
     "fgmin": 1.007,
     "fgmax": 1.011,
-    "pronunciation": "awr-din-air-ee bit-er"
+    "pronunciation": "ordinary bitter"
   },
   {
     "name": "Best Bitter",
@@ -789,7 +789,7 @@ const BJCP_STYLES = [
     "ogmax": 1.048,
     "fgmin": 1.008,
     "fgmax": 1.012,
-    "pronunciation": "best bit-er"
+    "pronunciation": "best bitter"
   },
   {
     "name": "Strong Bitter",
@@ -813,7 +813,7 @@ const BJCP_STYLES = [
     "ogmax": 1.06,
     "fgmin": 1.01,
     "fgmax": 1.016,
-    "pronunciation": "strong bit-er"
+    "pronunciation": "strong bitter"
   },
   {
     "name": "British Golden Ale",
@@ -837,7 +837,7 @@ const BJCP_STYLES = [
     "ogmax": 1.053,
     "fgmin": 1.006,
     "fgmax": 1.012,
-    "pronunciation": "bree-tish gohl-den ayl"
+    "pronunciation": "British golden ale"
   },
   {
     "name": "Australian Sparkling Ale",
@@ -861,7 +861,7 @@ const BJCP_STYLES = [
     "ogmax": 1.05,
     "fgmin": 1.004,
     "fgmax": 1.006,
-    "pronunciation": "aws-tray-lee-an spahr-kling ayl"
+    "pronunciation": "Australian sparkling ale"
   },
   {
     "name": "English IPA",
@@ -885,7 +885,7 @@ const BJCP_STYLES = [
     "ogmax": 1.07,
     "fgmin": 1.01,
     "fgmax": 1.015,
-    "pronunciation": "ing-lish ahy-pee-ay"
+    "pronunciation": "English IPA"
   },
   {
     "name": "Dark Mild",
@@ -909,7 +909,7 @@ const BJCP_STYLES = [
     "ogmax": 1.038,
     "fgmin": 1.008,
     "fgmax": 1.013,
-    "pronunciation": "dark my-ld"
+    "pronunciation": "dark mild"
   },
   {
     "name": "British Brown Ale",
@@ -933,7 +933,7 @@ const BJCP_STYLES = [
     "ogmax": 1.052,
     "fgmin": 1.008,
     "fgmax": 1.013,
-    "pronunciation": "bree-tish brown ayl"
+    "pronunciation": "British brown ale"
   },
   {
     "name": "English Porter",
@@ -957,7 +957,7 @@ const BJCP_STYLES = [
     "ogmax": 1.052,
     "fgmin": 1.008,
     "fgmax": 1.014,
-    "pronunciation": "ing-lish por-ter"
+    "pronunciation": "English porter"
   },
   {
     "name": "Scottish Light",
@@ -981,7 +981,7 @@ const BJCP_STYLES = [
     "ogmax": 1.035,
     "fgmin": 1.01,
     "fgmax": 1.013,
-    "pronunciation": "skaw-tish lyt"
+    "pronunciation": "Scottish light"
   },
   {
     "name": "Scottish Heavy",
@@ -1005,7 +1005,7 @@ const BJCP_STYLES = [
     "ogmax": 1.04,
     "fgmin": 1.01,
     "fgmax": 1.015,
-    "pronunciation": "skaw-tish hev-ee"
+    "pronunciation": "Scottish heavy"
   },
   {
     "name": "Scottish Export",
@@ -1029,7 +1029,7 @@ const BJCP_STYLES = [
     "ogmax": 1.06,
     "fgmin": 1.01,
     "fgmax": 1.016,
-    "pronunciation": "skaw-tish eks-port"
+    "pronunciation": "Scottish export"
   },
   {
     "name": "Irish Red Ale",
@@ -1053,7 +1053,7 @@ const BJCP_STYLES = [
     "ogmax": 1.046,
     "fgmin": 1.01,
     "fgmax": 1.014,
-    "pronunciation": "ahy-rish red ayl"
+    "pronunciation": "Irish red ale"
   },
   {
     "name": "Irish Stout",
@@ -1077,7 +1077,7 @@ const BJCP_STYLES = [
     "ogmax": 1.044,
     "fgmin": 1.007,
     "fgmax": 1.011,
-    "pronunciation": "ahy-rish stout"
+    "pronunciation": "Irish stout"
   },
   {
     "name": "Irish Extra Stout",
@@ -1101,7 +1101,7 @@ const BJCP_STYLES = [
     "ogmax": 1.062,
     "fgmin": 1.01,
     "fgmax": 1.014,
-    "pronunciation": "ahy-rish eks-tra stout"
+    "pronunciation": "Irish extra stout"
   },
   {
     "name": "Sweet Stout",
@@ -1149,7 +1149,7 @@ const BJCP_STYLES = [
     "ogmax": 1.065,
     "fgmin": 1.01,
     "fgmax": 1.018,
-    "pronunciation": "oat-meel stout"
+    "pronunciation": "oatmeal stout"
   },
   {
     "name": "Tropical Stout",
@@ -1173,7 +1173,7 @@ const BJCP_STYLES = [
     "ogmax": 1.075,
     "fgmin": 1.01,
     "fgmax": 1.018,
-    "pronunciation": "traw-pi-kal stout"
+    "pronunciation": "tropical stout"
   },
   {
     "name": "Foreign Extra Stout",
@@ -1197,7 +1197,7 @@ const BJCP_STYLES = [
     "ogmax": 1.075,
     "fgmin": 1.01,
     "fgmax": 1.018,
-    "pronunciation": "for-in eks-tra stout"
+    "pronunciation": "foreign extra stout"
   },
   {
     "name": "British Strong Ale",
@@ -1221,7 +1221,7 @@ const BJCP_STYLES = [
     "ogmax": 1.08,
     "fgmin": 1.015,
     "fgmax": 1.022,
-    "pronunciation": "bree-tish strong ayl"
+    "pronunciation": "British strong ale"
   },
   {
     "name": "Old Ale",
@@ -1245,7 +1245,7 @@ const BJCP_STYLES = [
     "ogmax": 1.088,
     "fgmin": 1.015,
     "fgmax": 1.022,
-    "pronunciation": "old ayl"
+    "pronunciation": "old ale"
   },
   {
     "name": "Wee Heavy",
@@ -1269,7 +1269,7 @@ const BJCP_STYLES = [
     "ogmax": 1.13,
     "fgmin": 1.018,
     "fgmax": 1.04,
-    "pronunciation": "wee hev-ee"
+    "pronunciation": "wee heavy"
   },
   {
     "name": "English Barley Wine",
@@ -1293,7 +1293,7 @@ const BJCP_STYLES = [
     "ogmax": 1.12,
     "fgmin": 1.018,
     "fgmax": 1.03,
-    "pronunciation": "ing-lish bar-lee-wyne"
+    "pronunciation": "English barleywine"
   },
   {
     "name": "Blonde Ale",
@@ -1317,7 +1317,7 @@ const BJCP_STYLES = [
     "ogmax": 1.054,
     "fgmin": 1.008,
     "fgmax": 1.013,
-    "pronunciation": "blawnd ayl"
+    "pronunciation": "blonde ale"
   },
   {
     "name": "American Pale Ale",
@@ -1341,7 +1341,7 @@ const BJCP_STYLES = [
     "ogmax": 1.06,
     "fgmin": 1.01,
     "fgmax": 1.015,
-    "pronunciation": "uh-meh-ri-kan payl ayl"
+    "pronunciation": "American pale ale"
   },
   {
     "name": "American Amber Ale",
@@ -1365,7 +1365,7 @@ const BJCP_STYLES = [
     "ogmax": 1.06,
     "fgmin": 1.01,
     "fgmax": 1.015,
-    "pronunciation": "uh-meh-ri-kan am-ber ayl"
+    "pronunciation": "American amber ale"
   },
   {
     "name": "California Common",
@@ -1389,7 +1389,7 @@ const BJCP_STYLES = [
     "ogmax": 1.054,
     "fgmin": 1.011,
     "fgmax": 1.014,
-    "pronunciation": "cal-ih-forn-yuh com-mon"
+    "pronunciation": "California common"
   },
   {
     "name": "American Brown Ale",
@@ -1413,7 +1413,7 @@ const BJCP_STYLES = [
     "ogmax": 1.06,
     "fgmin": 1.01,
     "fgmax": 1.016,
-    "pronunciation": "uh-meh-ri-kan brown ayl"
+    "pronunciation": "American brown ale"
   },
   {
     "name": "American Porter",
@@ -1437,7 +1437,7 @@ const BJCP_STYLES = [
     "ogmax": 1.07,
     "fgmin": 1.012,
     "fgmax": 1.018,
-    "pronunciation": "uh-meh-ri-kan por-ter"
+    "pronunciation": "American porter"
   },
   {
     "name": "American Stout",
@@ -1461,7 +1461,7 @@ const BJCP_STYLES = [
     "ogmax": 1.075,
     "fgmin": 1.01,
     "fgmax": 1.022,
-    "pronunciation": "uh-meh-ri-kan stout"
+    "pronunciation": "American stout"
   },
   {
     "name": "Imperial Stout",
@@ -1509,7 +1509,7 @@ const BJCP_STYLES = [
     "ogmax": 1.07,
     "fgmin": 1.008,
     "fgmax": 1.014,
-    "pronunciation": "uh-meh-ri-kan ahy-pee-ay"
+    "pronunciation": "American IPA"
   },
   {
     "name": "Belgian IPA",
@@ -1722,7 +1722,7 @@ const BJCP_STYLES = [
     "ogmax": 1.085,
     "fgmin": 1.01,
     "fgmax": 1.015,
-    "pronunciation": "hay-zee ahy-pee-ay"
+    "pronunciation": "hazy IPA"
   },
   {
     "name": "Double IPA",
@@ -1746,7 +1746,7 @@ const BJCP_STYLES = [
     "ogmax": 1.085,
     "fgmin": 1.008,
     "fgmax": 1.018,
-    "pronunciation": "duh-bull ahy-pee-ay"
+    "pronunciation": "double IPA"
   },
   {
     "name": "American Strong Ale",
@@ -1770,7 +1770,7 @@ const BJCP_STYLES = [
     "ogmax": 1.09,
     "fgmin": 1.014,
     "fgmax": 1.024,
-    "pronunciation": "uh-meh-ri-kan strong ayl"
+    "pronunciation": "American strong ale"
   },
   {
     "name": "American Barleywine",
@@ -1794,7 +1794,7 @@ const BJCP_STYLES = [
     "ogmax": 1.12,
     "fgmin": 1.016,
     "fgmax": 1.03,
-    "pronunciation": "uh-meh-ri-kan bar-lee-wyne"
+    "pronunciation": "American barleywine"
   },
   {
     "name": "Wheatwine",
@@ -1818,7 +1818,7 @@ const BJCP_STYLES = [
     "ogmax": 1.12,
     "fgmin": 1.016,
     "fgmax": 1.03,
-    "pronunciation": "wheet-wyne"
+    "pronunciation": "wheet-wine"
   },
   {
     "name": "Berliner Weisse",
@@ -1866,7 +1866,7 @@ const BJCP_STYLES = [
     "ogmax": 1.057,
     "fgmin": 1.002,
     "fgmax": 1.012,
-    "pronunciation": "flan-ders red ayl"
+    "pronunciation": "flan-ders red ale"
   },
   {
     "name": "Oud Bruin",
@@ -1962,7 +1962,7 @@ const BJCP_STYLES = [
     "ogmax": 1.06,
     "fgmin": 1,
     "fgmax": 1.01,
-    "pronunciation": "froot lam-beek"
+    "pronunciation": "fruit lam-beek"
   },
   {
     "name": "Gose",
@@ -2034,7 +2034,7 @@ const BJCP_STYLES = [
     "ogmax": 1.054,
     "fgmin": 1.01,
     "fgmax": 1.014,
-    "pronunciation": "bel-jee-an payl ayl"
+    "pronunciation": "Belgian pale ale"
   },
   {
     "name": "Bière de Garde",
@@ -2082,7 +2082,7 @@ const BJCP_STYLES = [
     "ogmax": 1.075,
     "fgmin": 1.008,
     "fgmax": 1.018,
-    "pronunciation": "bel-jee-an blawnd ayl"
+    "pronunciation": "Belgian blonde ale"
   },
   {
     "name": "Saison",
@@ -2130,7 +2130,7 @@ const BJCP_STYLES = [
     "ogmax": 1.095,
     "fgmin": 1.005,
     "fgmax": 1.016,
-    "pronunciation": "bel-jee-an gohl-den strong ayl"
+    "pronunciation": "Belgian golden strong ale"
   },
   {
     "name": "Belgian Single",
@@ -2154,7 +2154,7 @@ const BJCP_STYLES = [
     "ogmax": 1.054,
     "fgmin": 1.004,
     "fgmax": 1.01,
-    "pronunciation": "bel-jee-an sing-ul"
+    "pronunciation": "Belgian sing-ul"
   },
   {
     "name": "Belgian Dubbel",
@@ -2178,7 +2178,7 @@ const BJCP_STYLES = [
     "ogmax": 1.075,
     "fgmin": 1.008,
     "fgmax": 1.018,
-    "pronunciation": "bel-jee-an doo-bull"
+    "pronunciation": "Belgian doo-bull"
   },
   {
     "name": "Belgian Tripel",
@@ -2202,7 +2202,7 @@ const BJCP_STYLES = [
     "ogmax": 1.085,
     "fgmin": 1.008,
     "fgmax": 1.014,
-    "pronunciation": "bel-jee-an tree-pull"
+    "pronunciation": "Belgian tree-pull"
   },
   {
     "name": "Belgian Dark Strong Ale",
@@ -2226,7 +2226,7 @@ const BJCP_STYLES = [
     "ogmax": 1.11,
     "fgmin": 1.01,
     "fgmax": 1.024,
-    "pronunciation": "bel-jee-an dark strong ayl"
+    "pronunciation": "Belgian dark strong ale"
   },
   {
     "name": "Historical Beer: Kellerbier",
@@ -2266,7 +2266,7 @@ const BJCP_STYLES = [
     "srmmax": 20,
     "commercialexamples": "Apocalypse Brew Works 1912",
     "tags": "standard-strength, amber-color, top-fermented, northamerica, historical-style, balanced",
-    "pronunciation": "ken-tuck-ee com-mon"
+    "pronunciation": "Kentucky common"
   },
   {
     "name": "Historical Beer: Lichtenhainer",
@@ -2306,7 +2306,7 @@ const BJCP_STYLES = [
     "srmmax": 35,
     "commercialexamples": "Harveys Bloomsbury Brown Ale, Mann's Brown Ale",
     "tags": "session-strength, dark-color, top-fermented, britishisles, historical-style, brown-ale-family, malty, sweet",
-    "pronunciation": "lun-dun brown ayl"
+    "pronunciation": "London brown ale"
   },
   {
     "name": "Historical Beer: Piwo Grodziskie",
@@ -2346,7 +2346,7 @@ const BJCP_STYLES = [
     "srmmax": 6,
     "commercialexamples": "Capital Supper Club, Coors Batch 19, Little Harpeth Chicken Scratch, Schell Deer Brand, Urban Chestnut Forest Park Pilsner",
     "tags": "standard-strength, pale-color, bottom-fermented, lagered, north-america, historical-style, pilsner-family, bitter, hoppy",
-    "pronunciation": "pree-pro-hi-bish-un lay-ger"
+    "pronunciation": "pre-prohibition lager"
   },
   {
     "name": "Historical Beer: Pre-Prohibition Porter",
@@ -2366,7 +2366,7 @@ const BJCP_STYLES = [
     "srmmax": 30,
     "commercialexamples": "Stegmaier Porter, Yuengling Porter",
     "tags": "standard-strength, dark-color, any-fermentation, northamerica, historical-style, porter-family, malty",
-    "pronunciation": "pree-pro-hi-bish-un por-ter"
+    "pronunciation": "pre-prohibition porter"
   },
   {
     "name": "Historical Beer: Roggenbier",
@@ -2426,7 +2426,7 @@ const BJCP_STYLES = [
     "srmmax": null,
     "commercialexamples": "Boulevard Saison Brett, Hill Farmstead Arthur, Logsdon Seizoen Bretta, Lost Abbey Brett Devo, Russian River Sanctification, The Bruery Saison Rue",
     "tags": "wild-fermentation, north-america, craft-style, specialtybeer",
-    "pronunciation": "bret beer"
+    "pronunciation": "brett beer"
   },
   {
     "name": "Mixed-Fermentation Sour Beer",
@@ -2446,7 +2446,7 @@ const BJCP_STYLES = [
     "srmmax": null,
     "commercialexamples": "Boulevard Love Child, Jester King Le Petit Prince, Jolly Pumpkin Oro de Calabaza, Lost Abbey Ghosts in the Forest, New Belgium Le Terroir, Russian River Temptation",
     "tags": "wild-fermentation, north-america, craft-style, specialtybeer, sour",
-    "pronunciation": "mikst-fer-men-tay-shun sow-er beer"
+    "pronunciation": "mixed-fermentation sour beer"
   },
   {
     "name": "Wild Specialty Beer",
@@ -2466,7 +2466,7 @@ const BJCP_STYLES = [
     "srmmax": null,
     "commercialexamples": "Cascade Bourbonic Plague, Jester King Atrial Rubicite, New Belgium Dominga Mimosa Sour, New Glarus Wisconsin Belgian Red, Russian River Supplication, The Lost Abbey Cuvee de Tomme",
     "tags": "wild-fermentation, north-america, craft-style, specialtybeer, sour, fruit",
-    "pronunciation": "wy-ld spe-shul-tee beer"
+    "pronunciation": "wild specialty beer"
   },
   {
     "name": "Straight Sour Beer",
@@ -2490,7 +2490,7 @@ const BJCP_STYLES = [
     "ogmax": 1.065,
     "fgmin": 1.006,
     "fgmax": 1.013,
-    "pronunciation": "strayt sow-er beer"
+    "pronunciation": "straight sour beer"
   },
   {
     "name": "Fruit Beer",
@@ -2510,7 +2510,7 @@ const BJCP_STYLES = [
     "srmmax": null,
     "commercialexamples": "Cherrry Chouffe, Kwak Rouge, Pink Kiler Silly, Rince Cochon Haacht, Fruitesse Liefmans, Delirium Red, Peche Mel Bush",
     "tags": "specialty-beer, fruit",
-    "pronunciation": "froot beer"
+    "pronunciation": "fruit beer"
   },
   {
     "name": "Fruit and Spice Beer",
@@ -2530,7 +2530,7 @@ const BJCP_STYLES = [
     "srmmax": null,
     "commercialexamples": "Cigar City Margarita Gose, Firestone Walker Chocolate Cherry Stout, Golden Road Spicy Mango Cart, Kona Island Colada Cream Ale, New Glarus Blueberry Cocoa Stout, Sun King Orange Vanilla Sunlight",
     "tags": "specialty-beer, fruit, spice",
-    "pronunciation": "froot and spys beer"
+    "pronunciation": "fruit and spice beer"
   },
   {
     "name": "Specialty Fruit Beer",
@@ -2550,7 +2550,7 @@ const BJCP_STYLES = [
     "srmmax": null,
     "commercialexamples": "The Bruery Goses are Red, New Planet Raspberry Ale, Tired Hands Strawberry Milkshake IPA, WeldWerks Piña Colada IPA",
     "tags": "specialty-beer, fruit",
-    "pronunciation": "spe-shul-tee froot beer"
+    "pronunciation": "specialty fruit beer"
   },
   {
     "name": "Grape Ale",
@@ -2574,7 +2574,7 @@ const BJCP_STYLES = [
     "ogmax": 1.075,
     "fgmin": 1.004,
     "fgmax": 1.013,
-    "pronunciation": "i-tal-yan grayp ayl"
+    "pronunciation": "Italian grape ale"
   },
   {
     "name": "Spice, Herb, or Vegetable Beer",
