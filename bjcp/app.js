@@ -144,7 +144,8 @@ const Utils = {
   toast(msg, type = 'info') {
     const t = document.createElement('div');
     t.className = `toast toast-${type}`;
-    t.textContent = msg;
+    t.innerHTML = msg;
+    if (window.lucide) setTimeout(() => window.lucide.createIcons(), 0);
     document.getElementById('toast-container').appendChild(t);
     setTimeout(() => t.remove(), 3000);
   },
@@ -276,10 +277,10 @@ const Utils = {
 
     if (context === 'feedback-correct') {
       const confusionNote = h.confusableWith?.length
-        ? `<div class="helper-confusion-note">⚠️ Sovint es confon amb: <em>${h.confusableWith.slice(0, 2).join(', ')}</em></div>` : '';
+        ? `<div class="helper-confusion-note"><i data-lucide="alert-triangle" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> Sovint es confon amb: <em>${h.confusableWith.slice(0, 2).join(', ')}</em></div>` : '';
       return `<div class="study-helpers-panel helpers-correct">
-        <div class="helpers-header">🧩 Perquè has encertat — reforç</div>
-        ${section('🔑', 'Identificadors clau:', '#22c55e', h.keyIdentifiers)}
+        <div class="helpers-header"><i data-lucide="puzzle"></i> Perquè has encertat — reforç</div>
+        ${section('<i data-lucide="key" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i>', 'Identificadors clau:', '#22c55e', h.keyIdentifiers)}
         ${confusionNote}
       </div>`;
     }
@@ -290,23 +291,23 @@ const Utils = {
         const chosenFirst = chosenName.toLowerCase().split(/[\s(]/)[0];
         const matched = h.confusableWith.find(c => c.toLowerCase().includes(chosenFirst));
         if (matched) {
-          confusionMsg = `<div class="helper-confusion-alert">💡 Has triat <strong>${chosenName}</strong>, que és un dels estils que es confonen habitualment amb <strong>${style.name}</strong>. Recorda les diferències clau:</div>`;
+          confusionMsg = `<div class="helper-confusion-alert"><i data-lucide="lightbulb" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> Has triat <strong>${chosenName}</strong>, que és un dels estils que es confonen habitualment amb <strong>${style.name}</strong>. Recorda les diferències clau:</div>`;
         }
       }
       return `<div class="study-helpers-panel helpers-wrong">
-        <div class="helpers-header">🧩 Per aprendre de l'error</div>
+        <div class="helpers-header"><i data-lucide="puzzle"></i> Per aprendre de l'error</div>
         ${confusionMsg}
-        ${section('🔑', 'Identificadors clau de "' + style.name + '":', '#22c55e', h.keyIdentifiers?.slice(0, 3))}
-        ${section('⚠️', 'Defectes comuns:', '#E5172F', h.commonFaults?.slice(0, 2))}
-        ${section('🔀', 'No confondre amb:', '#E5A020', h.confusableWith?.slice(0, 3))}
+        ${section('<i data-lucide="key" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i>', 'Identificadors clau de "' + style.name + '":', '#22c55e', h.keyIdentifiers?.slice(0, 3))}
+        ${section('<i data-lucide="alert-triangle" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i>', 'Defectes comuns:', '#E5172F', h.commonFaults?.slice(0, 2))}
+        ${section('<i data-lucide="shuffle" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i>', 'No confondre amb:', '#E5A020', h.confusableWith?.slice(0, 3))}
       </div>`;
     }
 
     // Default: 'modal'
     return `<div class="study-helpers-panel">
-      ${section('🔀', 'Confusió habitual amb:', '#E5A020', h.confusableWith)}
-      ${section('🔑', 'Identificadors clau:', '#22c55e', h.keyIdentifiers)}
-      ${section('⚠️', 'Defectes comuns:', '#E5172F', h.commonFaults)}
+      ${section('<i data-lucide="shuffle" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i>', 'Confusió habitual amb:', '#E5A020', h.confusableWith)}
+      ${section('<i data-lucide="key" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i>', 'Identificadors clau:', '#22c55e', h.keyIdentifiers)}
+      ${section('<i data-lucide="alert-triangle" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i>', 'Defectes comuns:', '#E5172F', h.commonFaults)}
     </div>`;
   }
 };
@@ -323,6 +324,7 @@ const App = {
     const cats = [...new Set(BJCP_STYLES.map(s => s.category).filter(Boolean))].sort();
     const sel = Utils.el('exam-cat-filter');
     cats.forEach(c => { const o = document.createElement('option'); o.value = c; o.textContent = c; sel.appendChild(o); });
+    if (window.lucide) window.lucide.createIcons();
   },
   showMode(mode) {
     document.querySelectorAll('.mode-section').forEach(s => s.classList.remove('active'));
@@ -343,10 +345,10 @@ const App = {
     Utils.el('modal-content').innerHTML = `
       <div class="modal-top" style="border-bottom:1px solid var(--border); margin-bottom:16px;">
         <div>
-          <div class="modal-name">📖 Glòssari de termes</div>
+          <div class="modal-name"><i data-lucide="book" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> Glòssari de termes</div>
         </div>
         <div style="display:flex;gap:8px;align-items:flex-start">
-          <button class="modal-close" onclick="Study.closeModal()">✕</button>
+          <button class="modal-close" onclick="Study.closeModal()"><i data-lucide="x" style="width:1em;height:1em;vertical-align:-0.15em"></i></button>
         </div>
       </div>
       <div class="helper-list" style="padding: 0 8px;">
@@ -359,6 +361,7 @@ const App = {
         `).join('')}
       </div>
     `;
+    if (window.lucide) window.lucide.createIcons();
     Utils.el('detail-modal').classList.add('open');
     document.body.style.overflow = 'hidden';
   },
@@ -376,7 +379,7 @@ const App = {
     popup.innerHTML = `
       <div class="glossary-popup-overlay" onclick="document.getElementById('glossary-popup-layer').innerHTML=''"></div>
       <div class="glossary-popup">
-        <button class="glossary-popup-close" onclick="document.getElementById('glossary-popup-layer').innerHTML=''">✕</button>
+        <button class="glossary-popup-close" onclick="document.getElementById('glossary-popup-layer').innerHTML=''"><i data-lucide="x" style="width:1em;height:1em;vertical-align:-0.15em"></i></button>
         <h3 style="color:var(--accent); margin:0 0 8px 0; font-size:1.2em;">${termObj.term}</h3>
         <p style="color:var(--text); margin:0; line-height:1.5;">${termObj.def}</p>
       </div>
@@ -386,7 +389,8 @@ const App = {
     const html = document.documentElement;
     const isDark = html.dataset.theme === 'dark';
     html.dataset.theme = isDark ? 'light' : 'dark';
-    Utils.el('theme-icon').textContent = isDark ? '🌙' : '☀️';
+    Utils.el('theme-icon').innerHTML = isDark ? '<i data-lucide="moon" style="color:#8b5cf6; fill:rgba(139,92,246,0.2)"></i>' : '<i data-lucide="sun" style="color:#e5a020; fill:rgba(229,160,32,0.2)"></i>';
+    if (window.lucide) window.lucide.createIcons();
   },
   resetProgress() {
     if (!confirm('Segur que vols reiniciar tot el progrés? Aquesta acció és irreversible.')) return;
@@ -431,10 +435,11 @@ const Study = {
     const d = Store.get();
     const grid = Utils.el('cards-grid');
     if (!this.filtered.length) {
-      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:60px 0">🔍 Cap estil trobat</div>';
+      grid.innerHTML = '<div class="empty-state" style="grid-column:1/-1;padding:60px 0"><i data-lucide="search" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> Cap estil trobat</div>';
       return;
     }
     grid.innerHTML = this.filtered.map(s => this.cardHTML(s, d)).join('');
+    if (window.lucide) window.lucide.createIcons();
   },
 
   cardHTML(s, d) {
@@ -454,8 +459,8 @@ const Study = {
       <div class="card-header">
         <span class="card-number">${s.number || '—'}</span>
         <div class="card-actions">
-          <button class="card-action-btn" title="Preferit" onclick="event.stopPropagation();Study.toggleFav('${s.name.replace(/'/g, "\\'")}',this)">${isFav ? '❤️' : '🤍'}</button>
-          <button class="card-action-btn" title="A repassar" onclick="event.stopPropagation();Study.toggleDiff('${s.name.replace(/'/g, "\\'")}',this)">${isDiff ? '📌' : '📍'}</button>
+          <button class="card-action-btn" title="Preferit" onclick="event.stopPropagation();Study.toggleFav('${s.name.replace(/'/g, "\\'")}',this)">${isFav ? '<i data-lucide="heart" style="color:var(--red);fill:var(--red);width:20px;height:20px;vertical-align:middle"></i>' : '<i data-lucide="heart" style="color:var(--text3);width:20px;height:20px;vertical-align:middle"></i>'}</button>
+          <button class="card-action-btn" title="A repassar" onclick="event.stopPropagation();Study.toggleDiff('${s.name.replace(/'/g, "\\'")}',this)">${isDiff ? '<i data-lucide="pin" style="color:var(--accent);fill:var(--accent);width:20px;height:20px;vertical-align:middle"></i>' : '<i data-lucide="map-pin" style="color:var(--text3);width:20px;height:20px;vertical-align:middle"></i>'}</button>
         </div>
       </div>
       <div class="card-name">${s.name}</div>
@@ -493,14 +498,16 @@ const Study = {
 
   toggleFav(name, btn) {
     const isFav = Store.toggleFav(name);
-    btn.textContent = isFav ? '❤️' : '🤍';
+    btn.innerHTML = isFav ? '<i data-lucide="heart" style="color:var(--red);fill:var(--red);width:20px;height:20px;vertical-align:middle"></i>' : '<i data-lucide="heart" style="color:var(--text3);width:20px;height:20px;vertical-align:middle"></i>';
+    if (window.lucide) window.lucide.createIcons();
     Utils.toast(isFav ? `${name} afegit a preferits` : `${name} eliminat de preferits`, 'info');
     if (this.showFavs) this.render();
   },
 
   toggleDiff(name, btn) {
     const isD = Store.toggleDifficult(name);
-    btn.textContent = isD ? '📌' : '📍';
+    btn.innerHTML = isD ? '<i data-lucide="pin" style="color:var(--accent);fill:var(--accent);width:20px;height:20px;vertical-align:middle"></i>' : '<i data-lucide="map-pin" style="color:var(--text3);width:20px;height:20px;vertical-align:middle"></i>';
+    if (window.lucide) window.lucide.createIcons();
     const card = btn.closest('.style-card');
     card.classList.toggle('card-difficult', isD);
     Utils.toast(isD ? `${name} marcat per repassar` : `${name} ja no es repassa`, 'info');
@@ -564,13 +571,13 @@ const Study = {
           <div class="modal-number">${s.number || ''} · ${s.category || ''}</div>
           <div class="modal-name">
             ${s.name}
-            <span class="pronunciation-btn" style="font-size:0.6em;color:var(--text3);font-weight:500;margin-left:8px;cursor:pointer;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'" onclick="Utils.speak('${(s.pronunciation || s.name).replace(/-/g, ' ').replace(/'/g, "\\'")}')" title="Escoltar pronunciació">🔊${s.pronunciation ? ` / ${s.pronunciation} /` : ''}</span>
+            <span class="pronunciation-btn" style="font-size:0.6em;color:var(--text3);font-weight:500;margin-left:8px;cursor:pointer;transition:color 0.2s;" onmouseover="this.style.color='var(--text)'" onmouseout="this.style.color='var(--text3)'" onclick="Utils.speak('${(s.pronunciation || s.name).replace(/-/g, ' ').replace(/'/g, "\\'")}')" title="Escoltar pronunciació"><i data-lucide="volume-2" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i>${s.pronunciation ? ` / ${s.pronunciation} /` : ''}</span>
           </div>
         </div>
         <div style="display:flex;gap:8px;align-items:flex-start">
-          <button class="card-action-btn" title="Preferit" style="font-size:20px" onclick="Study.toggleFav('${s.name.replace(/'/g, "\\'")}',this)">${isFav ? '❤️' : '🤍'}</button>
-          <button class="card-action-btn" title="A repassar" style="font-size:20px" onclick="Study.toggleDiff('${s.name.replace(/'/g, "\\'")}',this)">${isDiff ? '📌' : '📍'}</button>
-          <button class="modal-close" onclick="Study.closeModal()">✕</button>
+          <button class="card-action-btn" title="Preferit" style="font-size:20px" onclick="Study.toggleFav('${s.name.replace(/'/g, "\\'")}',this)">${isFav ? '<i data-lucide="heart" style="color:var(--red);fill:var(--red);width:20px;height:20px;vertical-align:middle"></i>' : '<i data-lucide="heart" style="color:var(--text3);width:20px;height:20px;vertical-align:middle"></i>'}</button>
+          <button class="card-action-btn" title="A repassar" style="font-size:20px" onclick="Study.toggleDiff('${s.name.replace(/'/g, "\\'")}',this)">${isDiff ? '<i data-lucide="pin" style="color:var(--accent);fill:var(--accent);width:20px;height:20px;vertical-align:middle"></i>' : '<i data-lucide="map-pin" style="color:var(--text3);width:20px;height:20px;vertical-align:middle"></i>'}</button>
+          <button class="modal-close" onclick="Study.closeModal()"><i data-lucide="x" style="width:1em;height:1em;vertical-align:-0.15em"></i></button>
         </div>
       </div>
       <div class="modal-stats">
@@ -608,6 +615,7 @@ const Study = {
     const overlay = Utils.el('detail-modal');
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
+    if (window.lucide) window.lucide.createIcons();
     Store.updateStreak();
   },
 
@@ -631,6 +639,7 @@ const Quiz = {
     Utils.el('quiz-results').classList.add('hidden');
     Utils.el('quiz-game').classList.remove('hidden');
     this.showQuestion();
+    if (window.lucide) window.lucide.createIcons();
   },
 
   generateQuestions(type, n) {
@@ -874,13 +883,13 @@ const Quiz = {
 
     let bonusXP = 0;
     if (isCorrect) {
-      if (level === 'sure') { bonusXP = 5; Utils.toast('🎯 Correcte i n\'estaves segur! +15 XP', 'success'); }
-      else if (level === 'guess') { bonusXP = -3; Utils.toast('💡 Has tingut sort! +7 XP', 'info'); }
-      else { Utils.toast('✅ Correcte! +10 XP', 'success'); }
+      if (level === 'sure') { bonusXP = 5; Utils.toast('<i data-lucide="crosshair" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> Correcte i n\'estaves segur! +15 XP', 'success'); }
+      else if (level === 'guess') { bonusXP = -3; Utils.toast('<i data-lucide="lightbulb" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> Has tingut sort! +7 XP', 'info'); }
+      else { Utils.toast('<i data-lucide="check-circle"></i> Correcte! +10 XP', 'success'); }
     } else {
-      if (level === 'sure') { bonusXP = -10; Utils.toast('⚠️ Molt segur i has fallat! -10 XP', 'error'); }
-      else if (level === 'doubt') { bonusXP = -2; Utils.toast('❌ Incorrecte, però dubtaves.', 'error'); }
-      else { Utils.toast('❌ Incorrecte', 'error'); }
+      if (level === 'sure') { bonusXP = -10; Utils.toast('<i data-lucide="alert-triangle" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> Molt segur i has fallat! -10 XP', 'error'); }
+      else if (level === 'doubt') { bonusXP = -2; Utils.toast('<i data-lucide="x-circle"></i> Incorrecte, però dubtaves.', 'error'); }
+      else { Utils.toast('<i data-lucide="x-circle"></i> Incorrecte', 'error'); }
     }
 
     if (bonusXP !== 0) { this.score = Math.max(0, this.score + bonusXP); Store.addXP(bonusXP); }
@@ -892,10 +901,11 @@ const Quiz = {
     const chosenStyleName = (q.type === 'guess' || q.subtype === 'key_id') ? chosen : null;
     const helperCtx = isCorrect ? 'feedback-correct' : 'feedback-wrong';
     fb.innerHTML = `
-      <div class="feedback-title">${isCorrect ? '\u2705 Correcte!' : `\u274c La resposta correcta era: ${correct}`}</div>
+      <div class="feedback-title">${isCorrect ? '<i data-lucide=\"check-circle\" style=\"width:1em;height:1em;vertical-align:-0.15em;margin-right:4px\"></i> Correcte!' : `<i data-lucide=\"x-circle\" style=\"width:1em;height:1em;vertical-align:-0.15em;margin-right:4px\"></i> La resposta correcta era: ${correct}`}</div>
       <div class="feedback-text">${q.style.overallimpression?.substring(0, 200) || ''}${q.style.overallimpression?.length > 200 ? '\u2026' : ''}</div>
       ${Utils.buildHelperHTML(q.style, helperCtx, isCorrect ? null : chosenStyleName)}`;
     fb.classList.remove('hidden');
+    if (window.lucide) window.lucide.createIcons();
 
     Utils.el('quiz-confidence').classList.add('hidden');
     Utils.el('next-btn').classList.remove('hidden');
@@ -926,35 +936,35 @@ const Quiz = {
 
       if (q.profile === 'tasting') {
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">🍺 Tasting Mode — Identifica l'estil</div>
+          <div class="question-label"><i data-lucide="beer"></i> Tasting Mode — Identifica l'estil</div>
           <div class="question-title">Quina cervesa descriu aquesta nota de tast?</div>
           <div class="tasting-note">${this.generateTastingNote(s)}</div>`;
       } else if (q.profile === 'history') {
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">📜 Conèixes la seva història?</div>
+          <div class="question-label"><i data-lucide="scroll-text" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> Conèixes la seva història?</div>
           <div class="question-title">Quin estil descriu aquest origen i evolució?</div>
           <div class="question-chars">${wide('Història', s.history, 450)}${tagsHTML}</div>`;
       } else if (q.profile === 'ingredients') {
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">🌾 Ingredients característics</div>
+          <div class="question-label"><i data-lucide="wheat"></i> Ingredients característics</div>
           <div class="question-title">Quin estil utilitza aquests ingredients?</div>
           <div class="question-chars">${statsHTML}${wide('Ingredients característics', s.characteristicingredients, 380)}${tagsHTML}</div>`;
       } else if (q.profile === 'comments') {
         const cmpH = s.stylecomparison ? wide('Comparació d\'estils', Utils.linkify(s.stylecomparison), 300) : '';
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">💬 Comentaris de l'estil</div>
+          <div class="question-label"><i data-lucide="message-square"></i> Comentaris de l'estil</div>
           <div class="question-title">A quin estil es refereixen aquests comentaris?</div>
           <div class="question-chars">${wide('Comentaris', s.comments, 420)}${cmpH}</div>`;
       } else if (q.profile === 'stylecomparison') {
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">⚖️ Comparació d'estils</div>
+          <div class="question-label"><i data-lucide="scale"></i> Comparació d'estils</div>
           <div class="question-title">De quin estil parla aquesta comparació?</div>
           <div class="question-chars">${wide('Comparació d\'estils', Utils.linkify(s.stylecomparison), 450)}${tagsHTML}</div>`;
       } else if (q.profile === 'confusion') {
         const keyClue = q.keyClue || (typeof STUDY_HELPERS !== 'undefined' && STUDY_HELPERS[s.number]?.keyIdentifiers
           ? Utils.shuffle([...STUDY_HELPERS[s.number].keyIdentifiers])[0] : '');
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">🧩 Confusió d'estils</div>
+          <div class="question-label"><i data-lucide="puzzle"></i> Confusió d'estils</div>
           <div class="question-title">Quin estil té aquest identificador clau?</div>
           <div class="question-chars">
             <div class="q-char wide q-char-keyid">
@@ -971,7 +981,7 @@ const Quiz = {
           s.mouthfeel ? wide('Sensació', s.mouthfeel, 280) : '',
         ].join('');
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">🍺 Endevina l'estil BJCP</div>
+          <div class="question-label"><i data-lucide="beer"></i> Endevina l'estil BJCP</div>
           <div class="question-title">Quin estil és aquesta cervesa?</div>
           <div class="question-chars">${statsHTML}${chars}</div>`;
       }
@@ -992,7 +1002,7 @@ const Quiz = {
 
       if (q.subtype === 'key_id') {
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">🧩 Identifica l'estil</div>
+          <div class="question-label"><i data-lucide="puzzle"></i> Identifica l'estil</div>
           <div class="question-title">A quin estil pertany aquest identificador clau?</div>
           <div class="question-chars">
             <div class="q-char wide q-char-keyid">
@@ -1002,7 +1012,7 @@ const Quiz = {
           </div>`;
       } else {
         Utils.el('question-card').innerHTML = `
-          <div class="question-label">📋 Defineix l'estil</div>
+          <div class="question-label"><i data-lucide="clipboard-list"></i> Defineix l'estil</div>
           <div class="question-title" style="margin-bottom:8px">${s.name}</div>
           <div style="font-size:14px;color:var(--accent);font-weight:600;margin-bottom:16px">${prompt}</div>`;
       }
@@ -1039,14 +1049,14 @@ const Quiz = {
     this.current++;
     if (this.current >= this.questions.length) { this.showResults(); return; }
     this.showQuestion();
+    if (window.lucide) window.lucide.createIcons();
   },
 
   renderResults() {
     const pct = Math.round((this.score / (this.questions.length * 10)) * 100);
     Utils.trackEvent('quiz_completed', { score: this.score, percentage: pct, type: 'quiz' });
 
-    Utils.el('quiz-progress').innerHTML = '';
-    const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '👍' : pct >= 40 ? '🤔' : '💪';
+    const emoji = pct >= 80 ? '<i data-lucide="trophy"></i>' : pct >= 60 ? '<i data-lucide="thumbs-up"></i>' : pct >= 40 ? '<i data-lucide="help-circle"></i>' : '<i data-lucide="activity"></i>';
     const msg = pct >= 80 ? 'Excel·lent!' : pct >= 60 ? 'Molt bé!' : pct >= 40 ? 'Continua practicant!' : 'Cal estudiar més!';
     const errHTML = this.errors.length ? `
       <div class="errors-list">
@@ -1054,7 +1064,7 @@ const Quiz = {
         ${this.errors.map(e => `
           <div class="error-item">
             <div class="error-q">${e.q}</div>
-            <div class="error-correct">✓ ${e.correct}</div>
+            <div class="error-correct"><i data-lucide="check" style="width:1em;height:1em;vertical-align:-0.15em"></i> ${e.correct}</div>
           </div>`).join('')}
       </div>` : '';
     const res = Utils.el('quiz-results');
@@ -1071,11 +1081,13 @@ const Quiz = {
         </div>
         ${errHTML}
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-          <button class="btn btn-primary" onclick="Quiz.start('${this.type}')">🔄 Tornar a jugar</button>
-          <button class="btn btn-outline" onclick="Quiz.backToSelector()">← Canviar tipus</button>
+          <button class="btn btn-primary" onclick="Quiz.start('${this.type}')"><i data-lucide="refresh-cw" style="width:1em;height:1em;vertical-align:middle"></i> Tornar a jugar</button>
+          <button class="btn btn-outline" onclick="Quiz.backToSelector()"><i data-lucide="arrow-left" style="width:1em;height:1em;vertical-align:middle"></i> Canviar tipus</button>
         </div>
       </div>`;
     res.classList.remove('hidden');
+    if (window.lucide) window.lucide.createIcons();
+    if (window.lucide) window.lucide.createIcons();
   },
 
   showResults() {
@@ -1118,6 +1130,7 @@ const Exam = {
     Utils.el('exam-results').classList.add('hidden');
     Utils.el('exam-game').classList.remove('hidden');
     this.showQuestion();
+    if (window.lucide) window.lucide.createIcons();
   },
 
   showQuestion() {
@@ -1141,7 +1154,7 @@ const Exam = {
     ].filter(Boolean);
 
     Utils.el('exam-question-card').innerHTML = `
-      <div class="question-label">🧪 Pregunta ${this.current + 1}</div>
+      <div class="question-label"><i data-lucide="flask-conical"></i> Pregunta ${this.current + 1}</div>
       <div class="question-title">Quin estil BJCP és?</div>
       <div class="question-chars">
         ${chars.map(c => `
@@ -1189,7 +1202,7 @@ const Exam = {
     Store.recordAnswer(q.style, false);
     const fb = Utils.el('exam-feedback');
     fb.className = 'quiz-feedback wrong-fb';
-    fb.innerHTML = `<div class="feedback-title">⏱ Temps esgotat!</div><div class="feedback-text">La resposta era: <strong>${q.correct}</strong></div>`;
+    fb.innerHTML = `<div class="feedback-title"><i data-lucide="timer"></i> Temps esgotat!</div><div class="feedback-text">La resposta era: <strong>${q.correct}</strong></div>`;
     fb.classList.remove('hidden');
     Utils.el('exam-next-btn').classList.remove('hidden');
   },
@@ -1212,10 +1225,10 @@ const Exam = {
       const bonus = this.timePerQ > 0 ? Math.ceil(this.timeLeft / this.timePerQ * 10) : 0;
       this.score += 10 + bonus;
       Store.addXP(10 + bonus);
-      Utils.toast(`✅ +${10 + bonus} punts`, 'success');
+      Utils.toast(`<i data-lucide="check-circle"></i> +${10 + bonus} punts`, 'success');
     } else {
       this.errors.push({ q: `Quin estil?`, correct: q.correct });
-      Utils.toast('❌ Incorrecte', 'error');
+      Utils.toast('<i data-lucide="x-circle"></i> Incorrecte', 'error');
     }
     Store.recordAnswer(q.style, isCorrect);
 
@@ -1223,7 +1236,7 @@ const Exam = {
     fb.className = `quiz-feedback${isCorrect ? '' : ' wrong-fb'}`;
     const examHelperCtx = isCorrect ? 'feedback-correct' : 'feedback-wrong';
     fb.innerHTML = `
-      <div class="feedback-title">${isCorrect ? '\u2705 Correcte!' : '\u274c Incorrecte \u2014 ' + q.correct}</div>
+      <div class="feedback-title">${isCorrect ? '<i data-lucide=\"check-circle\" style=\"width:1em;height:1em;vertical-align:-0.15em;margin-right:4px\"></i> Correcte!' : '<i data-lucide=\"x-circle\" style=\"width:1em;height:1em;vertical-align:-0.15em;margin-right:4px\"></i> Incorrecte \u2014 ' + q.correct}</div>
       <div class="feedback-text">${q.style.overallimpression?.substring(0, 180) || ''}\u2026</div>
       ${Utils.buildHelperHTML(q.style, examHelperCtx, isCorrect ? null : chosen)}`;
     fb.classList.remove('hidden');
@@ -1235,6 +1248,7 @@ const Exam = {
     this.current++;
     if (this.current >= this.questions.length) { this.showResults(); return; }
     this.showQuestion();
+    if (window.lucide) window.lucide.createIcons();
   },
 
   showResults() {
@@ -1244,7 +1258,7 @@ const Exam = {
     const total = this.questions.length;
     const correct = total - this.errors.length;
     const pct = Math.round((correct / total) * 100);
-    const emoji = pct >= 80 ? '🏆' : pct >= 60 ? '🥈' : pct >= 40 ? '🥉' : '💪';
+    const emoji = pct >= 80 ? '<i data-lucide="trophy"></i>' : pct >= 60 ? '<i data-lucide="medal"></i>' : pct >= 40 ? '<i data-lucide="medal"></i>' : '<i data-lucide="activity"></i>';
     const res = Utils.el('exam-results');
     res.innerHTML = `
       <div class="quiz-results">
@@ -1257,13 +1271,15 @@ const Exam = {
           <div class="result-stat"><span class="result-stat-val" style="color:var(--red)">${this.errors.length}</span><span class="result-stat-key">Errors</span></div>
           <div class="result-stat"><span class="result-stat-val">${this.score}</span><span class="result-stat-key">Punts</span></div>
         </div>
-        ${this.errors.length ? `<div class="errors-list"><h4 style="margin-bottom:12px">Errors:</h4>${this.errors.map(e => `<div class="error-item"><div class="error-q">${e.q}</div><div class="error-correct">✓ ${e.correct}</div></div>`).join('')}</div>` : ''}
+        ${this.errors.length ? `<div class="errors-list"><h4 style="margin-bottom:12px">Errors:</h4>${this.errors.map(e => `<div class="error-item"><div class="error-q">${e.q}</div><div class="error-correct"><i data-lucide="check" style="width:1em;height:1em;vertical-align:-0.15em"></i> ${e.correct}</div></div>`).join('')}</div>` : ''}
         <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-          <button class="btn btn-primary" onclick="Exam.start()">🔄 Nou examen</button>
-          <button class="btn btn-outline" onclick="Exam.backToSetup()">← Configuració</button>
+          <button class="btn btn-primary" onclick="Exam.start()"><i data-lucide="refresh-cw" style="width:1em;height:1em;vertical-align:middle"></i> Nou examen</button>
+          <button class="btn btn-outline" onclick="Exam.backToSetup()"><i data-lucide="arrow-left" style="width:1em;height:1em;vertical-align:middle"></i> Configuració</button>
         </div>
       </div>`;
     res.classList.remove('hidden');
+    if (window.lucide) window.lucide.createIcons();
+    if (window.lucide) window.lucide.createIcons();
   },
 
   abort() { clearInterval(this.timerInterval); this.backToSetup(); },
@@ -1306,25 +1322,26 @@ const Stats = {
     const weakStyles = Object.entries(d.styleStats)
       .filter(([, st]) => st.wrong > 0)
       .sort((a, b) => b[1].wrong - a[1].wrong).slice(0, 10);
-    if (!weakStyles.length) { weak.innerHTML = '<div class="empty-state">Cap error de moment 🎉</div>'; }
+    if (!weakStyles.length) { weak.innerHTML = '<div class="empty-state">Cap error de moment <i data-lucide="party-popper" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i></div>'; }
     else {
       weak.innerHTML = weakStyles.map(([name, st]) => `
         <div class="weak-style-item" onclick="Study.openModal('${name.replace(/'/g, "\\'")}');App.showMode('study')">
           <div class="weak-style-name">${name}</div>
-          <div class="weak-style-errors">❌ ${st.wrong}</div>
+          <div class="weak-style-errors"><i data-lucide="x-circle"></i> ${st.wrong}</div>
         </div>`).join('');
     }
 
     // Favorites
     const favEl = Utils.el('fav-styles-list');
-    if (!d.favorites.length) { favEl.innerHTML = '<div class="empty-state">Afegeix estils a preferits amb ❤️</div>'; }
+    if (!d.favorites.length) { favEl.innerHTML = '<div class="empty-state">Afegeix estils a preferits amb <i data-lucide="heart" style="color:var(--red);fill:var(--red);width:1em;height:1em;vertical-align:-0.15em"></i></div>'; }
     else {
       favEl.innerHTML = d.favorites.map(name => `
         <div class="fav-style-item" onclick="Study.openModal('${name.replace(/'/g, "\\'")}');App.showMode('study')">
-          <span>❤️</span>
+          <span><i data-lucide="heart" style="color:var(--red);fill:var(--red);width:1em;height:1em;vertical-align:-0.15em"></i></span>
           <div class="fav-style-name">${name}</div>
         </div>`).join('');
     }
+    if (window.lucide) window.lucide.createIcons();
   }
 };
 
@@ -1340,6 +1357,7 @@ document.addEventListener('keydown', e => {
 // ===== BOOTSTRAP =====
 document.addEventListener('DOMContentLoaded', () => {
   App.init();
+if (window.lucide) window.lucide.createIcons();
 
   // ── Hero canvas bubbles (from bornloka-web) ──────────────────────────
   (function () {
@@ -1600,6 +1618,7 @@ const Detector = {
     Utils.el('detect-game').classList.remove('hidden');
     Utils.el('detect-results').classList.add('hidden');
     this.showQuestion();
+    if (window.lucide) window.lucide.createIcons();
   },
 
   showLanding() {
@@ -1616,7 +1635,7 @@ const Detector = {
     Utils.el('detect-question-card').innerHTML = `
       <div class="detect-q-icon">${q.icon}</div>
       <div class="detect-q-text">${q.text}</div>
-      ${q.hint ? `<div class="detect-q-hint">💡 ${q.hint}</div>` : ''}
+      ${q.hint ? `<div class="detect-q-hint"><i data-lucide="lightbulb" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> ${q.hint}</div>` : ''}
       <div class="detect-opts">
         ${q.opts.map((opt, i) => `
           <button class="detect-opt-btn" onclick="Detector.pickAnswer(${i})">
@@ -1635,6 +1654,7 @@ const Detector = {
     this._renderNavBtns();
     this.renderLiveRanking();
     if (window.lucide) window.lucide.createIcons();
+
   },
 
   pickAnswer(optIdx) {
@@ -1643,6 +1663,7 @@ const Detector = {
     document.querySelectorAll('.detect-opt-btn').forEach((btn, i) =>
       btn.classList.toggle('selected', i === optIdx));
     this.renderLiveRanking();
+    if (window.lucide) window.lucide.createIcons();
     this._renderNavBtns();
   },
 
@@ -1652,20 +1673,22 @@ const Detector = {
     const isLast = this.currentQ === this.QUESTIONS.length - 1;
     const hasAns = this.answers[this.currentQ] !== undefined;
     el.innerHTML =
-      (this.currentQ > 0 ? `<button class="btn btn-outline btn-sm" onclick="Detector.prev()">← Anterior</button>` : '') +
+      (this.currentQ > 0 ? `<button class="btn btn-outline btn-sm" onclick="Detector.prev()"><i data-lucide="arrow-left" style="width:1em;height:1em;vertical-align:middle"></i> Anterior</button>` : '') +
       (hasAns ? (isLast
-        ? `<button class="btn btn-primary btn-sm" onclick="Detector.showResults()">Veure resultats ✓</button>`
+        ? `<button class="btn btn-primary btn-sm" onclick="Detector.showResults()">Veure resultats <i data-lucide="check" style="width:1em;height:1em;vertical-align:-0.15em"></i></button>`
         : `<button class="btn btn-primary btn-sm" onclick="Detector.next()">Següent →</button>`) : '');
   },
 
   prev() {
-    if (this.currentQ > 0) { this.currentQ--; this.showQuestion(); }
+    if (this.currentQ > 0) { this.currentQ--; this.showQuestion();
+    if (window.lucide) window.lucide.createIcons(); }
   },
 
   next() {
     this.currentQ++;
     if (this.currentQ >= this.QUESTIONS.length) this.showResults();
     else this.showQuestion();
+    if (window.lucide) window.lucide.createIcons();
   },
 
   skip() {
@@ -1682,7 +1705,7 @@ const Detector = {
     const maxScore = Math.max(1, sorted[0]?.score || 0);
     const answered = this.currentQ > 0;
     Utils.el('detect-live-ranking').innerHTML = `
-      <div class="rank-title">🎯 ${answered ? 'Estils més probables' : 'Estils possibles'}</div>
+      <div class="rank-title"><i data-lucide="crosshair" style="width:1em;height:1em;vertical-align:-0.15em;margin-right:4px"></i> ${answered ? 'Estils més probables' : 'Estils possibles'}</div>
       ${sorted.slice(0, 10).map((item, i) => {
       const pct = answered ? Math.max(0, Math.round((item.score / maxScore) * 100)) : 0;
       const srmMid = item.style.srmmin && item.style.srmmax
@@ -1707,10 +1730,10 @@ const Detector = {
     const sorted = this._sorted();
     Utils.trackEvent('use_detector', { top_result: sorted[0]?.style.name || 'Unknown' });
     const maxScore = Math.max(1, sorted[0]?.score || 0);
-    const medals = ['🥇', '🥈', '🥉', '4️⃣', '5️⃣'];
+    const medals = ['<i data-lucide="award"></i>', '<i data-lucide="medal"></i>', '<i data-lucide="medal"></i>', '4', '5'];
     Utils.el('detect-results').innerHTML = `
       <div class="detect-results-header">
-        <div style="font-size:56px;margin-bottom:12px">🕵️</div>
+        <div style="font-size:56px;margin-bottom:12px"><i data-lucide="search"></i></div>
         <h2 class="detect-results-title">Resultat del Detectiu</h2>
         <p class="detect-results-sub">Basant-nos en les teves respostes, els estils més probables són:</p>
       </div>
@@ -1732,14 +1755,14 @@ const Detector = {
             </div>`;
     }).join('')}
       </div>
-      <p style="font-size:12px;color:var(--text3);text-align:center;margin-bottom:20px">Toca qualsevol estil per veure'n tots els detalls 👀</p>
+      <p style="font-size:12px;color:var(--text3);text-align:center;margin-bottom:20px">Toca qualsevol estil per veure'n tots els detalls <i data-lucide="eye"></i></p>
       <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-        <button class="btn btn-primary" onclick="Detector.start()">🔄 Tornar a detectar</button>
-        <button class="btn btn-outline" onclick="Detector.showLanding()">← Inici detectiu</button>
+        <button class="btn btn-primary" onclick="Detector.start()"><i data-lucide="refresh-cw" style="width:1em;height:1em;vertical-align:middle"></i> Tornar a detectar</button>
+        <button class="btn btn-outline" onclick="Detector.showLanding()"><i data-lucide="arrow-left" style="width:1em;height:1em;vertical-align:middle"></i> Inici detectiu</button>
       </div>
     `;
     Store.addXP(5);
-    Utils.toast('🕵️ Detecció completada! +5 XP', 'success');
+    Utils.toast('<i data-lucide="search"></i> Detecció completada! +5 XP', 'success');
   },
 };
 

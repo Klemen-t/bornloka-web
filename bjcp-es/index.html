@@ -65,35 +65,35 @@
     </div>
     <div class="nav-tabs">
       <button class="nav-tab active" id="tab-study" onclick="App.showMode('study')">
-        <span>📚</span> Estudio
+        <span class="nav-icon"><i data-lucide="book-open"></i></span> Estudio
       </button>
       <button class="nav-tab" id="tab-quiz" onclick="App.showMode('quiz')">
-        <span>🧠</span> Quiz
+        <span class="nav-icon"><i data-lucide="brain"></i></span> Quiz
       </button>
       <button class="nav-tab" id="tab-exam" onclick="App.showMode('exam')">
-        <span>🧪</span> Examen
+        <span class="nav-icon"><i data-lucide="flask-conical"></i></span> Examen
       </button>
       <button class="nav-tab" id="tab-detect" onclick="App.showMode('detect')">
-        <span>🕵️</span> Detecta
+        <span class="nav-icon"><i data-lucide="search"></i></span> Detecta
       </button>
       <button class="nav-tab" id="tab-stats" onclick="App.showMode('stats')">
-        <span>📊</span> Estadísticas
+        <span class="nav-icon"><i data-lucide="bar-chart-2"></i></span> Estadísticas
       </button>
     </div>
     <div class="nav-actions">
       <div class="xp-badge" id="xp-badge">
-        <span class="xp-icon">⚡</span>
+        <span class="xp-icon"><i data-lucide="zap" style="width:14px;height:14px"></i></span>
         <span id="xp-display">0 XP</span>
       </div>
       <div class="streak-badge" id="streak-badge">
-        <span>🔥</span>
+        <span class="nav-icon"><i data-lucide="flame"></i></span>
         <span id="streak-display">0</span>
       </div>
       <button class="theme-toggle" id="theme-toggle" onclick="App.toggleTheme()" title="Cambiar tema">
-        <span id="theme-icon">☀️</span>
+        <span id="theme-icon"><i data-lucide="sun" style="color:#e5a020; fill:rgba(229,160,32,0.2)"></i></span>
       </button>
       <button class="theme-toggle" onclick="App.openGlossary()" title="Glosario de términos">
-        <span>📖</span>
+        <span class="nav-icon"><i data-lucide="book" style="color:var(--accent); fill:rgba(34,197,94,0.15)"></i></span>
       </button>
       <a href="../bjcp/index.html" class="theme-toggle" title="Català"
         style="text-decoration:none; font-family:'Barlow Condensed', sans-serif; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; gap:6px; color:var(--text); width:auto; border-radius:20px; padding:0 12px;">CAT <svg width="16" height="12" viewBox="0 0 9 9" preserveAspectRatio="none" style="border-radius:2px; flex-shrink:0;"><rect width="9" height="9" fill="#FFC400"/><rect y="1" width="9" height="1" fill="#DA121A"/><rect y="3" width="9" height="1" fill="#DA121A"/><rect y="5" width="9" height="1" fill="#DA121A"/><rect y="7" width="9" height="1" fill="#DA121A"/></svg></a>
@@ -108,7 +108,7 @@
       <div class="study-header">
         <div class="study-controls">
           <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
+            <span class="search-icon"><i data-lucide="search"></i></span>
             <input type="text" id="search-input" class="search-input" placeholder="Buscar estilo..."
               oninput="Study.search(this.value)" />
           </div>
@@ -116,15 +116,15 @@
             <option value="">Todas las categorías</option>
           </select>
           <button class="btn btn-outline btn-sm" onclick="Study.filterFavorites()" id="fav-filter-btn">
-            ❤️ Favoritos
+            <i data-lucide="heart" style="width:1em;height:1em;vertical-align:middle"></i> Favoritos
           </button>
           <button class="btn btn-outline btn-sm" onclick="Study.filterDifficult()" id="diff-filter-btn">
-            📌 A repasar
+            <i data-lucide="pin" style="width:1em;height:1em;vertical-align:middle"></i> A repasar
           </button>
         </div>
         <div class="study-info">
           <span id="style-count" class="style-count">116 estilos</span>
-          <button class="btn btn-primary btn-sm" onclick="Study.shuffle()">🔀 Mezclar</button>
+          <button class="btn btn-primary btn-sm" onclick="Study.shuffle()"><i data-lucide="shuffle" style="width:1em;height:1em;vertical-align:middle"></i> Mezclar</button>
         </div>
       </div>
 
@@ -151,19 +151,19 @@
         <!-- Quiz type selector -->
         <div id="quiz-selector" class="quiz-selector">
           <div class="quiz-type-card" onclick="Quiz.start('guess')">
-            <div class="quiz-type-icon">🍺</div>
+            <div class="quiz-type-icon"><i data-lucide="beer" style="width:40px;height:40px;stroke-width:2px;color:var(--accent)"></i></div>
             <h3>Adivina el Estilo</h3>
             <p>Se te muestran las características y tienes que adivinar qué estilo BJCP es</p>
             <div class="quiz-type-badge">Quiz A</div>
           </div>
           <div class="quiz-type-card quiz-type-card--featured" onclick="Quiz.start('mix')">
-            <div class="quiz-type-icon">🎲</div>
+            <div class="quiz-type-icon"><i data-lucide="dices" style="width:40px;height:40px;stroke-width:2px;color:var(--purple)"></i></div>
             <h3>Modo Mixto</h3>
             <p>Mezcla de los dos modos: a veces adivinas el estilo, a veces defines sus características</p>
             <div class="quiz-type-badge quiz-type-badge--featured">Recomendado</div>
           </div>
           <div class="quiz-type-card" onclick="Quiz.start('define')">
-            <div class="quiz-type-icon">📋</div>
+            <div class="quiz-type-icon"><i data-lucide="clipboard-list" style="width:40px;height:40px;stroke-width:2px;color:var(--red)"></i></div>
             <h3>Define el Estilo</h3>
             <p>Se te muestra el nombre de un estilo y tienes que adivinar sus características (ABV, IBU, color...)</p>
             <div class="quiz-type-badge">Quiz B</div>
@@ -178,7 +178,7 @@
           <div class="quiz-meta">
             <span id="quiz-q-counter">Pregunta 1/10</span>
             <span id="quiz-score-live">Puntuación: 0</span>
-            <button class="btn btn-outline btn-sm" onclick="Quiz.abort()">✕ Salir</button>
+            <button class="btn btn-outline btn-sm" onclick="Quiz.abort()"><i data-lucide="x" style="width:1em;height:1em;vertical-align:middle"></i> Salir</button>
           </div>
 
           <div class="question-card" id="question-card">
@@ -195,11 +195,11 @@
 
           <!-- Confidence calibration -->
           <div id="quiz-confidence" class="quiz-confidence hidden">
-            <div class="confidence-label">💭 ¿Cuál es tu confianza con la respuesta?</div>
+            <div class="confidence-label"><i data-lucide="message-square" style="width:1em;height:1em;vertical-align:middle"></i> ¿Cuál es tu confianza con la respuesta?</div>
             <div class="confidence-btns">
-              <button class="conf-btn sure" onclick="Quiz.setConfidence('sure')">🎯 Seguro/a</button>
-              <button class="conf-btn doubt" onclick="Quiz.setConfidence('doubt')">🤔 Dudo</button>
-              <button class="conf-btn guess" onclick="Quiz.setConfidence('guess')">🎲 Me la juego</button>
+              <button class="conf-btn sure" onclick="Quiz.setConfidence('sure')"><i data-lucide="crosshair" style="width:1em;height:1em;vertical-align:middle"></i> Seguro/a</button>
+              <button class="conf-btn doubt" onclick="Quiz.setConfidence('doubt')"><i data-lucide="help-circle" style="width:1em;height:1em;vertical-align:middle"></i> Dudo</button>
+              <button class="conf-btn guess" onclick="Quiz.setConfidence('guess')"><i data-lucide="dices" style="width:1em;height:1em;vertical-align:middle"></i> Me la juego</button>
             </div>
           </div>
 
@@ -222,7 +222,7 @@
         <!-- Exam selector -->
         <div id="exam-setup" class="exam-setup">
           <div class="exam-hero">
-            <div class="exam-hero-icon">🧪</div>
+            <div class="exam-hero-icon"><i data-lucide="flask-conical" style="width:64px;height:64px"></i></div>
             <h2>Modo Examen BJCP</h2>
             <p>Simulación de examen real con tiempo limitado y 20 preguntas aleatorias</p>
           </div>
@@ -252,7 +252,7 @@
             </div>
           </div>
           <button class="btn btn-primary btn-xl" onclick="Exam.start()">
-            🚀 Iniciar Examen
+            <i data-lucide="rocket" style="width:1em;height:1em;vertical-align:middle"></i> Iniciar Examen
           </button>
         </div>
 
@@ -302,11 +302,11 @@
 
         <!-- Landing -->
         <div id="detect-landing" class="detect-landing">
-          <div style="font-size:72px;margin-bottom:16px">🕵️</div>
+          <div style="font-size:72px;margin-bottom:16px"><i data-lucide="search" style="width:72px;height:72px"></i></div>
           <h2 class="detect-title">Detective de Estilo</h2>
           <p class="detect-desc">Responde preguntas sobre las características de la cerveza que estás catando y te diremos los estilos BJCP más probables, con las probabilidades en tiempo real.</p>
           <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
-            <button class="btn btn-primary btn-xl" onclick="Detector.start()">🔍 Iniciar detección</button>
+            <button class="btn btn-primary btn-xl" onclick="Detector.start()"><i data-lucide="search" style="width:1em;height:1em;vertical-align:middle"></i> Iniciar detección</button>
           </div>
         </div>
 
@@ -317,13 +317,13 @@
           </div>
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px">
             <span id="detect-q-counter" style="font-size:13px;color:var(--text2)">1 / 7</span>
-            <button class="btn btn-outline btn-sm" onclick="Detector.showLanding()">✕ Salir</button>
+            <button class="btn btn-outline btn-sm" onclick="Detector.showLanding()"><i data-lucide="x" style="width:1em;height:1em;vertical-align:middle"></i> Salir</button>
           </div>
           <div class="detect-layout">
             <div id="detect-question-card" class="detect-question-card"></div>
             <div class="detect-ranking-panel">
               <div id="detect-live-ranking" class="detect-live-ranking">
-                <div class="rank-title">🎯 Estilos posibles</div>
+                <div class="rank-title"><i data-lucide="crosshair" style="width:1em;height:1em;vertical-align:middle"></i> Estilos posibles</div>
                 <div style="color:var(--text3);font-size:13px;text-align:center;padding:20px">Responde las preguntas para ver el ranking</div>
               </div>
             </div>
@@ -339,26 +339,26 @@
     <!-- ===== MODE ESTADÍSTIQUES ===== -->
     <section id="mode-stats" class="mode-section">
       <div class="stats-container">
-        <h2 class="stats-title">📊 Tus estadísticas</h2>
+        <h2 class="stats-title"><i data-lucide="bar-chart-2" style="width:1.2em;height:1.2em;vertical-align:middle;margin-right:8px"></i> Tus estadísticas</h2>
 
         <div class="stats-grid-top">
           <div class="stat-card big-stat">
-            <div class="stat-icon">⚡</div>
+            <div class="stat-icon"><i data-lucide="zap"></i></div>
             <div class="stat-val" id="stat-xp">0</div>
             <div class="stat-label">Puntos XP</div>
           </div>
           <div class="stat-card big-stat">
-            <div class="stat-icon">🔥</div>
+            <div class="stat-icon"><i data-lucide="flame"></i></div>
             <div class="stat-val" id="stat-streak">0</div>
             <div class="stat-label">Días seguidos</div>
           </div>
           <div class="stat-card big-stat">
-            <div class="stat-icon">✅</div>
+            <div class="stat-icon"><i data-lucide="check-circle"></i></div>
             <div class="stat-val" id="stat-correct">0</div>
             <div class="stat-label">Respuestas correctas</div>
           </div>
           <div class="stat-card big-stat">
-            <div class="stat-icon">🎯</div>
+            <div class="stat-icon"><i data-lucide="crosshair" style="width:1em;height:1em;vertical-align:middle"></i></div>
             <div class="stat-val" id="stat-accuracy">0%</div>
             <div class="stat-label">Precisión</div>
           </div>
@@ -366,21 +366,21 @@
 
         <div class="stats-sections">
           <div class="stats-section">
-            <h3>🏅 Nivel por Categoría</h3>
+            <h3><i data-lucide="medal" style="width:1em;height:1em;vertical-align:middle"></i> Nivel por Categoría</h3>
             <div id="cat-levels" class="cat-levels"></div>
           </div>
           <div class="stats-section">
-            <h3>🔴 Estilos débiles (donde más fallas)</h3>
+            <h3><i data-lucide="alert-circle" style="width:1em;height:1em;vertical-align:middle"></i> Estilos débiles (donde más fallas)</h3>
             <div id="weak-styles" class="weak-styles"></div>
           </div>
           <div class="stats-section">
-            <h3>❤️ Favoritos</h3>
+            <h3><i data-lucide="heart" style="width:1em;height:1em;vertical-align:middle"></i> Favoritos</h3>
             <div id="fav-styles-list" class="fav-styles-list"></div>
           </div>
         </div>
 
         <div class="stats-actions">
-          <button class="btn btn-danger" onclick="App.resetProgress()">🗑 Reiniciar progreso</button>
+          <button class="btn btn-danger" onclick="App.resetProgress()"><i data-lucide="trash-2" style="width:1em;height:1em;vertical-align:middle"></i> Reiniciar progreso</button>
         </div>
       </div>
     </section>

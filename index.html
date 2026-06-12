@@ -3389,7 +3389,7 @@
       function goTo(idx) {
         if (!frames.length) return;
         carIdx = Math.max(0, Math.min(frames.length - 1, idx));
-        frames[carIdx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        track.scrollTo({ left: frames[carIdx].offsetLeft - (track.clientWidth - frames[carIdx].clientWidth) / 2, behavior: 'smooth' });
         if (dotsEl) dotsEl.querySelectorAll('.car-dot').forEach((d, i) => d.classList.toggle('active', i === carIdx));
         frames.forEach((frame, i) => {
           if (i === idx) frame.classList.add('focus');
